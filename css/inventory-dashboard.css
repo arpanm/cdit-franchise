@@ -1,0 +1,62 @@
+.inventory-table {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.inventory-filters {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+.inventory-status-badge {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.inventory-actions {
+    white-space: nowrap;
+}
+
+.modal-dialog.modal-lg {
+    max-width: 800px;
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+#compatibleProducts {
+    height: 100px;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.badge {
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+.filters-row {
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.filter-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+}

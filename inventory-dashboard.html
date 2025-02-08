@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDIT Franchise Inventory Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/inventory-dashboard.css">
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Left Sidebar -->
+        <div class="sidebar bg-dark text-white p-3 admin-sidebar">
+            <h5 class="mb-4 py-2 border-bottom">Franchise Admin</h5>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2">
+                    <a href="admin-dashboard.html" class="nav-link text-white">
+                        <i class="bi bi-tools me-2"></i> Service
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="finance-dashboard.html" class="nav-link text-white">
+                        <i class="bi bi-currency-rupee me-2"></i> Finance
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="inventory-dashboard.html" class="nav-link text-white">
+                        <i class="bi bi-box-seam me-2"></i> Inventory
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="#" class="nav-link text-white">
+                        <i class="bi bi-graph-up me-2"></i> Reports
+                    </a>
+                </li>
+                <li class="nav-item mt-auto">
+                    <a href="#" class="nav-link text-white" onclick="logout()">
+                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Inventory Management</h2>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addInventoryModal">
+                    <i class="bi bi-plus-circle me-2"></i>Add New Item
+                </button>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <h6 class="card-title">Total Inventory</h6>
+                            <h2 class="mb-0">₹308,200</h2>
+                            <small>115 Items</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-warning text-dark">
+                        <div class="card-body">
+                            <h6 class="card-title">Low Stock Items</h6>
+                            <h2 class="mb-0">32</h2>
+                            <small>Immediate Ordering Needed</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-danger text-white">
+                        <div class="card-body">
+                            <h6 class="card-title">Ageing Inventory</h6>
+                            <h2 class="mb-0">₹18,200</h2>
+                            <small>3 Items</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Credit Balance Section -->
+            <div class="alert alert-info mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="bi bi-wallet2"></i>
+                        <strong>Available Credit Balance:</strong>
+                        <span id="creditBalance">₹50,000</span>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#creditHistoryModal">
+                        <i class="bi bi-clock-history"></i> View History
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters Section -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="searchSku" placeholder="Search SKU/Name">
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-select" id="filterCategory">
+                                <option value="">All Categories</option>
+                                <option value="spare">Spare Parts</option>
+                                <option value="accessory">Accessories</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-select" id="filterBrand">
+                                <option value="">All Brands</option>
+                                <option value="samsung">Samsung</option>
+                                <option value="lg">LG</option>
+                                <option value="whirlpool">Whirlpool</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-select" id="filterInventoryStatus">
+                                <option value="">All Inventory Status</option>
+                                <option value="low">Low</option>
+                                <option value="normal">Normal</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-select" id="filterDemand">
+                                <option value="">All Demand</option>
+                                <option value="low">Low</option>
+                                <option value="normal">Normal</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-primary w-100" onclick="applyFilters()">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventory Table -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="inventoryTable">
+                            <thead>
+                                <tr>
+                                    <th>SKU ID</th>
+                                    <th>SKU Name</th>
+                                    <th>Category</th>
+                                    <th>Brand</th>
+                                    <th>MRP (₹)</th>
+                                    <th>Offer Price (₹)</th>
+                                    <th>Commission %</th>
+                                    <th>Purchased</th>
+                                    <th>Sold</th>
+                                    <th>Stock</th>
+                                    <th>Inventory</th>
+                                    <th>Demand</th>
+                                    <th>Open POs</th>
+                                    <th>Return</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Modal -->
+    <div class="modal fade" id="orderModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Purchase Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="orderForm">
+                        <div class="mb-3">
+                            <label class="form-label">SKU Details</label>
+                            <p id="orderSkuDetails" class="form-text"></p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Quantity</label>
+                            <input type="number" class="form-control" id="orderQuantity" required min="1">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Total Amount</label>
+                            <p id="orderTotalAmount" class="form-text">₹0</p>
+                        </div>
+                        <div class="alert alert-warning" id="orderCreditWarning" style="display: none;">
+                            Insufficient credit balance!
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="createPurchaseOrder()">Create Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Return Modal -->
+    <div class="modal fade" id="returnModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Initiate Return</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="returnForm">
+                        <div class="mb-3">
+                            <label class="form-label">SKU Details</label>
+                            <p id="returnSkuDetails" class="form-text"></p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Return Quantity</label>
+                            <input type="number" class="form-control" id="returnQuantity" required min="1">
+                            <div class="text-danger mt-1" id="returnQuantityWarning" style="display: none;"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Reason for Return</label>
+                            <textarea class="form-control" id="returnReason" required rows="3"></textarea>
+                        </div>
+                        <div class="alert alert-info">
+                            Return request will be sent for approval. Credit will be updated once approved.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="initiateReturn()">Submit Return</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Credit History Modal -->
+    <div class="modal fade" id="creditHistoryModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Credit Balance History</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Category</th>
+                                    <th>Credit (₹)</th>
+                                    <th>Debit (₹)</th>
+                                    <th>Balance (₹)</th>
+                                    <th>Reference</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="creditHistoryTableBody"></tbody>
+                            <tfoot>
+                                <tr class="table-info">
+                                    <td colspan="3"><strong>Total</strong></td>
+                                    <td id="totalCredit"></td>
+                                    <td id="totalDebit"></td>
+                                    <td id="netBalance">₹0</td>
+                                    <td colspan="2"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Inventory Modal -->
+    <div class="modal fade" id="addInventoryModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Inventory Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="inventoryForm">
+                        <div class="row g-3">
+                            <div class="col-12 mb-3">
+                                <label class="form-label">Search SKU</label>
+                                <input type="text" class="form-control" id="skuSearch" placeholder="Search by SKU name...">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Filter Category</label>
+                                <select class="form-select" id="skuFilterCategory">
+                                    <option value="">All Categories</option>
+                                    <option value="spare">Spare Part</option>
+                                    <option value="accessory">Accessory</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Filter Brand</label>
+                                <select class="form-select" id="skuFilterBrand">
+                                    <option value="">All Brands</option>
+                                    <option value="samsung">Samsung</option>
+                                    <option value="lg">LG</option>
+                                    <option value="whirlpool">Whirlpool</option>
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="filterAvailableSkus()">Search SKUs</button>
+                            <div class="col-12">
+                                <label class="form-label">Available SKUs</label>
+                                <select class="form-select" id="availableSkus" size="5" style="height: 200px;">
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="addSelectedSku()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+    <script src="js/inventory-dashboard.js"></script>
+</body>
+</html>

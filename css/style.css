@@ -1,0 +1,37 @@
+.engineer-card {
+    cursor: move;
+    transition: all 0.3s ease;
+}
+
+.engineer-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.engineer-card.unavailable {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.engineer-card.selected {
+    border: 2px solid #0d6efd;
+    background-color: rgba(13, 110, 253, 0.1);
+}
+
+.drag-over {
+    background-color: rgba(0, 123, 255, 0.1);
+    border: 2px dashed #007bff;
+}
+
+.engineer-list {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.performance-badge {
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
