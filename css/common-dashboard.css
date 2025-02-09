@@ -1,0 +1,93 @@
+.admin-sidebar {
+    min-height: 100vh;
+    width: 250px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.admin-sidebar.collapsed {
+    width: 60px;
+}
+
+.admin-sidebar .nav-link span,
+.admin-sidebar h5 span {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.admin-sidebar.collapsed .nav-link span,
+.admin-sidebar.collapsed h5 span {
+    opacity: 0;
+    display: none;
+}
+
+.admin-sidebar .toggle-btn {
+    position: absolute;
+    right: -12px;
+    top: 20px;
+    background: #343a40;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.admin-sidebar .toggle-btn:hover {
+    background: #23272b;
+}
+
+.admin-sidebar .nav-item {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.admin-sidebar.collapsed .nav-item {
+    text-align: center;
+}
+
+.admin-sidebar.collapsed .nav-link i {
+    margin-right: 0 !important;
+}
+
+.admin-sidebar.collapsed h5 {
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+/* Main content adjustment */
+main, .flex-grow-1 {
+    transition: margin-left 0.3s ease;
+    width: calc(100% - 250px);
+}
+
+.sidebar-collapsed main,
+.sidebar-collapsed .flex-grow-1 {
+    width: calc(100% - 60px);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        width: 60px;
+    }
+    
+    .admin-sidebar:hover {
+        width: 250px;
+    }
+    
+    main, .flex-grow-1 {
+        width: calc(100% - 60px);
+    }
+    
+    .admin-sidebar:hover .nav-link span,
+    .admin-sidebar:hover h5 span {
+        display: inline;
+        opacity: 1;
+    }
+}

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/common-dashboard.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
 </head>
 <body>
@@ -15,6 +16,9 @@
         <!-- Left Sidebar -->
         <div class="sidebar bg-dark text-white p-3 admin-sidebar">
             <h5 class="mb-4 py-2 border-bottom">Franchise Admin</h5>
+            <button class="toggle-btn" onclick="toggleSidebar()">
+                <i class="bi bi-chevron-left"></i>
+            </button>
             <ul class="nav flex-column">
                 <li class="nav-item mb-2">
                     <a href="admin-dashboard.html" class="nav-link text-white">
@@ -167,6 +171,15 @@
         </div>
     </div>
 
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.admin-sidebar').classList.toggle('collapsed');
+            document.querySelector('main').parentElement.classList.toggle('sidebar-collapsed');
+            const toggleBtn = document.querySelector('.toggle-btn i');
+            toggleBtn.classList.toggle('bi-chevron-left');
+            toggleBtn.classList.toggle('bi-chevron-right');
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/service-requests.js"></script>
