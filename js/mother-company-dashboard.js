@@ -429,31 +429,6 @@ function updateOnboardingMetrics() {
     });
 }
 
-// Function to apply filters
-function applyFilters() {
-    const location = document.getElementById('locationFilter').value;
-    const brand = document.getElementById('brandFilter').value;
-    const timeframe = document.getElementById('timeframeFilter').value;
-
-    // Filter franchises based on selected criteria
-    let filteredFranchises = dashboardData.franchises;
-
-    if (location !== 'all') {
-        filteredFranchises = filteredFranchises.filter(franchise => franchise.region === location);
-    }
-
-    if (brand !== 'all') {
-        filteredFranchises = filteredFranchises.filter(franchise => franchise.brands.includes(brand));
-    }
-
-    // Update metrics and charts based on filtered data
-    updateMetrics(filteredFranchises);
-    updateCharts(filteredFranchises);
-    updateOnboardingMetrics();
-    updateServiceMetrics();
-    initNPSDistributionChart();
-}
-
 // Initialize dashboard
 document.addEventListener('DOMContentLoaded', function() {
     updateOnboardingMetrics();
