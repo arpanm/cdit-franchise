@@ -11,44 +11,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
 <body>
-    
     <div class="d-flex">
-        <div class="sidebar bg-dark text-white p-3 admin-sidebar">
-            <h5 class="mb-4 py-2 border-bottom">Franchise Admin</h5>
-            <button class="toggle-btn" onclick="toggleSidebar()">
-                <i class="bi bi-chevron-left"></i>
-            </button>
-            <ul class="nav flex-column">
-                <li class="nav-item mb-2">
-                    <a href="admin-dashboard.html" class="nav-link text-white">
-                        <i class="bi bi-tools me-2"></i> Service
-                    </a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a href="finance-dashboard.html" class="nav-link text-white">
-                        <i class="bi bi-currency-rupee me-2"></i> Finance
-                    </a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a href="inventory-dashboard.html" class="nav-link text-white">
-                        <i class="bi bi-box-seam me-2"></i> Inventory
-                    </a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a href="#" class="nav-link text-white">
-                        <i class="bi bi-graph-up me-2"></i> Reports
-                    </a>
-                </li>
-                <li class="nav-item mt-auto">
-                    <a href="#" class="nav-link text-white" onclick="logout()">
-                        <i class="bi bi-box-arrow-right me-2"></i> Logout
-                    </a>
-                </li>
-            </ul>
-        </div>
         <main class="container mt-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Service Request Details</h2>
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-outline-secondary me-3" onclick="window.history.back()"><i class="bi bi-arrow-left"></i> Back</button>
+                    <h2>Service Request Details</h2>
+                </div>
                 <div class="action-buttons">
                     <button class="btn btn-primary" id="assignEngineerBtn">Assign Engineer</button>
                     <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#changeStatusModal">Change Status</button>
@@ -242,6 +211,66 @@
                 </div>
                 <div class="card-body">
                     <div id="commentsSection" class="comments-list"></div>
+                </div>
+            </div>
+
+            <!-- Cancel Request Modal -->
+            <div class="modal fade" id="cancelRequestModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Cancel Service Request</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="cancelRequestForm">
+                                <div class="mb-3">
+                                    <label for="cancellationReason" class="form-label">Cancellation Reason</label>
+                                    <select class="form-select" id="cancellationReason" required>
+                                        <option value="" selected disabled>Select a reason</option>
+                                        <option value="Customer Request">Customer Request</option>
+                                        <option value="Service Not Required">Service Not Required</option>
+                                        <option value="Duplicate Request">Duplicate Request</option>
+                                        <option value="Wrong Location">Wrong Location</option>
+                                        <option value="Product Under Different Warranty">Product Under Different Warranty</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="cancellationComment" class="form-label">Comment</label>
+                                    <textarea class="form-control" id="cancellationComment" rows="3"  required placeholder="Please provide a details"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger" onclick="cancelRequest()">Cancel Request</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Comment Modal -->
+            <div class="modal fade" id="addCommentModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add Comment</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addCommentForm">
+                                <div class="mb-3">
+                                    <label for="commentText" class="form-label">Comment</label>
+                                    <textarea class="form-control" id="commentText" rows="3" required></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-success" onclick="addComment()">Add Comment</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
