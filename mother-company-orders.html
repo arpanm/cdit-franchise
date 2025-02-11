@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spare Parts & Accessories Orders - CDIT Franchise Management Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/common-dashboard.css">
+    <link rel="stylesheet" href="css/mother-company-dashboard.css">
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Left Sidebar -->
+        <div class="sidebar bg-dark text-white p-3 admin-sidebar">
+            <h5 class="mb-4 py-2 border-bottom">Company Admin</h5>
+            <button class="toggle-btn" onclick="toggleSidebar()">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2">
+                    <a href="mother-company-dashboard.html" class="nav-link text-white">
+                        <i class="bi bi-speedometer2 me-2"></i> Performance
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-service.html" class="nav-link text-white active">
+                        <i class="bi bi-tools me-2"></i> Service
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-franchise.html" class="nav-link text-white">
+                        <i class="bi bi-building me-2"></i> Franchises
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-orders.html" class="nav-link text-white">
+                        <i class="bi bi-box-seam me-2"></i> Order Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="#" class="nav-link text-white">
+                        <i class="bi bi-gear me-2"></i> Settings
+                    </a>
+                </li>
+                <li class="nav-item mt-auto">
+                    <a href="#" class="nav-link text-white" onclick="logout()">
+                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <main class="flex-grow-1 p-4">
+            <div class="container-fluid">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Spare Parts & Accessories Orders</h2>
+                    <div>
+                        <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#newOrderModal">
+                            <i class="bi bi-plus-circle me-2"></i>New Order
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportOrders()">
+                            <i class="bi bi-download me-2"></i>Export
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Summary Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">Total Orders</h6>
+                                <h3 class="card-text" id="totalOrders">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning text-dark">
+                            <div class="card-body">
+                                <h6 class="card-title">Processing</h6>
+                                <h3 class="card-text" id="processingOrders">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">In Transit</h6>
+                                <h3 class="card-text" id="inTransitOrders">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">Delivered</h6>
+                                <h3 class="card-text" id="deliveredOrders">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Date Range</label>
+                                <input type="date" class="form-control" id="dateFilter" onchange="applyFilters()">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Status</label>
+                                <select class="form-select" id="statusFilter" onchange="applyFilters()">
+                                    <option value="">All</option>
+                                    <option value="processing">Processing</option>
+                                    <option value="confirmed">Confirmed</option>
+                                    <option value="dispatched">Dispatched</option>
+                                    <option value="delivered">Delivered</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Warehouse</label>
+                                <select class="form-select" id="warehouseFilter" onchange="applyFilters()">
+                                    <option value="">All Warehouses</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Franchise</label>
+                                <select class="form-select" id="franchiseFilter" onchange="applyFilters()">
+                                    <option value="">All</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders Table -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Franchise</th>
+                                        <th>Order Date</th>
+                                        <th>Items</th>
+                                        <th>Total Amount</th>
+                                        <th>Warehouse</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ordersTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- New Order Modal -->
+    <div class="modal fade" id="newOrderModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create New Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="newOrderForm">
+                        <div class="mb-3">
+                            <label class="form-label">Franchise</label>
+                            <select class="form-select" required id="orderFranchise">
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Warehouse</label>
+                            <select class="form-select" required id="orderWarehouse">
+                                <option value="">Select Warehouse</option>
+                            </select>
+                        </div>
+                        <div id="orderItems">
+                            <div class="row mb-3 order-item">
+                                <div class="col-md-3">
+                                    <label class="form-label">Item</label>
+                                    <select class="form-select" required onchange="updateItemPrice(this)">
+                                        <option value="">Select Item</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" required min="1" onchange="updateTotalPrice(this)">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">Unit Price</label>
+                                    <input type="number" class="form-control" readonly>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Total Price</label>
+                                    <input type="number" class="form-control item-total" readonly>
+                                </div>
+                                <div class="col-md-2 d-flex align-items-end">
+                                    <button type="button" class="btn btn-danger" onclick="removeOrderItem(this)">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary mb-3" onclick="addOrderItem()">
+                            <i class="bi bi-plus-circle me-2"></i>Add Item
+                        </button>
+                        <div class="row">
+                            <div class="col-md-6 ms-auto">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Order Summary</h5>
+                                        <div class="d-flex justify-content-between">
+                                            <strong>Total Amount:</strong>
+                                            <span id="orderTotalAmount">₹0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveOrder()">Create Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div class="modal fade" id="orderDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Order Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6>Order Information</h6>
+                            <p class="mb-1">Order ID: <span id="detailOrderId"></span></p>
+                            <p class="mb-1">Franchise: <span id="detailFranchise"></span></p>
+                            <p class="mb-1">Order Date: <span id="detailOrderDate"></span></p>
+                            <p class="mb-1">Status: <span id="detailStatus"></span></p>
+                            <p class="mb-1">Warehouse: 
+                                <select class="form-select form-select-sm d-inline-block w-auto" id="detailWarehouse">
+                                    <option value="">Select Warehouse</option>
+                                </select>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Courier Information</h6>
+                            <div id="courierDetails">
+                                <p class="mb-1">Courier: <span id="detailCourier"></span></p>
+                                <p class="mb-1">Tracking ID: <span id="detailTrackingId"></span></p>
+                            </div>
+                            <button class="btn btn-sm btn-primary mt-2" onclick="updateCourierDetails()">
+                                <i class="bi bi-pencil me-2"></i>Update Courier Details
+                            </button>
+                            <button class="btn btn-sm btn-success mt-2 ms-2" onclick="splitShipment()">
+                                <i class="bi bi-box-seam me-2"></i>Split Shipment
+                            </button>
+                        </div>
+                    </div>
+                    <div id="shipmentSections">
+                        <!-- First Shipment Section -->
+                        <div class="shipment-section mb-4" id="firstShipmentSection">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6>First Shipment</h6>
+                                <div class="d-flex align-items-center">
+                                    <label class="me-2">Status:</label>
+                                    <select class="form-select form-select-sm w-auto" onchange="updateShipmentStatus('first', this.value)">
+                                        <option value="processing">Processing</option>
+                                        <option value="confirmed">Confirmed</option>
+                                        <option value="dispatched">Dispatched</option>
+                                        <option value="delivered">Delivered</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="firstShipmentItemsTable">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Second Shipment Section -->
+                        <div class="shipment-section" id="secondShipmentSection" style="display: none;">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6>Second Shipment</h6>
+                                <div class="d-flex align-items-center">
+                                    <label class="me-2">Status:</label>
+                                    <select class="form-select form-select-sm w-auto" onchange="updateShipmentStatus('second', this.value)">
+                                        <option value="processing">Processing</option>
+                                        <option value="confirmed">Confirmed</option>
+                                        <option value="dispatched">Dispatched</option>
+                                        <option value="delivered">Delivered</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="secondShipmentItemsTable">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="updateOrderStatus()">Update Status</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Split Shipment Modal -->
+    <div class="modal fade" id="splitShipmentModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Split Shipment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6>First Shipment</h6>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>Available Qty</th>
+                                            <th>Ship Qty</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="firstShipmentItems"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Second Shipment</h6>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>Quantity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="secondShipmentItems"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="confirmSplitShipment()">Confirm Split</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script src="js/login.js"></script>
+    <script src="js/mother-company-orders.js"></script>
+</body>
+</html>
