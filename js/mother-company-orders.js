@@ -384,6 +384,26 @@ function updateShipmentStatus(shipmentType, status) {
     const order = ordersData.orders.find(o => o.id === orderId);
     if (!order) return;
 
+    if (status === 'dispatched') {
+        // Show courier details modal
+        const courierModal = new bootstrap.Modal(document.getElementById('courierDetailsModal'));
+        courierModal.show();
+        return;
+    } else if (status === 'cancelled') {
+        // Show cancellation reason modal
+        const cancelModal = new bootstrap.Modal(document.getElementById('cancellationModal'));
+        cancelModal.show();
+        return;
+    }
+
+    updateShipmentStatusInternal(shipmentType, status);
+}
+
+function updateShipmentStatusInternal(shipmentType, status) {
+    const orderId = document.getElementById('detailOrderId').textContent;
+    const order = ordersData.orders.find(o => o.id === orderId);
+    if (!order) return;
+
     if (shipmentType === 'first') {
         order.items.forEach(item => {
             if (item.shipment1Quantity > 0) {
@@ -403,23 +423,124 @@ function updateShipmentStatus(shipmentType, status) {
     populateOrdersTable();
 }
 
-// Update overall order status
-function updateOrderOverallStatus(order) {
-    const allDelivered = order.items.every(item => 
-        item.status === 'delivered' && 
-        (!order.isShipmentSplit || item.secondShipmentStatus === 'delivered'));
-    
-    const allCancelled = order.items.every(item => 
-        item.status === 'cancelled' && 
-        (!order.isShipmentSplit || item.secondShipmentStatus === 'cancelled'));
-    
-    if (allDelivered) {
-        order.status = 'completed';
-    } else if (allCancelled) {
-        order.status = 'cancelled';
-    } else {
-        order.status = 'in_progress';
+function submitCourierDetails() {
+    const courierName = document.getElementById('courierName').value;
+    const trackingId = document.getElementById('trackingId').value;
+
+    if (!courierName || !trackingId) {
+        alert('Please fill in all courier details');
+        return;
     }
+
+    const orderId = document.getElementById('detailOrderId').textContent;
+    const order = ordersData.orders.find(o => o.id === orderId);
+    if (!order) return;
+
+    // Update courier details
+    order.courier = courierName;
+    order.trackingId = trackingId;
+
+    // Update UI
+    document.getElementById('detailCourier').textContent = courierName;
+    document.getElementById('detailTrackingId').textContent = trackingId;
+
+    // Close modal and update status
+    bootstrap.Modal.getInstance(document.getElementById('courierDetailsModal')).hide();
+    updateShipmentStatusInternal('first', 'dispatched');
+}
+
+function submitCancellationReason() {
+    const reason = document.getElementById('cancellationReason').value;
+    if (!reason) {
+        alert('Please enter a cancellation reason');
+        return;
+    }
+
+    // Close modal and update status
+    bootstrap.Modal.getInstance(document.getElementById('cancellationModal')).hide();
+    updateShipmentStatusInternal('first', 'cancelled');
+}
+
+// Update order metrics
+function updateOrderMetrics() {
+    let totalOrders = ordersData.orders.length;
+    let pendingOrders = 0;
+    let inProgressOrders = 0;
+    let completedOrders = 0;
+
+    ordersData.orders.forEach(order => {
+        if (order.status === 'processing') {
+            pendingOrders++;
+        } else if (['confirmed', 'dispatched'].includes(order.status)) {
+            inProgressOrders++;
+        } else if (['delivered', 'cancelled'].includes(order.status)) {
+            completedOrders++;
+        }
+    });
+
+    document.getElementById('totalOrders').textContent = totalOrders;
+    document.getElementById('processingOrders').textContent = pendingOrders;
+    document.getElementById('inTransitOrders').textContent = inProgressOrders;
+    document.getElementById('deliveredOrders').textContent = completedOrders;
+}
+
+// Populate franchise dropdowns
+function populateFranchiseDropdowns() {
+    const franchiseOptions = ordersData.franchises.map(f =>
+        `<option value="${f.id}">${f.name}</option>`
+    ).join('');
+
+    document.getElementById('franchiseFilter').innerHTML += franchiseOptions;
+    document.getElementById('orderFranchise').innerHTML = franchiseOptions;
+}
+
+// Populate orders table
+function populateOrdersTable() {
+    const tbody = document.getElementById('ordersTableBody');
+    tbody.innerHTML = ordersData.orders.map(order => `
+        <tr>
+            <td>${order.id}</td>
+            <td>${order.franchiseName}</td>
+            <td>${formatDate(order.orderDate)}</td>
+            <td>${order.items.length} items</td>
+            <td>₹${calculateOrderTotal(order)}</td>
+            <td>${order.warehouse || 'Not Assigned'}</td>
+            <td><span class="badge bg-${getStatusBadgeClass(order.status)}">${order.status}</span></td>
+            <td>
+                <button class="btn btn-sm btn-info" onclick="viewOrderDetails('${order.id}')">
+                    <i class="bi bi-eye"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Populate warehouse filter
+function populateWarehouseFilter() {
+    const warehouses = [...new Set(ordersData.orders.map(o => o.warehouse).filter(w => w))];
+    const warehouseFilter = document.getElementById('warehouseFilter');
+    warehouseFilter.innerHTML = '<option value="">All Warehouses</option>' +
+        warehouses.map(w => `<option value="${w}">${w}</option>`).join('');
+}
+
+// Format date
+function formatDate(dateStr) {
+    return new Date(dateStr).toLocaleDateString('en-IN');
+}
+
+// Calculate order total
+function calculateOrderTotal(order) {
+    return order.items.reduce((total, item) => total + (item.quantity * item.price), 0);
+}
+
+// Get status badge class
+function getStatusBadgeClass(status) {
+    const classes = {
+        'pending': 'secondary',
+        'in_progress': 'warning',
+        'completed': 'success'
+    };
+    return classes[status] || 'secondary';
 }
 
 // Add order item row
