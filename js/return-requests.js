@@ -266,19 +266,82 @@ function viewReturnDetails(requestId) {
 }
 
 // Handle return request actions (approve/reject)
-function handleReturnAction(action, requestId) {
+function handleReturnAction(action) {
+    const requestId = document.getElementById('modalRequestId').textContent;
     const request = returnRequests.find(r => r.id === requestId);
     if (!request) return;
 
-    // Update request status
-    request.status = action === 'approve' ? 'approved' : 'rejected';
+    if (action === 'approve') {
+        // Show courier details modal
+        new bootstrap.Modal(document.getElementById('courierDetailsModal')).show();
+    } else if (action === 'reject') {
+        // Show rejection reason modal
+        new bootstrap.Modal(document.getElementById('rejectionReasonModal')).show();
+    }
+}
+
+// Submit courier details and approve return
+function submitCourierDetails() {
+    const requestId = document.getElementById('modalRequestId').textContent;
+    const request = returnRequests.find(r => r.id === requestId);
+    if (!request) return;
+
+    const courierId = document.getElementById('courierId').value;
+    const returnOrderId = document.getElementById('returnOrderId').value;
+
+    if (!courierId || !returnOrderId) {
+        alert('Please fill in all courier details');
+        return;
+    }
+
+    // Update request status and add courier details
+    request.status = 'approved';
+    request.courierDetails = {
+        courierId: courierId,
+        returnOrderId: returnOrderId
+    };
 
     // Show success message
-    alert(`Return request ${requestId} has been ${request.status}`);
+    alert(`Return request ${requestId} has been approved`);
 
-    // Close modal if open
-    const modal = bootstrap.Modal.getInstance(document.getElementById('returnDetailsModal'));
-    if (modal) modal.hide();
+    // Close both modals
+    bootstrap.Modal.getInstance(document.getElementById('courierDetailsModal')).hide();
+    bootstrap.Modal.getInstance(document.getElementById('returnDetailsModal')).hide();
+
+    // Reset form
+    document.getElementById('courierDetailsForm').reset();
+
+    // Update dashboard and table
+    updateDashboardCounts();
+    filterRequests();
+}
+
+// Submit rejection reason and reject return
+function submitRejectionReason() {
+    const requestId = document.getElementById('modalRequestId').textContent;
+    const request = returnRequests.find(r => r.id === requestId);
+    if (!request) return;
+
+    const rejectionReason = document.getElementById('rejectionReason').value;
+
+    if (!rejectionReason) {
+        alert('Please select a rejection reason');
+        return;
+    }
+
+    // Update request status and add rejection reason
+    request.status = 'rejected';
+    request.rejectionReason = rejectionReason;
+
+    // Show success message
+    alert(`Return request ${requestId} has been rejected`);
+
+    // Close both modals
+    bootstrap.Modal.getInstance(document.getElementById('rejectionReasonModal')).hide();
+    bootstrap.Modal.getInstance(document.getElementById('returnDetailsModal')).hide();
+
+    // Reset form
+    document.getElementById('rejectionReasonForm').reset();
 
     // Update dashboard and table
     updateDashboardCounts();

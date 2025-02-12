@@ -61,6 +61,11 @@
                     </a>
                 </li>
                 <li class="nav-item mb-2">
+                    <a href="mother-company-scheme.html" class="nav-link text-white">
+                        <i class="bi bi-box-seam me-2"></i> Scheme Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
                     <a href="#" class="nav-link text-white">
                         <i class="bi bi-gear me-2"></i> Settings
                     </a>
@@ -217,6 +222,65 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-danger" onclick="handleReturnAction('reject')">Reject Return</button>
                     <button type="button" class="btn btn-success" onclick="handleReturnAction('approve')">Approve Return</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Courier Details Modal -->
+    <div class="modal fade" id="courierDetailsModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Enter Courier Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="courierDetailsForm">
+                        <div class="mb-3">
+                            <label for="courierId" class="form-label">Courier ID</label>
+                            <input type="text" class="form-control" id="courierId" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="returnOrderId" class="form-label">Return Order ID</label>
+                            <input type="text" class="form-control" id="returnOrderId" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="submitCourierDetails()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rejection Reason Modal -->
+    <div class="modal fade" id="rejectionReasonModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Enter Rejection Reason</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="rejectionReasonForm">
+                        <div class="mb-3">
+                            <label for="rejectionReason" class="form-label">Reason for Rejection</label>
+                            <select class="form-select" id="rejectionReason" required>
+                                <option value="" selected disabled>Select a reason</option>
+                                <option value="Invalid Return Request">Invalid Return Request</option>
+                                <option value="Product Not Eligible">Product Not Eligible</option>
+                                <option value="Warranty Expired">Warranty Expired</option>
+                                <option value="Incomplete Information">Incomplete Information</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" onclick="submitRejectionReason()">Submit</button>
                 </div>
             </div>
         </div>
