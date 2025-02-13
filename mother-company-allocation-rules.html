@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mother Company - Allocation Rules</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/mother-company-dashboard.css" rel="stylesheet">
+    <link href="css/common-dashboard.css" rel="stylesheet">
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Left Sidebar -->
+        <div class="sidebar bg-dark text-white p-3 admin-sidebar">
+            <h5 class="mb-4 py-2 border-bottom">Mother Company</h5>
+            <button class="toggle-btn" onclick="toggleSidebar()">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2">
+                    <a href="mother-company-dashboard.html" class="nav-link text-white">
+                        <i class="bi bi-speedometer2 me-2"></i> Performance
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-service.html" class="nav-link text-white">
+                        <i class="bi bi-tools me-2"></i> Service
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-franchise.html" class="nav-link text-white">
+                        <i class="bi bi-building me-2"></i> Franchises
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-orders.html" class="nav-link text-white">
+                        <i class="bi bi-box-seam me-2"></i> Order Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-returns.html" class="nav-link text-white">
+                        <i class="bi bi-arrow-return-left me-2"></i> Return Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-credits.html" class="nav-link text-white">
+                        <i class="bi bi-credit-card me-2"></i> Credit Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-commission.html" class="nav-link text-white active">
+                        <i class="bi bi-percent me-2"></i> Commission Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-dispute.html" class="nav-link text-white">
+                        <i class="bi bi-exclamation-triangle me-2"></i> Dispute Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-schemes.html" class="nav-link text-white">
+                        <i class="bi bi-gift me-2"></i> Scheme Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-allocation-rules.html" class="nav-link text-white">
+                        <i class="bi bi-gift me-2"></i> Service Allocation Rule 
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="#" class="nav-link text-white">
+                        <i class="bi bi-gear me-2"></i> Settings
+                    </a>
+                </li>
+                <li class="nav-item mt-auto">
+                    <a href="#" class="nav-link text-white" onclick="logout()">
+                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            
+            <!-- Content Area -->
+            <div class="content-wrapper p-4">
+                <div class="row mb-4">
+                    <div class="col">
+                        <h2>Allocation Rules</h2>
+                    </div>
+                    <div class="col text-end">
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRuleModal">
+                            <i class="bi bi-plus-circle"></i> Add New Rule
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Summary Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Rules</h5>
+                                <h3 class="card-text" id="totalRules">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Active Rules</h5>
+                                <h3 class="card-text" id="activeRules">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning">
+                            <div class="card-body">
+                                <h5 class="card-title">Pending Rules</h5>
+                                <h3 class="card-text" id="pendingRules">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-danger text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Inactive Rules</h5>
+                                <h3 class="card-text" id="inactiveRules">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <select class="form-select" id="typeFilter">
+                                    <option value="">All Types</option>
+                                    <option value="pincode">Pincode</option>
+                                    <option value="brand">Brand</option>
+                                    <option value="nps">NPS</option>
+                                    <option value="manual">Manual</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select" id="statusFilter">
+                                    <option value="">All Status</option>
+                                    <option value="active">Active</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="searchInput" placeholder="Search rules...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rules Table -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="rulesTable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Selection Rules</th>
+                                        <th>Sorting Rule</th>
+                                        <th>Selected Franchises</th>
+                                        <th>Priority</th>
+                                        <th>Last Updated</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Rule Modal -->
+    <div class="modal fade" id="addRuleModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Rule</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="addRuleForm">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Rule Name</label>
+                            <input type="text" class="form-control" id="ruleName" required>
+                        </div>
+
+                        <!-- Selection Rules Section -->
+                        <div class="mb-4">
+                            <h5>Selection Rules</h5>
+                            <div id="selectionRulesContainer">
+                                <!-- Sub-rules will be added here -->
+                            </div>
+                            <button type="button" class="btn btn-secondary" id="addSelectionRule">
+                                <i class="bi bi-plus-circle"></i> Add Selection Rule
+                            </button>
+                        </div>
+
+                        <!-- Franchise Selection Section -->
+                        <div class="mb-4">
+                            <h5>Franchise Selection</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">Location Filter</label>
+                                    <select class="form-select" id="franchiseLocationFilter">
+                                        <option value="all">All Locations</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Brand Filter</label>
+                                    <select class="form-select" id="franchiseBrandFilter">
+                                        <option value="all">All Brands</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Search Franchise</label>
+                                    <input type="text" class="form-control" id="franchiseSearch" placeholder="Search by name...">
+                                </div>
+                            </div>
+                            <div class="franchise-list-container" style="max-height: 200px; overflow-y: auto;">
+                                <div class="list-group" id="franchiseList">
+                                    <!-- Franchises will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <label class="form-label">Sorting Method</label>
+                            <select class="form-select" id="sortingMethod" required>
+                                <option value="">Select Sorting Method</option>
+                                <option value="nps">Highest NPS First</option>
+                                <option value="roundRobin">Round Robin</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Priority</label>
+                            <input type="number" class="form-control" id="rulePriority" min="1" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" id="ruleStatus" required>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="pending">Pending</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" form="addRuleForm" class="btn btn-primary">Save Rule</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Rule Modal -->
+    <div class="modal fade" id="editRuleModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Rule</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="editRuleForm">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Rule Name</label>
+                            <input type="text" class="form-control" id="ruleName" required>
+                        </div>
+
+                        <!-- Selection Rules Section -->
+                        <div class="mb-4">
+                            <h5>Selection Rules</h5>
+                            <div id="selectionRulesContainer">
+                                <!-- Sub-rules will be added here -->
+                            </div>
+                            <button type="button" class="btn btn-secondary" id="editSelectionRule">
+                                <i class="bi bi-plus-circle"></i> Edit Selection Rule
+                            </button>
+                        </div>
+
+                        <!-- Franchise Selection Section -->
+                        <div class="mb-4">
+                            <h5>Franchise Selection</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">Location Filter</label>
+                                    <select class="form-select" id="franchiseLocationFilter">
+                                        <option value="all">All Locations</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Brand Filter</label>
+                                    <select class="form-select" id="franchiseBrandFilter">
+                                        <option value="all">All Brands</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Search Franchise</label>
+                                    <input type="text" class="form-control" id="franchiseSearch" placeholder="Search by name...">
+                                </div>
+                            </div>
+                            <div class="franchise-list-container" style="max-height: 200px; overflow-y: auto;">
+                                <div class="list-group" id="franchiseList">
+                                    <!-- Franchises will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <label class="form-label">Sorting Method</label>
+                            <select class="form-select" id="sortingMethod" required>
+                                <option value="">Select Sorting Method</option>
+                                <option value="nps">Highest NPS First</option>
+                                <option value="roundRobin">Round Robin</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Priority</label>
+                            <input type="number" class="form-control" id="rulePriority" min="1" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" id="ruleStatus" required>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="pending">Pending</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" form="editRuleForm" class="btn btn-primary">Save Rule</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap and other dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/franchise-selector.js"></script>
+    <script src="js/mother-company-allocation-rules.js"></script>
+</body>
+</html>
