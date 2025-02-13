@@ -20,7 +20,7 @@ let allocationRules = [
             }
         ],
         sortingRule: 'nps',
-        selectedFranchise: ['Franchise 1', 'Franchise 2', 'Franchise 3'],
+        selectedFranchise: ['franchise1', 'franchise2', 'franchise3'],
         priority: 1,
         lastUpdated: '2024-02-01',
         status: 'active'
@@ -46,7 +46,7 @@ let allocationRules = [
             }
         ],
         sortingRule: 'roundrobin',
-        selectedFranchise: ['Franchise 4', 'Franchise 5'],
+        selectedFranchise: ['franchise1', 'franchise2'],
         priority: 2,
         lastUpdated: '2024-02-01',
         status: 'active'
@@ -72,7 +72,7 @@ let allocationRules = [
             }
         ],
         sortingRule: 'nps',
-        selectedFranchise: ['Franchise 6', 'Franchise 7', 'Franchise 8'],
+        selectedFranchise: ['franchise2', 'franchise3'],
         priority: 3,
         lastUpdated: '2024-01-30',
         status: 'pending'
@@ -402,6 +402,13 @@ function editRule(ruleId) {
     // Clear existing selection rules
     const selectionRulesContainer = document.getElementById('editSelectionRulesContainer');
     selectionRulesContainer.innerHTML = '';
+
+    if (rule.selectedFranchise) {
+        rule.selectedFranchise.forEach(franchise => {
+            document.getElementById(`franchise-${franchise}`).checked = true;
+        });
+    }
+
 
     // Add existing sub-rules
     rule.subRules.forEach((subRule, index) => {

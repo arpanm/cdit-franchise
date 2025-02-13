@@ -1,21 +1,21 @@
 // Mock data for franchises
 const franchises = [
     {
-        id: 'f1',
+        id: 'franchise1',
         name: 'Mumbai Central Franchise',
         location: 'Mumbai',
         brands: ['samsung', 'lg', 'whirlpool'],
         nps: 4.5
     },
     {
-        id: 'f2',
+        id: 'franchise2',
         name: 'Delhi North Franchise',
         location: 'Delhi',
         brands: ['samsung', 'whirlpool'],
         nps: 4.2
     },
     {
-        id: 'f3',
+        id: 'franchise3',
         name: 'Bangalore Tech Franchise',
         location: 'Bangalore',
         brands: ['lg', 'whirlpool'],
@@ -25,18 +25,21 @@ const franchises = [
 
 // Initialize franchise selector
 function initializeFranchiseSelector() {
-    populateFilters();
-    attachEventListeners();
-    renderFranchiseList(franchises);
+    populateFilters('franchiseLocationFilter', 'franchiseBrandFilter');
+    populateFilters('editFranchiseLocationFilter', 'editFranchiseBrandFilter');
+    attachEventListeners('franchiseLocationFilter', 'franchiseBrandFilter', 'franchiseSearch');
+    attachEventListeners('editFranchiseLocationFilter', 'editFranchiseBrandFilter', 'editFranchiseSearch');
+    renderFranchiseList(franchises, 'franchiseList');
+    renderFranchiseList(franchises, 'editFranchiseList');
 }
 
 // Populate filter dropdowns
-function populateFilters() {
+function populateFilters(locationFilterName, brandFilterName) {
     const locations = [...new Set(franchises.map(f => f.location))];
     const brands = [...new Set(franchises.flatMap(f => f.brands))];
 
-    const locationFilter = document.getElementById('franchiseLocationFilter');
-    const brandFilter = document.getElementById('franchiseBrandFilter');
+    const locationFilter = document.getElementById(locationFilterName);
+    const brandFilter = document.getElementById(brandFilterName);
 
     // Populate locations
     locations.forEach(location => {
@@ -56,10 +59,10 @@ function populateFilters() {
 }
 
 // Attach event listeners
-function attachEventListeners() {
-    const locationFilter = document.getElementById('franchiseLocationFilter');
-    const brandFilter = document.getElementById('franchiseBrandFilter');
-    const searchInput = document.getElementById('franchiseSearch');
+function attachEventListeners(locationFilterName, brandFilterName, searchFilterName) {
+    const locationFilter = document.getElementById(locationFilterName);
+    const brandFilter = document.getElementById(brandFilterName);
+    const searchInput = document.getElementById(searchFilterName);
 
     locationFilter.addEventListener('change', applyFilters);
     brandFilter.addEventListener('change', applyFilters);
@@ -84,8 +87,8 @@ function applyFilters() {
 }
 
 // Render franchise list
-function renderFranchiseList(franchises) {
-    const franchiseList = document.getElementById('franchiseList');
+function renderFranchiseList(franchises, franchileListName) {
+    const franchiseList = document.getElementById(franchileListName);
     franchiseList.innerHTML = '';
 
     franchises.forEach(franchise => {

@@ -219,23 +219,23 @@
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <label class="form-label">Location Filter</label>
-                                    <select class="form-select" id="franchiseLocationFilter">
+                                    <select class="form-select" id="editFranchiseLocationFilter">
                                         <option value="all">All Locations</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Brand Filter</label>
-                                    <select class="form-select" id="franchiseBrandFilter">
+                                    <select class="form-select" id="editFranchiseBrandFilter">
                                         <option value="all">All Brands</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Search Franchise</label>
-                                    <input type="text" class="form-control" id="franchiseSearch" placeholder="Search by name...">
+                                    <input type="text" class="form-control" id="editFranchiseSearch" placeholder="Search by name...">
                                 </div>
                             </div>
                             <div class="franchise-list-container" style="max-height: 200px; overflow-y: auto;">
-                                <div class="list-group" id="franchiseList">
+                                <div class="list-group" id="editFranchiseList">
                                     <!-- Franchises will be populated here -->
                                 </div>
                             </div>
@@ -284,13 +284,13 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Rule Name</label>
-                            <input type="text" class="form-control" id="ruleName" required>
+                            <input type="text" class="form-control" id="editRuleName" required>
                         </div>
 
                         <!-- Selection Rules Section -->
                         <div class="mb-4">
                             <h5>Selection Rules</h5>
-                            <div id="selectionRulesContainer">
+                            <div id="editSelectionRulesContainer">
                                 <!-- Sub-rules will be added here -->
                             </div>
                             <button type="button" class="btn btn-secondary" id="editSelectionRule">
@@ -327,7 +327,7 @@
                         </div>
                         <div class="mt-3">
                             <label class="form-label">Sorting Method</label>
-                            <select class="form-select" id="sortingMethod" required>
+                            <select class="form-select" id="editSortingMethod" required>
                                 <option value="">Select Sorting Method</option>
                                 <option value="nps">Highest NPS First</option>
                                 <option value="roundRobin">Round Robin</option>
@@ -336,12 +336,12 @@
 
                         <div class="mb-3">
                             <label class="form-label">Priority</label>
-                            <input type="number" class="form-control" id="rulePriority" min="1" required>
+                            <input type="number" class="form-control" id="editRulePriority" min="1" required>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Status</label>
-                            <select class="form-select" id="ruleStatus" required>
+                            <select class="form-select" id="editRuleStatus" required>
                                 <option value="active">Active</option>
                                 <option value="inactive">Inactive</option>
                                 <option value="pending">Pending</option>
