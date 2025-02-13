@@ -1,9 +1,9 @@
 // Mock data for commissions
 let commissionData = [
-    { id: 1, type: 'repair', itemName: 'AC Repair', category: 'AC', brands: 'Samsung, LG', commissionPercentage: 10, lastUpdated: '2023-10-15', status: 'active' },
-    { id: 2, type: 'installation', itemName: 'AC Installation', category: 'AC', brands: 'Samsung, LG', commissionPercentage: 8, lastUpdated: '2023-10-15', status: 'active' },
-    { id: 3, type: 'spare_parts', itemName: 'Compressor', category: 'Refrgerator', brands: 'Samsung', commissionPercentage: 15, lastUpdated: '2023-10-14', status: 'active' },
-    { id: 4, type: 'accessories', itemName: 'Remote Control', category: 'TV', brands: 'BPL, LG', commissionPercentage: 20, lastUpdated: '2023-10-13', status: 'active' }
+    { id: 1, type: 'repair', itemName: 'AC Repair', category: 'ac', brands: 'samsung, lg', commissionPercentage: 10, lastUpdated: '2023-10-15', status: 'active' },
+    { id: 2, type: 'installation', itemName: 'AC Installation', category: 'ac', brands: 'samsung, lg', commissionPercentage: 8, lastUpdated: '2023-10-15', status: 'active' },
+    { id: 3, type: 'spare_parts', itemName: 'Compressor', category: 'refrigerator', brands: 'samsung', commissionPercentage: 15, lastUpdated: '2023-10-14', status: 'active' },
+    { id: 4, type: 'accessories', itemName: 'Remote Control', category: 'tv', brands: 'bpl, lg', commissionPercentage: 20, lastUpdated: '2023-10-13', status: 'active' }
 ];
 
 // Initialize the dashboard
@@ -70,8 +70,14 @@ function renderCommissionTable(filteredData = null) {
 
 // Setup event listeners
 function setupEventListeners() {
+    // Type filter
+    document.getElementById('typeFilter').addEventListener('change', filterCommissions);
+
     // Category filter
     document.getElementById('categoryFilter').addEventListener('change', filterCommissions);
+
+    // Category filter
+    document.getElementById('brandFilter').addEventListener('change', filterCommissions);
     
     // Search input
     document.getElementById('searchInput').addEventListener('input', filterCommissions);
@@ -91,7 +97,7 @@ function filterCommissions() {
     const searchQuery = document.getElementById('searchInput').value.toLowerCase();
     
     const filteredData = commissionData.filter(item => {
-        const matchesType = !typeFilter || item.category === typeFilter;
+        const matchesType = !typeFilter || item.type === typeFilter;
         const matchesCategory = !categoryFilter || item.category === categoryFilter;
         const matchesBrand = !brandFilter || item.brands.toLocaleLowerCase().includes(brandFilter);
         const matchesSearch = item.itemName.toLowerCase().includes(searchQuery) ||

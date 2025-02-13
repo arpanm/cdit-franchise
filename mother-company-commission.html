@@ -130,11 +130,34 @@
                     <!-- Filters -->
                     <div class="row mb-3">
                         <div class="col-md-3">
-                            <select class="form-select" id="categoryFilter">
-                                <option value="">All Categories</option>
-                                <option value="service">Service</option>
+                            <select class="form-select" id="typeFilter">
+                                <option value="">All Types</option>
+                                <option value="repair">Repair</option>
+                                <option value="installation">Installation</option>
+                                <option value="maintenance">Periodic Maintenance</option>
                                 <option value="spare_parts">Spare Parts</option>
                                 <option value="accessories">Accessories</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" id="categoryFilter">
+                                <option value="">All Categories</option>
+                                <option value="ac">AC</option>
+                                <option value="refrigerator">Refrigerator</option>
+                                <option value="tv">TV</option>
+                                <option value="washing machine">Washing Machine</option>
+                                <option value="phone">Phone</option>
+                                <option value="sda">SDA</option>
+                                <option value="storage">Storage</option>
+                                <option value="audio">Audio</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" id="brandFilter">
+                                <option value="">All Brands</option>
+                                <option value="lg">LG</option>
+                                <option value="samsung">Samsung</option>
+                                <option value="bpl">BPL</option>
                             </select>
                         </div>
                         <div class="col-md-3">
@@ -179,11 +202,11 @@
                             <label class="form-label">Type</label>
                             <select class="form-select" id="type" required>
                                 <option value="">Select Type</option>
-                                <option value="Repair">Repair</option>
-                                <option value="Installation">Installation</option>
-                                <option value="Periodic Maintenance">Periodic Maintenance</option>
-                                <option value="Spare Parts">Spare Parts</option>
-                                <option value="Accessories">Accessories</option>
+                                <option value="repair">Repair</option>
+                                <option value="installation">Installation</option>
+                                <option value="periodic maintenance">Periodic Maintenance</option>
+                                <option value="spare parts">Spare Parts</option>
+                                <option value="accessories">Accessories</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -194,14 +217,14 @@
                             <label class="form-label">Category</label>
                             <select class="form-select" id="category" required>
                                 <option value="">Select Category</option>
-                                <option value="AC">AC</option>
-                                <option value="Refrigerator">Refrigerator</option>
-                                <option value="TV">TV</option>
-                                <option value="Washing Machine">Washing Machine</option>
-                                <option value="Phone">Phone</option>
-                                <option value="SDA">SDA</option>
-                                <option value="Storage">Storage</option>
-                                <option value="Audio">Audio</option>
+                                <option value="ac">AC</option>
+                                <option value="refrigerator">Refrigerator</option>
+                                <option value="tv">TV</option>
+                                <option value="washing machine">Washing Machine</option>
+                                <option value="phone">Phone</option>
+                                <option value="sda">SDA</option>
+                                <option value="storage">Storage</option>
+                                <option value="audio">Audio</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -265,13 +288,13 @@
                             <select class="form-select" id="editCategory" required>
                                 <option value="">Select Category</option>
                                 <option value="ac">AC</option>
-                                <option value="ref">Refrigerator</option>
+                                <option value="refrigerator">Refrigerator</option>
                                 <option value="tv">TV</option>
-                                <option value="wm">Washing Machine</option>
-                                <option value="ph">Phone</option>
+                                <option value="washing machine">Washing Machine</option>
+                                <option value="phone">Phone</option>
                                 <option value="sda">SDA</option>
-                                <option value="sto">Storage</option>
-                                <option value="aud">Audio</option>
+                                <option value="storage">Storage</option>
+                                <option value="audio">Audio</option>
                             </select>
                         </div>
                         <div class="mb-3">
