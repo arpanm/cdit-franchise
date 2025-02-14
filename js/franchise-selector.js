@@ -71,9 +71,19 @@ function attachEventListeners(locationFilterName, brandFilterName, searchFilterN
 
 // Apply filters and search
 function applyFilters() {
-    const location = document.getElementById('franchiseLocationFilter').value;
-    const brand = document.getElementById('franchiseBrandFilter').value;
-    const searchQuery = document.getElementById('franchiseSearch').value.toLowerCase();
+    alert(this.id);
+    if (this.id.startsWith("event")) {
+        applyFilters('editFranchiseLocationFilter', 'editFranchiseBrandFilter', 'editFranchiseSearch', 'editFranchiseList');
+    } else {
+        applyFilters('franchiseLocationFilter', 'franchiseBrandFilter', 'franchiseSearch', 'franchiseList');
+    }
+}
+
+function applyFilters(locationFilterName, brandFilterName, searchFilterName, franchileListName) {
+    alert(this.id);
+    const location = document.getElementById(locationFilterName).value;
+    const brand = document.getElementById(brandFilterName).value;
+    const searchQuery = document.getElementById(searchFilterName).value.toLowerCase();
 
     const filteredFranchises = franchises.filter(franchise => {
         const locationMatch = location === 'all' || franchise.location === location;
@@ -83,7 +93,7 @@ function applyFilters() {
         return locationMatch && brandMatch && searchMatch;
     });
 
-    renderFranchiseList(filteredFranchises);
+    renderFranchiseList(filteredFranchises, franchileListName);
 }
 
 // Render franchise list
