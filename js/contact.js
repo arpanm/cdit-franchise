@@ -1,6 +1,18 @@
 // Function to handle contact form submission
 async function handleContactSubmit(event) {
     event.preventDefault();
+    
+    // Get the submit button and disable it
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+
+    // Check if form is already being submitted
+    if (submitButton.dataset.submitting === 'true') {
+        return;
+    }
+
+    // Set submitting flag
+    submitButton.dataset.submitting = 'true';
 
     // Initialize EmailJS with your public key
     emailjs.init("sRgORvA-80TMW7Oan");
@@ -35,8 +47,20 @@ async function handleContactSubmit(event) {
     } catch (error) {
         console.error('Error:', error);
         alert('Sorry, there was an error sending your message. Please try again later.');
+    } finally {
+        // Reset submitting flag and enable button
+        submitButton.dataset.submitting = 'false';
+        submitButton.disabled = false;
     }
 }
 
-// Add event listener to the form
-document.getElementById('contactForm').addEventListener('submit', handleContactSubmit);
+// Remove any existing event listeners and add a new one
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+    // Remove the form completely from DOM and create a fresh copy
+    const newContactForm = contactForm.cloneNode(true);
+    contactForm.parentNode.replaceChild(newContactForm, contactForm);
+    
+    // Add single event listener to the new form
+    newContactForm.addEventListener('submit', handleContactSubmit, { once: true });
+}
