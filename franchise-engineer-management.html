@@ -15,10 +15,27 @@
             padding: 10px;
         }
         .calendar-day {
-            padding: 10px;
+            padding: 8px;
             text-align: center;
             border: 1px solid #ddd;
             border-radius: 4px;
+            min-height: 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .calendar-day .day-number {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        .calendar-day .time-details,
+        .calendar-day .convenience-amount {
+            font-size: 0.8em;
+            color: #666;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 2px 4px;
+            border-radius: 3px;
         }
         .calendar-day.present {
             background-color: #d4edda;
@@ -76,38 +93,34 @@
                 </li>
             </ul>
         </div>
-        <div class="container-fluid">
+
+        <!-- Main Content -->
+        <div class="main-content p-4 w-100">
+            <h2 class="mb-4">Engineers Management Dashboard</h2>
+
             <!-- Summary Cards -->
-            <div class="row mb-4 mt-4">
-                <div class="col-xl-3 col-md-6">
-                    <div class="card">
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card bg-danger text-white">
                         <div class="card-body">
                             <h6 class="card-title mb-3">Total Engineers</h6>
-                            <h2 class="mb-0" id="totalEngineers">0</h2>
+                            <h2 class="mb-0" id="totalEngineers">20</h2>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-md-6">
-                    <div class="card">
+                <div class="col-md-4">
+                    <div class="card bg-primary text-white">
                         <div class="card-body">
                             <h6 class="card-title mb-3">Active Engineers</h6>
-                            <h2 class="mb-0" id="activeEngineers">0</h2>
+                            <h2 class="mb-0" id="activeEngineers">18</h2>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-md-6">
-                    <div class="card">
+                <div class="col-md-4">
+                    <div class="card bg-warning text-dark">
                         <div class="card-body">
                             <h6 class="card-title mb-3">Average Daily Services</h6>
-                            <h2 class="mb-0" id="avgDailyServices">0</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title mb-3">Total Service Areas</h6>
-                            <h2 class="mb-0" id="totalServiceAreas">0</h2>
+                            <h2 class="mb-0" id="avgDailyServices">110</h2>
                         </div>
                     </div>
                 </div>
@@ -222,6 +235,65 @@
         </div>
     </div>
 
+    <!-- Edit Engineer Modal -->
+    <div class="modal fade" id="editEngineerModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Engineer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editEngineerForm">
+                        <input type="hidden" id="editEngineerId">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" id="editEngineerName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Contact</label>
+                                <input type="tel" class="form-control" id="editEngineerContact" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Brands</label>
+                                <select class="form-select" id="editEngineerBrands" multiple required>
+                                    <option value="Samsung">Samsung</option>
+                                    <option value="LG">LG</option>
+                                    <option value="Whirlpool">Whirlpool</option>
+                                    <option value="Haier">Haier</option>
+                                    <option value="Godrej">Godrej</option>
+                                    <option value="IFB">IFB</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Categories</label>
+                                <select class="form-select" id="editEngineerCategories" multiple required>
+                                    <option value="Refrigerator">Refrigerator</option>
+                                    <option value="Washing Machine">Washing Machine</option>
+                                    <option value="Air Conditioner">Air Conditioner</option>
+                                    <option value="Microwave">Microwave</option>
+                                    <option value="Dishwasher">Dishwasher</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Service Area Pincodes</label>
+                            <input type="text" class="form-control" id="editEngineerPincodes" 
+                                   placeholder="Enter comma-separated pincodes" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="engineerManager.saveEditedEngineer()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Engineer Details Modal -->
     <div class="modal fade" id="engineerDetailsModal" tabindex="-1">
         <div class="modal-dialog modal-xl">
@@ -231,9 +303,19 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="mb-3">
+                        <select class="form-select" id="engineerDetailsMonth">
+                            <option value="2024-01">January 2024</option>
+                            <option value="2023-12">December 2023</option>
+                            <option value="2023-11">November 2023</option>
+                        </select>
+                    </div>
                     <ul class="nav nav-tabs" id="engineerDetailsTabs">
                         <li class="nav-item">
                             <a class="nav-link active" data-bs-toggle="tab" href="#attendance">Attendance</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#convenience">Convenience</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#services">Services</a>
@@ -248,6 +330,9 @@
                     <div class="tab-content mt-3">
                         <div class="tab-pane fade show active" id="attendance">
                             <div id="attendanceCalendar"></div>
+                        </div>
+                        <div class="tab-pane fade" id="convenience">
+                            <div id="convenienceCalendar"></div>
                         </div>
                         <div class="tab-pane fade" id="services">
                             <canvas id="servicesChart"></canvas>
@@ -267,5 +352,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/franchise-engineer-management.js"></script>
+    <script src="js/login.js"></script>
 </body>
 </html>

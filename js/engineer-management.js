@@ -2,6 +2,7 @@
 class EngineerManager {
     constructor() {
         this.engineers = [
+        // Initialize engineers array
             {
                 id: 'ENG001',
                 name: 'Raj Kumar',

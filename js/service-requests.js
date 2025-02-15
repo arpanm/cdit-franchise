@@ -342,9 +342,13 @@ function updateTable() {
 
         // Payment Status badge
         const paymentStatusClass = {
-            'Payment Pending': 'bg-warning',
+            'Payment Pending': 'bg-danger',
             'Paid': 'bg-success',
-            'Free': 'bg-success'
+            'Free': 'bg-success',
+            'Partially Paid': 'bg-warning',
+            'Refunded': 'bg-info',
+            'Under Warranty': 'bg-success',
+            'COD': 'bg-warning'
         }[request.paymentStatus];
 
         row.append(`<td><span class="badge ${paymentStatusClass}">${request.paymentStatus}</span></td>`);
@@ -353,8 +357,16 @@ function updateTable() {
         // Status badge
         const statusClass = {
             'Pending': 'bg-warning',
+            'Pending Approval': 'bg-danger',
             'In Progress': 'bg-primary',
-            'Completed': 'bg-success'
+            'Completed': 'bg-success',
+            'Escalated': 'bg-danger',
+            'On Hold': 'bg-secondary',
+            'Cancelled': 'bg-danger',
+            'Scheduled': 'bg-warning',
+            'Parts Pending': 'bg-danger',
+            'Quality Check': 'bg-info',
+            'Customer Review Pending': 'bg-info'
         }[request.status];
 
         row.append(`<td><span class="badge ${statusClass}">${request.status}</span></td>`);
