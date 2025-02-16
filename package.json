@@ -1,7 +1,7 @@
 {
-  "name": "cdit-franchise",
+  "name": "FraMaSaaS AI",
   "version": "1.0.0",
-  "description": "CDIT Franchise Dashboard",
+  "description": "FraMaSaaS AI - AI Based Business Growth SaaS Platform",
   "scripts": {
     "start": "http-server -p 8080"
   },
