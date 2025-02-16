@@ -548,43 +548,14 @@ const mockEngineersData = {
 
 class EngineerManagement {
     constructor() {
-        this.engineersData = {
-            summary: {
-                totalEngineers: 25,
-                activeEngineers: 20,
-                avgDailyServices: 8
-            },
-            brands: ['Samsung', 'LG', 'Whirlpool', 'Haier', 'Godrej', 'IFB'],
-            categories: ['Refrigerator', 'Washing Machine', 'Air Conditioner', 'Microwave', 'Dishwasher'],
-            engineers: [
-                {
-                    id: 'ENG001',
-                    name: 'Rajesh Kumar',
-                    contact: '9876543210',
-                    brands: ['Samsung', 'LG', 'Whirlpool'],
-                    categories: ['Refrigerator', 'Washing Machine'],
-                    servicePincodes: ['400001', '400002', '400003'],
-                    performanceScore: 4.5,
-                    status: 'active'
-                },
-                {
-                    id: 'ENG002',
-                    name: 'Priya Singh',
-                    contact: '9876543211',
-                    brands: ['Samsung', 'LG'],
-                    categories: ['Air Conditioner'],
-                    servicePincodes: ['400004', '400005'],
-                    performanceScore: 4.8,
-                    status: 'active'
-                }
-            ]
-        };
+        this.engineersData = mockEngineersData;
         this.initializeDashboard();
     }
 
     initializeDashboard() {
         this.updateSummaryCards();
-        this.populateEngineersTable();
+        this.initializeFilters();
+        this.populateEngineersTable(this.engineersData.engineers);
         this.initializeAddEngineerModal();
     }
 
@@ -606,7 +577,7 @@ class EngineerManagement {
     }
 
     showEditEngineer(engineerId) {
-        const engineer = engineersData.engineers.find(eng => eng.id === engineerId);
+        const engineer = this.engineersData.engineers.find(eng => eng.id === engineerId);
         if (engineer) {
             // Populate form fields
             document.getElementById('editEngineerId').value = engineer.id;
@@ -641,7 +612,7 @@ class EngineerManagement {
     initializeFilters() {
         // Populate brand filter
         const brandFilter = document.getElementById('brandFilter');
-        engineersData.brands.forEach(brand => {
+        this.engineersData.brands.forEach(brand => {
             const option = document.createElement('option');
             option.value = brand;
             option.textContent = brand;
@@ -650,7 +621,7 @@ class EngineerManagement {
 
         // Populate category filter
         const categoryFilter = document.getElementById('categoryFilter');
-        engineersData.categories.forEach(category => {
+        this.engineersData.categories.forEach(category => {
             const option = document.createElement('option');
             option.value = category;
             option.textContent = category;
@@ -673,7 +644,7 @@ class EngineerManagement {
         if (!locationFilter) return;
 
         // Get unique locations from engineers
-        const uniqueLocations = [...new Set(this.engineers.map(engineer => engineer.servicePincodes).flat())];
+        const uniqueLocations = [...new Set(this.engineersData.engineers.map(engineer => engineer.servicePincodes).flat())];
 
         // Sort locations alphabetically
         uniqueLocations.sort();
@@ -698,7 +669,7 @@ class EngineerManagement {
         const status = document.getElementById('statusFilter').value;
         const location = document.getElementById('locationFilter').value;
 
-        const filteredEngineers = this.engineers.filter(engineer => {
+        const filteredEngineers = this.engineersData.engineers.filter(engineer => {
             const brandMatch = !brand || engineer.brands.includes(brand);
             const categoryMatch = !category || engineer.categories.includes(category);
             const statusMatch = !status || engineer.status === status;
@@ -706,7 +677,7 @@ class EngineerManagement {
             return brandMatch && categoryMatch && statusMatch && locationMatch;
         });
 
-        this.populateEngineersTable();
+        this.populateEngineersTable(filteredEngineers);
     }
 
     updateSummaryCards() {
@@ -715,11 +686,11 @@ class EngineerManagement {
         document.getElementById('avgDailyServices').textContent = this.engineersData.summary.avgDailyServices;
     }
 
-    populateEngineersTable() {
+    populateEngineersTable(engineers) {
         const tableBody = document.querySelector('#engineersTable tbody');
         if (!tableBody) return;
 
-        tableBody.innerHTML = this.engineersData.engineers.map(engineer => `
+        tableBody.innerHTML = engineers.map(engineer => `
             <tr>
                 <td>${engineer.name}</td>
                 <td>${engineer.brands.join(', ')}</td>
@@ -757,7 +728,7 @@ class EngineerManagement {
     }
 
     showEngineerDetails(engineerId) {
-        const engineer = mockEngineersData.engineers.find(eng => eng.id === engineerId);
+        const engineer = this.engineersData.engineers.find(eng => eng.id === engineerId);
         if (!engineer) return;
 
         // Show the modal
@@ -1121,7 +1092,7 @@ function saveEngineerChanges(engineerId) {
         engineer.status = formData.get('status');
 
         // Update the table
-        window.engineerManagement.populateEngineersTable();
+        window.engineerManagement.populateEngineersTable(window.engineerManagement.engineersData.engineers);
 
         // Close the modal
         const modal = bootstrap.Modal.getInstance(document.getElementById('editEngineerModal'));
