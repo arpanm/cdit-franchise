@@ -311,9 +311,3 @@ function addNewPayment() {
     bootstrap.Modal.getInstance(document.getElementById('addPaymentModal')).hide();
     document.getElementById('addPaymentForm').reset();
 }
-
-// Logout function
-function logout() {
-    // Implement logout logic here
-    window.location.href = 'login.html';
-}

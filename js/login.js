@@ -11,7 +11,7 @@ function handleLogin(event) {
         if (username === 'admin' && password === 'admin123') {
             sessionStorage.setItem('isLoggedIn', 'true');
             sessionStorage.setItem('username', username);
-            window.location.href = 'admin-dashboard.html';
+            window.location.href = 'franchise-service.html';
         } else if (username === 'madmin' && password === 'madmin123') {
             sessionStorage.setItem('isLoggedIn', 'true');
             sessionStorage.setItem('username', username);
@@ -27,7 +27,7 @@ function handleLogin(event) {
         if (username === 'admin' && otp === '123456') {
             sessionStorage.setItem('isLoggedIn', 'true');
             sessionStorage.setItem('username', username);
-            window.location.href = 'admin-dashboard.html';
+            window.location.href = 'franchise-service.html';
         } else if (username === 'madmin' && otp === '123456') {
             sessionStorage.setItem('isLoggedIn', 'true');
             sessionStorage.setItem('username', username);
@@ -97,13 +97,13 @@ function checkLoginStatus() {
 
     // If not logged in and trying to access protected pages, redirect to login
     if (!isLoggedIn && currentPage !== 'login.html') {
-        window.location.href = 'login.html';
+        window.location.href = 'franchise-service.html';
     }
 
     // If logged in and on login page, redirect to dashboard
     if (isLoggedIn && currentPage === 'login.html') {
         if (username === 'admin') {
-            window.location.href = 'admin-dashboard.html';
+            window.location.href = 'franchise-service.html';
         } else if (username ==='madmin') {
             window.location.href = 'mother-company-dashboard.html';
         }
