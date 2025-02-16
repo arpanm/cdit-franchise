@@ -341,11 +341,6 @@ function capitalizeFirst(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-// Toggle sidebar
-function toggleSidebar() {
-    document.querySelector('.admin-sidebar').classList.toggle('collapsed');
-}
-
 // Logout function
 function logout() {
     window.location.href = 'login.html';

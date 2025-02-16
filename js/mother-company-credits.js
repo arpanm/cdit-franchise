@@ -312,11 +312,6 @@ function addNewPayment() {
     document.getElementById('addPaymentForm').reset();
 }
 
-// Toggle sidebar
-function toggleSidebar() {
-    document.querySelector('.admin-sidebar').classList.toggle('collapsed');
-}
-
 // Logout function
 function logout() {
     // Implement logout logic here

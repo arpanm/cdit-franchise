@@ -193,11 +193,6 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-// Toggle sidebar
-function toggleSidebar() {
-    document.querySelector('.admin-sidebar').classList.toggle('collapsed');
-}
-
 // Logout function
 function logout() {
     // Implement logout functionality

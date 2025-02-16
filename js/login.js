@@ -116,5 +116,14 @@ function logout () {
     window.location.href = 'login.html';
 }
 
+// Toggle sidebar
+function toggleSidebar() {
+    document.querySelector('.admin-sidebar').classList.toggle('collapsed');
+    document.querySelector('main').parentElement.classList.toggle('sidebar-collapsed');
+    const toggleBtn = document.querySelector('.toggle-btn i');
+    toggleBtn.classList.toggle('bi-chevron-left');
+    toggleBtn.classList.toggle('bi-chevron-right');
+}
+
 // Check login status when page loads
 window.addEventListener('load', checkLoginStatus);

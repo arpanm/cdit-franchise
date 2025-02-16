@@ -445,11 +445,6 @@ function getStatusBadgeClass(status) {
     return classes[status] || 'bg-secondary';
 }
 
-// Sidebar toggle function
-function toggleSidebar() {
-    document.querySelector('.admin-sidebar').classList.toggle('collapsed');
-}
-
 // Logout function
 function logout() {
     // Implement logout logic here
