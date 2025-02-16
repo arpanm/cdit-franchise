@@ -6,6 +6,14 @@ let commissionData = [
     { id: 4, type: 'accessories', itemName: 'Remote Control', category: 'tv', brands: 'bpl, lg', commissionPercentage: 20, lastUpdated: '2023-10-13', status: 'active' }
 ];
 
+// Mock transaction data
+const transactionData = [
+    { type: 'repair', amount: 25000 },
+    { type: 'installation', amount: 15000 },
+    { type: 'spare_parts', amount: 35000 },
+    { type: 'accessories', amount: 8000 }
+];
+
 // Initialize the dashboard
 document.addEventListener('DOMContentLoaded', function() {
     updateSummaryCards();
@@ -16,9 +24,9 @@ document.addEventListener('DOMContentLoaded', function() {
 // Update summary cards
 function updateSummaryCards() {
     const totalCommission = calculateTotalCommission();
-    const serviceCommission = calculateCategoryCommission('service');
-    const sparePartsCommission = calculateCategoryCommission('spare_parts');
-    const accessoriesCommission = calculateCategoryCommission('accessories');
+    const serviceCommission = calculateServiceCommission();
+    const sparePartsCommission = calculateTypeCommission('spare_parts');
+    const accessoriesCommission = calculateTypeCommission('accessories');
 
     document.getElementById('totalCommission').textContent = `₹${totalCommission.toFixed(2)}`;
     document.getElementById('serviceCommission').textContent = `₹${serviceCommission.toFixed(2)}`;
@@ -28,14 +36,39 @@ function updateSummaryCards() {
 
 // Calculate total commission
 function calculateTotalCommission() {
-    return commissionData.reduce((total, item) => total + item.commissionPercentage, 0);
+    return transactionData.reduce((total, transaction) => {
+        const commission = commissionData.find(c => c.type === transaction.type && c.status === 'active');
+        if (commission) {
+            return total + (transaction.amount * commission.commissionPercentage / 100);
+        }
+        return total;
+    }, 0);
 }
 
-// Calculate category-wise commission
-function calculateCategoryCommission(category) {
-    return commissionData
-        .filter(item => item.category === category)
-        .reduce((total, item) => total + item.commissionPercentage, 0);
+// Calculate service commission (repair + installation)
+function calculateServiceCommission() {
+    return transactionData
+        .filter(t => ['repair', 'installation'].includes(t.type))
+        .reduce((total, transaction) => {
+            const commission = commissionData.find(c => c.type === transaction.type && c.status === 'active');
+            if (commission) {
+                return total + (transaction.amount * commission.commissionPercentage / 100);
+            }
+            return total;
+        }, 0);
+}
+
+// Calculate commission by type
+function calculateTypeCommission(type) {
+    return transactionData
+        .filter(t => t.type === type)
+        .reduce((total, transaction) => {
+            const commission = commissionData.find(c => c.type === transaction.type && c.status === 'active');
+            if (commission) {
+                return total + (transaction.amount * commission.commissionPercentage / 100);
+            }
+            return total;
+        }, 0);
 }
 
 // Render commission table
@@ -50,8 +83,8 @@ function renderCommissionTable(filteredData = null) {
         row.innerHTML = `
             <td>${capitalizeFirstLetter(item.type.replace('_', ' '))}</td>
             <td>${item.itemName}</td>
-            <td>${item.category}</td>
-            <td>${item.brands}</td>
+            <td>${capitalizeFirstLetter(item.category)}</td>
+            <td>${item.brands.toUpperCase()}</td>
             <td>${item.commissionPercentage}%</td>
             <td>${item.lastUpdated}</td>
             <td><span class="badge ${item.status === 'active' ? 'bg-success' : 'bg-danger'}">${capitalizeFirstLetter(item.status)}</span></td>
@@ -76,7 +109,7 @@ function setupEventListeners() {
     // Category filter
     document.getElementById('categoryFilter').addEventListener('change', filterCommissions);
 
-    // Category filter
+    // Brand filter
     document.getElementById('brandFilter').addEventListener('change', filterCommissions);
     
     // Search input
@@ -99,9 +132,9 @@ function filterCommissions() {
     const filteredData = commissionData.filter(item => {
         const matchesType = !typeFilter || item.type === typeFilter;
         const matchesCategory = !categoryFilter || item.category === categoryFilter;
-        const matchesBrand = !brandFilter || item.brands.toLocaleLowerCase().includes(brandFilter);
+        const matchesBrand = !brandFilter || item.brands.toLowerCase().includes(brandFilter.toLowerCase());
         const matchesSearch = item.itemName.toLowerCase().includes(searchQuery) ||
-                            item.category.toLowerCase().includes(searchQuery)||
+                            item.category.toLowerCase().includes(searchQuery) ||
                             item.type.toLowerCase().includes(searchQuery);
         return matchesType && matchesCategory && matchesBrand && matchesSearch;
     });
@@ -143,7 +176,14 @@ function editCommission(id) {
     document.getElementById('editType').value = commission.type;
     document.getElementById('editItemName').value = commission.itemName;
     document.getElementById('editCategory').value = commission.category;
-    document.getElementById('editBrands').value = commission.brands;
+    
+    // Handle multiple brand selection
+    const brandsArray = commission.brands.split(',').map(b => b.trim());
+    const brandsSelect = document.getElementById('editBrands');
+    Array.from(brandsSelect.options).forEach(option => {
+        option.selected = brandsArray.includes(option.value);
+    });
+    
     document.getElementById('editCommissionPercentage').value = commission.commissionPercentage;
     document.getElementById('editStatus').value = commission.status;
     

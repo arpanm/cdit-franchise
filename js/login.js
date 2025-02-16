@@ -97,7 +97,7 @@ function checkLoginStatus() {
 
     // If not logged in and trying to access protected pages, redirect to login
     if (!isLoggedIn && currentPage !== 'login.html') {
-        window.location.href = 'franchise-service.html';
+        window.location.href = 'login.html';
     }
 
     // If logged in and on login page, redirect to dashboard

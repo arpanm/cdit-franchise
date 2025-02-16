@@ -624,7 +624,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Initialize the dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    loadPayoutHistory();
+    const tableBody = document.getElementById('payoutTableBody');
+    if (tableBody) {
+        loadPayoutHistory();
+    }
 });
 
 // Load payout history and dispute history data
@@ -764,14 +767,23 @@ function viewDisputeDetails(transactionId) {
 
 // Open dispute modal with transaction details
 function openDisputeModal(transactionId) {
-    document.getElementById('disputeTransactionId').value = transactionId;
+    if (transactionId) {
+        document.getElementById('disputeTransactionId').value = transactionId;
+    } else {
+        document.getElementById('disputeTransactionId').value = '1';
+    }
     const disputeModal = new bootstrap.Modal(document.getElementById('disputeModal'));
     disputeModal.show();
 }
 
 // Open dispute modal with transaction details
 function openDisputeModal() {
-    document.getElementById('disputeTransactionId').value = transactionId;
+    // Reset form fields
+    document.getElementById('disputeTransactionId').value = '';
+    document.getElementById('disputeType').value = '';
+    document.getElementById('disputeDescription').value = '';
+    document.getElementById('disputeDocuments').value = '';
+    
     const disputeModal = new bootstrap.Modal(document.getElementById('disputeModal'));
     disputeModal.show();
 }

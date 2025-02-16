@@ -71,19 +71,26 @@ function attachEventListeners(locationFilterName, brandFilterName, searchFilterN
 
 // Apply filters and search
 function applyFilters() {
-    alert(this.id);
-    if (this.id.startsWith("event")) {
-        applyFilters('editFranchiseLocationFilter', 'editFranchiseBrandFilter', 'editFranchiseSearch', 'editFranchiseList');
+    if (this.id.startsWith("edit")) {
+        applyFiltersImpl('editFranchiseLocationFilter', 'editFranchiseBrandFilter', 'editFranchiseSearch', 'editFranchiseList');
     } else {
-        applyFilters('franchiseLocationFilter', 'franchiseBrandFilter', 'franchiseSearch', 'franchiseList');
+        applyFiltersImpl('franchiseLocationFilter', 'franchiseBrandFilter', 'franchiseSearch', 'franchiseList');
     }
 }
 
-function applyFilters(locationFilterName, brandFilterName, searchFilterName, franchileListName) {
-    alert(this.id);
-    const location = document.getElementById(locationFilterName).value;
-    const brand = document.getElementById(brandFilterName).value;
-    const searchQuery = document.getElementById(searchFilterName).value.toLowerCase();
+function applyFiltersImpl(locationFilterName, brandFilterName, searchFilterName, franchileListName) {
+    const locationFilter = document.getElementById(locationFilterName);
+    const brandFilter = document.getElementById(brandFilterName);
+    const searchInput = document.getElementById(searchFilterName);
+
+    if (!locationFilter || !brandFilter || !searchInput) {
+        console.warn('One or more filter elements not found');
+        return;
+    }
+
+    const location = locationFilter.value;
+    const brand = brandFilter.value;
+    const searchQuery = searchInput.value.toLowerCase();
 
     const filteredFranchises = franchises.filter(franchise => {
         const locationMatch = location === 'all' || franchise.location === location;

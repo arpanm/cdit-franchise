@@ -236,6 +236,9 @@ const serviceRequests = [
     }
 ];
 
+// Initialize engineer management
+const engineerManager = new EngineerManager();
+
 // Initialize filters and table when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize date range picker

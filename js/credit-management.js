@@ -109,9 +109,13 @@ function setupEventListeners() {
 // Update credit overview cards
 function updateCreditOverview() {
     const totalCredit = mockFranchises.reduce((sum, franchise) => sum + franchise.creditLimit, 0);
-    const availableCredit = mockTransactions
-        .filter(t => (t.type === 'Purchase'))
+    const totalPurchases = mockTransactions
+        .filter(t => t.type === 'Purchase')
         .reduce((sum, t) => sum + t.amount, 0);
+    const totalPayments = mockTransactions
+        .filter(t => t.type === 'Payment')
+        .reduce((sum, t) => sum + t.amount, 0);
+    const availableCredit = totalCredit - (totalPurchases - totalPayments);
     const pendingAmount = mockTransactions
         .filter(t => (t.status === 'Pending' || t.status === 'Overdue'))
         .reduce((sum, t) => sum + t.amount, 0);
@@ -253,12 +257,12 @@ function updateFranchiseCredit() {
         mockFranchises[franchiseIndex].creditPeriod = creditPeriod;
         // Update available credit based on the new limit
         const availed = mockTransactions
-            .filter(t => (t.type === 'Purchase' && t.franchiseId === franchise.id))
+            .filter(t => (t.type === 'Purchase' && t.franchiseId === franchiseId))
             .reduce((sum, t) => sum + t.amount, 0);
         const paid = mockTransactions
-            .filter(t => (t.type === 'Payment' && t.franchiseId === franchise.id))
+            .filter(t => (t.type === 'Payment' && t.franchiseId === franchiseId))
             .reduce((sum, t) => sum + t.amount, 0);
-        mockFranchises[franchiseIndex].availableCredit = availed - paid;
+        mockFranchises[franchiseIndex].availableCredit = creditLimit - (availed - paid);
     }
 
     // Refresh the dashboard

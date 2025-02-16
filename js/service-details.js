@@ -75,6 +75,11 @@ const serviceRequestDetails = {
     ]
 };
 
+
+// Initialize engineer management
+const engineerManager = new EngineerManager();
+
+
 // Function to populate service request details
 function populateServiceRequestDetails() {
     const request = serviceRequestDetails.requestInfo;
