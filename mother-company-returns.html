@@ -28,29 +28,34 @@
     <div class="d-flex">
         <!-- Left Sidebar -->
         <div class="sidebar bg-dark text-white p-3 admin-sidebar">
-            <h5 class="mb-4 py-2 border-bottom">Return Management</h5>
+            <h5 class="mb-4 py-2 border-bottom">Mother Company</h5>
             <button class="toggle-btn" onclick="toggleSidebar()">
                 <i class="bi bi-chevron-left"></i>
             </button>
             <ul class="nav flex-column">
                 <li class="nav-item mb-2">
-                    <a href="mother-company-dashboard.html" class="nav-link text-white active">
-                        <i class="bi bi-speedometer2 me-2"></i> Performance
+                    <a href="mother-company-dashboard.html" class="nav-link text-white">
+                        <i class="bi bi-speedometer2 me-2"></i> Dashboard
                     </a>
                 </li>
                 <li class="nav-item mb-2">
                     <a href="mother-company-service.html" class="nav-link text-white">
-                        <i class="bi bi-tools me-2"></i> Service
+                        <i class="bi bi-tools me-2"></i> Service Management
                     </a>
                 </li>
                 <li class="nav-item mb-2">
                     <a href="mother-company-franchise.html" class="nav-link text-white">
-                        <i class="bi bi-building me-2"></i> Franchises
+                        <i class="bi bi-shop me-2"></i> Franchise Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-inventory.html" class="nav-link text-white">
+                        <i class="bi bi-box-seam me-2"></i> Inventory Management
                     </a>
                 </li>
                 <li class="nav-item mb-2">
                     <a href="mother-company-orders.html" class="nav-link text-white">
-                        <i class="bi bi-cart3 me-2"></i> Order Management
+                        <i class="bi bi-cart me-2"></i> Order Management
                     </a>
                 </li>
                 <li class="nav-item mb-2">
@@ -80,12 +85,12 @@
                 </li>
                 <li class="nav-item mb-2">
                     <a href="mother-company-allocation-rules.html" class="nav-link text-white">
-                        <i class="bi bi-gift me-2"></i> Service Allocation Rule 
+                        <i class="bi bi-diagram-3 me-2"></i> Service Allocation Rule
                     </a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a href="#" class="nav-link text-white">
-                        <i class="bi bi-gear me-2"></i> Settings
+                    <a href="mother-company-api-integration.html" class="nav-link text-white active">
+                        <i class="bi bi-code-slash me-2"></i> API Integration
                     </a>
                 </li>
                 <li class="nav-item mt-auto">
@@ -96,105 +101,117 @@
             </ul>
         </div>
 
-        <!-- Main Content -->
-        <div class="main-content p-4 w-100">
-            <h2>Return Requests Management</h2>
-            
-            <!-- Summary Cards -->
-            <div class="row mb-4">
-                <div class="col-md-4">
-                    <div class="card bg-primary text-white">
-                        <div class="card-body">
-                            <h6 class="card-title">Pending Requests</h6>
-                            <h2 class="mb-0" id="pendingCount">0</h2>
-                            <small>Awaiting Review</small>
-                        </div>
+        <main class="flex-grow-1 p-4">
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h2 class="fw-bold text-dark">Return Requests Management</h2>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="mother-company-dashboard.html" class="text-decoration-none">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Return</li>
+                            </ol>
+                        </nav>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card bg-success text-white">
-                        <div class="card-body">
-                            <h6 class="card-title">Approved Returns</h6>
-                            <h2 class="mb-0" id="approvedCount">0</h2>
-                            <small>Last 30 Days</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card bg-danger text-white">
-                        <div class="card-body">
-                            <h6 class="card-title">Rejected Returns</h6>
-                            <h2 class="mb-0" id="rejectedCount">0</h2>
-                            <small>Last 30 Days</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Filters -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-3">
-                            <select class="form-select" id="statusFilter">
-                                <option value="">All Status</option>
-                                <option value="pending">Pending</option>
-                                <option value="approved">Approved</option>
-                                <option value="rejected">Rejected</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <select class="form-select" id="locationFilter">
-                                <option value="">All Locations</option>
-                                <option value="mumbai">Mumbai</option>
-                                <option value="delhi">Delhi</option>
-                                <option value="bangalore">Bangalore</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="dateRangeFilter" placeholder="Select Date Range" readonly>
-                                <span class="input-group-text"><i class="bi bi-calendar-range"></i></span>
+                
+                <!-- Summary Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">Pending Requests</h6>
+                                <h2 class="mb-0" id="pendingCount">0</h2>
+                                <small>Awaiting Review</small>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="searchFilter" placeholder="Search...">
-                                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">Approved Returns</h6>
+                                <h2 class="mb-0" id="approvedCount">0</h2>
+                                <small>Last 30 Days</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-danger text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">Rejected Returns</h6>
+                                <h2 class="mb-0" id="rejectedCount">0</h2>
+                                <small>Last 30 Days</small>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Return Requests Table -->
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Return Requests</h5>
-                    <button class="btn btn-success btn-sm">Export to Excel</button>
+                <!-- Filters -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <select class="form-select" id="statusFilter">
+                                    <option value="">All Status</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="rejected">Rejected</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select" id="locationFilter">
+                                    <option value="">All Locations</option>
+                                    <option value="mumbai">Mumbai</option>
+                                    <option value="delhi">Delhi</option>
+                                    <option value="bangalore">Bangalore</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="dateRangeFilter" placeholder="Select Date Range" readonly>
+                                    <span class="input-group-text"><i class="bi bi-calendar-range"></i></span>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="searchFilter" placeholder="Search...">
+                                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover" id="returnRequestsTable">
-                            <thead>
-                                <tr>
-                                    <th>Request ID</th>
-                                    <th>Franchise</th>
-                                    <th>Product Details</th>
-                                    <th>Return Reason</th>
-                                    <th>Request Date</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="returnRequestsTableBody">
-                                <!-- Table content will be populated by JavaScript -->
-                            </tbody>
-                        </table>
+
+                <!-- Return Requests Table -->
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Return Requests</h5>
+                        <button class="btn btn-success btn-sm">Export to Excel</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="returnRequestsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Request ID</th>
+                                        <th>Franchise</th>
+                                        <th>Product Details</th>
+                                        <th>Return Reason</th>
+                                        <th>Request Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="returnRequestsTableBody">
+                                    <!-- Table content will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <!-- Return Details Modal -->

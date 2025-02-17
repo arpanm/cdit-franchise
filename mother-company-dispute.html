@@ -25,31 +25,36 @@
         </nav>
     </header>
     <div class="d-flex">
-        <!-- Sidebar -->
+        <!-- Left Sidebar -->
         <div class="sidebar bg-dark text-white p-3 admin-sidebar">
-            <h5 class="mb-4 py-2 border-bottom">Company Admin</h5>
+            <h5 class="mb-4 py-2 border-bottom">Mother Company</h5>
             <button class="toggle-btn" onclick="toggleSidebar()">
                 <i class="bi bi-chevron-left"></i>
             </button>
             <ul class="nav flex-column">
                 <li class="nav-item mb-2">
-                    <a href="mother-company-dashboard.html" class="nav-link text-white active">
-                        <i class="bi bi-speedometer2 me-2"></i> Performance
+                    <a href="mother-company-dashboard.html" class="nav-link text-white">
+                        <i class="bi bi-speedometer2 me-2"></i> Dashboard
                     </a>
                 </li>
                 <li class="nav-item mb-2">
                     <a href="mother-company-service.html" class="nav-link text-white">
-                        <i class="bi bi-tools me-2"></i> Service
+                        <i class="bi bi-tools me-2"></i> Service Management
                     </a>
                 </li>
                 <li class="nav-item mb-2">
                     <a href="mother-company-franchise.html" class="nav-link text-white">
-                        <i class="bi bi-building me-2"></i> Franchises
+                        <i class="bi bi-shop me-2"></i> Franchise Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-inventory.html" class="nav-link text-white">
+                        <i class="bi bi-box-seam me-2"></i> Inventory Management
                     </a>
                 </li>
                 <li class="nav-item mb-2">
                     <a href="mother-company-orders.html" class="nav-link text-white">
-                        <i class="bi bi-cart3 me-2"></i> Order Management
+                        <i class="bi bi-cart me-2"></i> Order Management
                     </a>
                 </li>
                 <li class="nav-item mb-2">
@@ -79,12 +84,12 @@
                 </li>
                 <li class="nav-item mb-2">
                     <a href="mother-company-allocation-rules.html" class="nav-link text-white">
-                        <i class="bi bi-gift me-2"></i> Service Allocation Rule 
+                        <i class="bi bi-diagram-3 me-2"></i> Service Allocation Rule
                     </a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a href="#" class="nav-link text-white">
-                        <i class="bi bi-gear me-2"></i> Settings
+                    <a href="mother-company-api-integration.html" class="nav-link text-white active">
+                        <i class="bi bi-code-slash me-2"></i> API Integration
                     </a>
                 </li>
                 <li class="nav-item mt-auto">
@@ -95,100 +100,112 @@
             </ul>
         </div>
 
-        <!-- Main Content -->
-        <div class="main-content p-4 w-100">
-            <h2>Dispute Management</h2>
+        <main class="flex-grow-1 p-4">
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h2 class="fw-bold text-dark">Dispute Management</h2>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="mother-company-dashboard.html" class="text-decoration-none">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Dispute</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
             
-            <!-- Summary Cards -->
-            <div class="row mb-4">
-                <div class="col-md-3">
-                    <div class="card bg-primary text-white">
-                        <div class="card-body">
-                            <h6 class="card-title">Total Disputes</h6>
-                            <h2 class="mb-0" id="totalDisputes">0</h2>
+                <!-- Summary Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">Total Disputes</h6>
+                                <h2 class="mb-0" id="totalDisputes">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">Resolved Disputes</h6>
+                                <h2 class="mb-0" id="resolvedDisputes">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning text-dark">
+                            <div class="card-body">
+                                <h6 class="card-title">Pending Disputes</h6>
+                                <h2 class="mb-0" id="pendingDisputes">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-danger text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">Rejected Disputes</h6>
+                                <h2 class="mb-0" id="rejectedDisputes">0</h2>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="card bg-success text-white">
-                        <div class="card-body">
-                            <h6 class="card-title">Resolved Disputes</h6>
-                            <h2 class="mb-0" id="resolvedDisputes">0</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card bg-warning text-dark">
-                        <div class="card-body">
-                            <h6 class="card-title">Pending Disputes</h6>
-                            <h2 class="mb-0" id="pendingDisputes">0</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card bg-danger text-white">
-                        <div class="card-body">
-                            <h6 class="card-title">Rejected Disputes</h6>
-                            <h2 class="mb-0" id="rejectedDisputes">0</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Filters -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-3">
-                            <label class="form-label">Status</label>
-                            <select class="form-select" id="statusFilter">
-                                <option value="">All Status</option>
-                                <option value="pending">Pending</option>
-                                <option value="resolved">Resolved</option>
-                                <option value="rejected">Rejected</option>
-                                <option value="more_info">More Info Required</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Franchise</label>
-                            <select class="form-select" id="franchiseFilter">
-                                <option value="">All Franchises</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Date Range</label>
-                            <input type="text" class="form-control" id="dateRangeFilter" placeholder="Select date range">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">Search</label>
-                            <input type="text" class="form-control" id="searchFilter" placeholder="Search disputes...">
+                <!-- Filters -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Status</label>
+                                <select class="form-select" id="statusFilter">
+                                    <option value="">All Status</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="resolved">Resolved</option>
+                                    <option value="rejected">Rejected</option>
+                                    <option value="more_info">More Info Required</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Franchise</label>
+                                <select class="form-select" id="franchiseFilter">
+                                    <option value="">All Franchises</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Date Range</label>
+                                <input type="text" class="form-control" id="dateRangeFilter" placeholder="Select date range">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Search</label>
+                                <input type="text" class="form-control" id="searchFilter" placeholder="Search disputes...">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Disputes Table -->
-            <div class="card">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped" id="disputesTable">
-                            <thead>
-                                <tr>
-                                    <th>Dispute ID</th>
-                                    <th>Franchise</th>
-                                    <th>Type</th>
-                                    <th>Description</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="disputesTableBody"></tbody>
-                        </table>
+                <!-- Disputes Table -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="disputesTable">
+                                <thead>
+                                    <tr>
+                                        <th>Dispute ID</th>
+                                        <th>Franchise</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="disputesTableBody"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <!-- View Dispute Details Modal -->

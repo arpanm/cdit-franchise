@@ -9,46 +9,51 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/common-dashboard.css">
 </head>
-<header class="header">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="index.html">
-                <img src="images/titleicon.ico" alt="FraMaSaaS AI" class="me-2" style="width: 32px; height: 32px;">
-                <span class="h3 mb-0 me-2">FraMaSaaS AI</span>
-            </a>
-            <div class="navbar-text text-light d-none d-md-block">
-                <small class="text-light">AI based Business Growth SaaS Platform</small>
-            </div>
-        </div>
-    </nav>
-</header>
 <body>
+    <header class="header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="index.html">
+                    <img src="images/titleicon.ico" alt="FraMaSaaS AI" class="me-2" style="width: 32px; height: 32px;">
+                    <span class="h3 mb-0 me-2">FraMaSaaS AI</span>
+                </a>
+                <div class="navbar-text text-light d-none d-md-block">
+                    <small class="text-light">AI based Business Growth SaaS Platform</small>
+                </div>
+            </div>
+        </nav>
+    </header>
     <div class="d-flex">
         <!-- Left Sidebar -->
         <div class="sidebar bg-dark text-white p-3 admin-sidebar">
-            <h5 class="mb-4 py-2 border-bottom">Company Admin</h5>
+            <h5 class="mb-4 py-2 border-bottom">Mother Company</h5>
             <button class="toggle-btn" onclick="toggleSidebar()">
                 <i class="bi bi-chevron-left"></i>
             </button>
             <ul class="nav flex-column">
                 <li class="nav-item mb-2">
-                    <a href="mother-company-dashboard.html" class="nav-link text-white active">
-                        <i class="bi bi-speedometer2 me-2"></i> Performance
+                    <a href="mother-company-dashboard.html" class="nav-link text-white">
+                        <i class="bi bi-speedometer2 me-2"></i> Dashboard
                     </a>
                 </li>
                 <li class="nav-item mb-2">
                     <a href="mother-company-service.html" class="nav-link text-white">
-                        <i class="bi bi-tools me-2"></i> Service
+                        <i class="bi bi-tools me-2"></i> Service Management
                     </a>
                 </li>
                 <li class="nav-item mb-2">
                     <a href="mother-company-franchise.html" class="nav-link text-white">
-                        <i class="bi bi-building me-2"></i> Franchises
+                        <i class="bi bi-shop me-2"></i> Franchise Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-inventory.html" class="nav-link text-white">
+                        <i class="bi bi-box-seam me-2"></i> Inventory Management
                     </a>
                 </li>
                 <li class="nav-item mb-2">
                     <a href="mother-company-orders.html" class="nav-link text-white">
-                        <i class="bi bi-cart3 me-2"></i> Order Management
+                        <i class="bi bi-cart me-2"></i> Order Management
                     </a>
                 </li>
                 <li class="nav-item mb-2">
@@ -78,12 +83,12 @@
                 </li>
                 <li class="nav-item mb-2">
                     <a href="mother-company-allocation-rules.html" class="nav-link text-white">
-                        <i class="bi bi-gift me-2"></i> Service Allocation Rule 
+                        <i class="bi bi-diagram-3 me-2"></i> Service Allocation Rule
                     </a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a href="#" class="nav-link text-white">
-                        <i class="bi bi-gear me-2"></i> Settings
+                    <a href="mother-company-api-integration.html" class="nav-link text-white active">
+                        <i class="bi bi-code-slash me-2"></i> API Integration
                     </a>
                 </li>
                 <li class="nav-item mt-auto">
@@ -94,101 +99,111 @@
             </ul>
         </div>
 
-        <!-- Main Content -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Credit Management</h1>
-            </div>
+        <main class="flex-grow-1 p-4">
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h2 class="fw-bold text-dark">Credit Management</h2>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="mother-company-dashboard.html" class="text-decoration-none">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Credit</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
 
-            <!-- Credit Overview Cards -->
-            <div class="row mb-4">
-                <div class="col-md-3">
-                    <div class="card bg-primary text-white">
-                        <div class="card-body">
-                            <h6 class="card-title">Total Credit Extended</h6>
-                            <h2 class="mb-0" id="totalCreditExtended">₹0</h2>
+                <!-- Credit Overview Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">Total Credit Extended</h6>
+                                <h2 class="mb-0" id="totalCreditExtended">₹0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">Available Credit</h6>
+                                <h2 class="mb-0" id="availableCredit">₹0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning text-dark">
+                            <div class="card-body">
+                                <h6 class="card-title">Pending Payments</h6>
+                                <h2 class="mb-0" id="pendingPayments">₹0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-danger text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">Overdue Amount</h6>
+                                <h2 class="mb-0" id="overdueAmount">₹0</h2>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="card bg-success text-white">
-                        <div class="card-body">
-                            <h6 class="card-title">Available Credit</h6>
-                            <h2 class="mb-0" id="availableCredit">₹0</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card bg-warning text-dark">
-                        <div class="card-body">
-                            <h6 class="card-title">Pending Payments</h6>
-                            <h2 class="mb-0" id="pendingPayments">₹0</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card bg-danger text-white">
-                        <div class="card-body">
-                            <h6 class="card-title">Overdue Amount</h6>
-                            <h2 class="mb-0" id="overdueAmount">₹0</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Franchise Credit Management Table -->
-            <div class="card mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">Franchise Credit Management</h5>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateCreditLimitModal">
-                        <i class="bi bi-plus-circle me-2"></i>Update Credit Limit
-                    </button>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover" id="franchiseCreditTable">
-                            <thead>
-                                <tr>
-                                    <th>Franchise ID</th>
-                                    <th>Franchise Name</th>
-                                    <th>Credit Limit</th>
-                                    <th>Available Credit</th>
-                                    <th>Credit Period (Days)</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                <!-- Franchise Credit Management Table -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Franchise Credit Management</h5>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateCreditLimitModal">
+                            <i class="bi bi-plus-circle me-2"></i>Update Credit Limit
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover" id="franchiseCreditTable">
+                                <thead>
+                                    <tr>
+                                        <th>Franchise ID</th>
+                                        <th>Franchise Name</th>
+                                        <th>Credit Limit</th>
+                                        <th>Available Credit</th>
+                                        <th>Credit Period (Days)</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Transaction History -->
-            <div class="card mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0" id="transactionHistoryTitle">Transaction History: </h5>
-                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPaymentModal">
-                        <i class="bi bi-plus-circle me-2"></i>Add Payment
-                    </button>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover" id="transactionHistoryTable">
-                            <thead>
-                                <tr>
-                                    <th>Transaction ID</th>
-                                    <th>Franchise</th>
-                                    <th>Date</th>
-                                    <th>Type</th>
-                                    <th>Amount</th>
-                                    <th>Due Date</th>
-                                    <th>Status</th>
-                                    <th>Payment Details</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                <!-- Transaction History -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0" id="transactionHistoryTitle">Transaction History: </h5>
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPaymentModal">
+                            <i class="bi bi-plus-circle me-2"></i>Add Payment
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover" id="transactionHistoryTable">
+                                <thead>
+                                    <tr>
+                                        <th>Transaction ID</th>
+                                        <th>Franchise</th>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Due Date</th>
+                                        <th>Status</th>
+                                        <th>Payment Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

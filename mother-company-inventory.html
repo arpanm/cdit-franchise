@@ -35,23 +35,28 @@
             </button>
             <ul class="nav flex-column">
                 <li class="nav-item mb-2">
-                    <a href="mother-company-dashboard.html" class="nav-link text-white active">
-                        <i class="bi bi-speedometer2 me-2"></i> Performance
+                    <a href="mother-company-dashboard.html" class="nav-link text-white">
+                        <i class="bi bi-speedometer2 me-2"></i> Dashboard
                     </a>
                 </li>
                 <li class="nav-item mb-2">
                     <a href="mother-company-service.html" class="nav-link text-white">
-                        <i class="bi bi-tools me-2"></i> Service
+                        <i class="bi bi-tools me-2"></i> Service Management
                     </a>
                 </li>
                 <li class="nav-item mb-2">
                     <a href="mother-company-franchise.html" class="nav-link text-white">
-                        <i class="bi bi-building me-2"></i> Franchises
+                        <i class="bi bi-shop me-2"></i> Franchise Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-inventory.html" class="nav-link text-white">
+                        <i class="bi bi-box-seam me-2"></i> Inventory Management
                     </a>
                 </li>
                 <li class="nav-item mb-2">
                     <a href="mother-company-orders.html" class="nav-link text-white">
-                        <i class="bi bi-cart3 me-2"></i> Order Management
+                        <i class="bi bi-cart me-2"></i> Order Management
                     </a>
                 </li>
                 <li class="nav-item mb-2">
@@ -81,12 +86,12 @@
                 </li>
                 <li class="nav-item mb-2">
                     <a href="mother-company-allocation-rules.html" class="nav-link text-white">
-                        <i class="bi bi-gift me-2"></i> Service Allocation Rule 
+                        <i class="bi bi-diagram-3 me-2"></i> Service Allocation Rule
                     </a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a href="#" class="nav-link text-white">
-                        <i class="bi bi-gear me-2"></i> Settings
+                    <a href="mother-company-api-integration.html" class="nav-link text-white active">
+                        <i class="bi bi-code-slash me-2"></i> API Integration
                     </a>
                 </li>
                 <li class="nav-item mt-auto">
@@ -97,16 +102,18 @@
             </ul>
         </div>
 
-        <!-- Main Content -->
-        <main class="admin-main">
-            
-            <!-- Content Area -->
-            <div class="content-wrapper p-4">
-
-                <!-- Header -->
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Inventory Management</h2>
-                    <div>
+        <main class="flex-grow-1 p-4">
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h2 class="fw-bold text-dark">Inventory Management</h2>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="mother-company-dashboard.html" class="text-decoration-none">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Inventory</li>
+                            </ol>
+                        </nav>
                         <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#createPurchaseOrderModal">
                             <i class="bi bi-plus-circle"></i> Create Purchase Order
                         </button>
