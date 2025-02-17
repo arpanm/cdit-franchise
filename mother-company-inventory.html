@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mother Company Inventory Management - CDIT Franchise Management Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/common-dashboard.css">
+    <link rel="stylesheet" href="css/mother-company-dashboard.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="index.html">
+                    <img src="images/titleicon.ico" alt="FraMaSaaS AI" class="me-2" style="width: 32px; height: 32px;">
+                    <span class="h3 mb-0 me-2">FraMaSaaS AI</span>
+                </a>
+                <div class="navbar-text text-light d-none d-md-block">
+                    <small class="text-light">AI based Business Growth SaaS Platform</small>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="d-flex">
+        <!-- Left Sidebar -->
+        <div class="sidebar bg-dark text-white p-3 admin-sidebar">
+            <h5 class="mb-4 py-2 border-bottom">Mother Company</h5>
+            <button class="toggle-btn" onclick="toggleSidebar()">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2">
+                    <a href="mother-company-dashboard.html" class="nav-link text-white active">
+                        <i class="bi bi-speedometer2 me-2"></i> Performance
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-service.html" class="nav-link text-white">
+                        <i class="bi bi-tools me-2"></i> Service
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-franchise.html" class="nav-link text-white">
+                        <i class="bi bi-building me-2"></i> Franchises
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-orders.html" class="nav-link text-white">
+                        <i class="bi bi-cart3 me-2"></i> Order Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-returns.html" class="nav-link text-white">
+                        <i class="bi bi-arrow-return-left me-2"></i> Return Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-credits.html" class="nav-link text-white">
+                        <i class="bi bi-credit-card me-2"></i> Credit Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-commission.html" class="nav-link text-white">
+                        <i class="bi bi-percent me-2"></i> Commission Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-dispute.html" class="nav-link text-white">
+                        <i class="bi bi-exclamation-triangle me-2"></i> Dispute Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-schemes.html" class="nav-link text-white">
+                        <i class="bi bi-gift me-2"></i> Scheme Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-allocation-rules.html" class="nav-link text-white">
+                        <i class="bi bi-gift me-2"></i> Service Allocation Rule 
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="#" class="nav-link text-white">
+                        <i class="bi bi-gear me-2"></i> Settings
+                    </a>
+                </li>
+                <li class="nav-item mt-auto">
+                    <a href="#" class="nav-link text-white" onclick="logout()">
+                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            
+            <!-- Content Area -->
+            <div class="content-wrapper p-4">
+
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Inventory Management</h2>
+                    <div>
+                        <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#createPurchaseOrderModal">
+                            <i class="bi bi-plus-circle"></i> Create Purchase Order
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Inventory Overview Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">Total Items</h6>
+                                <h3 class="card-text" id="totalItems">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">Low Stock Items</h6>
+                                <h3 class="card-text" id="lowStockItems">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">Active Purchase Orders</h6>
+                                <h3 class="card-text" id="activePOs">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">Pending Deliveries</h6>
+                                <h3 class="card-text" id="pendingDeliveries">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inventory Table -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Current Inventory</h5>
+                        <div class="d-flex gap-2">
+                            <input type="text" class="form-control" placeholder="Search items..." id="searchInventory">
+                            <select class="form-select" id="categoryFilter">
+                                <option value="">All Categories</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>SKU ID</th>
+                                        <th>SKU Name</th>
+                                        <th>Category</th>
+                                        <th>Brand</th>
+                                        <th>MRP (₹)</th>
+                                        <th>Offer Price (₹)</th>
+                                        <th>Commission %</th>
+                                        <th>Purchased</th>
+                                        <th>Sold</th>
+                                        <th>Stock</th>
+                                        <th>Inventory</th>
+                                        <th>Demand</th>
+                                        <th>Open POs</th>
+                                        <th>Return</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventoryTableBody">
+                                    <!-- Dynamic rows will be added here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vendors Table -->
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Vendors</h5>
+                        <div class="d-flex gap-2">
+                            <input type="text" class="form-control" placeholder="Search vendors..." id="searchVendors">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#vendorModal">
+                                <i class="bi bi-plus-lg"></i> Add Vendor
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Vendor ID</th>
+                                        <th>Name</th>
+                                        <th>Contact Person</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="vendorsTableBody">
+                                    <!-- Dynamic rows will be added here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Create Purchase Order Modal -->
+    <div class="modal fade" id="createPurchaseOrderModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Purchase Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="purchaseOrderForm">
+                        <div class="mb-3">
+                            <label class="form-label">Vendor</label>
+                            <select class="form-select" required id="vendorSelect">
+                                <option value="">Select Vendor</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Expected Delivery Date</label>
+                            <input type="date" class="form-control" required id="expectedDeliveryDate">
+                        </div>
+                        <div id="poItems">
+                            <div class="row mb-3 po-item">
+                                <div class="col-md-4">
+                                    <label class="form-label">Item</label>
+                                    <select class="form-select" id="poSku" required>
+                                        <option value="">Select Item</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" required min="1">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Unit Price</label>
+                                    <input type="number" class="form-control" required min="0" step="0.01">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">Total</label>
+                                    <input type="number" class="form-control" readonly>
+                                </div>
+                                <div class="col-md-1 d-flex align-items-end">
+                                    <button type="button" class="btn btn-danger" onclick="removePoItem(this)">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary mb-3" onclick="addPoItem()">
+                            <i class="bi bi-plus-circle"></i> Add Item
+                        </button>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Notes</label>
+                                    <textarea class="form-control" rows="3" id="poNotes"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Total Amount</label>
+                                    <input type="number" class="form-control" readonly id="poTotalAmount">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="submitPurchaseOrder()">Create Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Vendor Modal -->
+    <div class="modal fade" id="vendorModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="vendorModalTitle">Add New Vendor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="vendorForm">
+                        <input type="hidden" id="vendorId">
+                        <div class="mb-3">
+                            <label class="form-label">Vendor Name</label>
+                            <input type="text" class="form-control" id="vendorName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Contact Person</label>
+                            <input type="text" class="form-control" id="contactPerson" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="vendorEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="vendorPhone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" id="vendorStatus" required>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveVendor()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Vendor Modal -->
+    <div class="modal fade" id="viewVendorModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Vendor Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p><strong>Vendor ID:</strong> <span id="viewVendorId"></span></p>
+                            <p><strong>Name:</strong> <span id="viewVendorName"></span></p>
+                            <p><strong>Contact Person:</strong> <span id="viewContactPerson"></span></p>
+                            <p><strong>Email:</strong> <span id="viewVendorEmail"></span></p>
+                            <p><strong>Phone:</strong> <span id="viewVendorPhone"></span></p>
+                            <p><strong>Status:</strong> <span id="viewVendorStatus"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Vendor Confirmation Modal -->
+    <div class="modal fade" id="deleteVendorModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Vendor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this vendor?</p>
+                    <p>This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmDeleteVendor()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Adjust Inventory Modal -->
+    <div class="modal fade" id="adjustInventoryModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Adjust Inventory</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="adjustInventoryForm">
+                        <div class="mb-3">
+                            <label class="form-label">SKU Details</label>
+                            <p id="adjustItemSelect" class="form-text"></p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Adjustment Quantity</label>
+                            <input type="number" class="form-control" id="adjustQuantity" required>
+                            <small class="form-text text-muted">Use negative values for reduction</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Reason for Adjustment</label>
+                            <select class="form-select" id="adjustReason" required>
+                                <option value="">Select a reason...</option>
+                                <option value="damaged">Damaged Stock</option>
+                                <option value="quality_failed">Quality Check Failed</option>
+                                <option value="count_adjustment">Stock Count Adjustment</option>
+                                <option value="returned_items">Returned Items</option>
+                                <option value="expired">Expired Stock</option>
+                                <option value="lost">Lost/Missing Items</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="otherReasonContainer" style="display: none;">
+                            <label class="form-label">Other Reason</label>
+                            <textarea class="form-control" id="otherReason" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="submitInventoryAdjustment()">Submit Adjustment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script src="js/inventory-dashboard.js" defer></script>
+    <script src="js/po-vendor-management.js"></script>
+    <script src="js/login.js" defer></script>
+</body>
+</html>

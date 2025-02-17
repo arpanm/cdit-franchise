@@ -529,7 +529,10 @@ class InventoryManager {
     }
 
     updateCreditBalance() {
-        document.getElementById('creditBalance').textContent = `₹${this.creditBalance.toLocaleString()}`;
+        const creditBalanceElement = document.getElementById('creditBalance');
+        if (creditBalanceElement) {
+            creditBalanceElement.textContent = `₹${this.creditBalance.toLocaleString()}`;
+        }
     }
 
     populateTable(filteredData = null) {
@@ -572,6 +575,9 @@ class InventoryManager {
                     </button>
                     <button class="btn btn-sm btn-warning" onclick="inventoryManager.openReturnModal('${item.skuId}')"}>
                         <i class="bi bi-arrow-return-left"></i> Return
+                    </button>
+                    <button class="btn btn-sm btn-danger me-1" onclick="inventoryManager.openAdjustModal('${item.skuId}')">
+                        <i class="bi bi-wrench-adjustable-circle"></i> Adjust
                     </button>
                 </td>
             `;
@@ -623,6 +629,36 @@ class InventoryManager {
                 totalAmount > this.creditBalance ? 'block' : 'none';
         });
     }
+
+
+    openReturnModal(skuId) {
+        const item = this.inventoryData.find(i => i.skuId === skuId);
+        document.getElementById('returnSkuDetails').textContent = `${item.skuName} (${item.skuId})`;
+        document.getElementById('returnQuantity').value = '';
+        document.getElementById('returnReason').value = '';
+        
+        const modal = new bootstrap.Modal(document.getElementById('returnModal'));
+        modal.show();
+    }
+
+    openAdjustModal(skuId) {
+        const item = this.inventoryData.find(i => i.skuId === skuId);
+        document.getElementById('adjustItemSelect').textContent = `${item.skuName} (${item.skuId}) - ₹${item.offerPrice}`;
+        document.getElementById('adjustQuantity').value = '';
+        document.getElementById('adjustReason').value = '';
+        document.getElementById('otherReason').value = '';
+        document.getElementById('otherReasonContainer').style.display = 'none';
+        
+        const modal = new bootstrap.Modal(document.getElementById('adjustInventoryModal'));
+        modal.show();
+
+        // Add event listener for reason change
+        document.getElementById('adjustReason').addEventListener('change', (e) => {
+            const otherReasonContainer = document.getElementById('otherReasonContainer');
+            otherReasonContainer.style.display = e.target.value === 'other' ? 'block' : 'none';
+        });
+    }
+
 
     openReturnModal(skuId) {
         const item = this.inventoryData.find(i => i.skuId === skuId);
@@ -786,16 +822,35 @@ class InventoryManager {
     initialize() {
         this.populateTable();
         // Set up filter event listeners
-        document.getElementById('searchSku').addEventListener('input', () => this.applyFilters());
-        document.getElementById('filterCategory').addEventListener('change', () => this.applyFilters());
-        document.getElementById('filterBrand').addEventListener('change', () => this.applyFilters());
-        document.getElementById('filterInventoryStatus').addEventListener('change', () => this.applyFilters());
-        document.getElementById('filterDemand').addEventListener('change', () => this.applyFilters());
+        const searchSku = document.getElementById('searchSku');
+        const filterCategory = document.getElementById('filterCategory');
+        const filterBrand = document.getElementById('filterBrand');
+        const filterInventoryStatus = document.getElementById('filterInventoryStatus');
+        const filterDemand = document.getElementById('filterDemand');
+        const creditHistoryModal = document.getElementById('creditHistoryModal');
+
+        if (searchSku) {
+            searchSku.addEventListener('input', () => this.applyFilters());
+        }
+        if (filterCategory) {
+            filterCategory.addEventListener('change', () => this.applyFilters());
+        }
+        if (filterBrand) {
+            filterBrand.addEventListener('change', () => this.applyFilters());
+        }
+        if (filterInventoryStatus) {
+            filterInventoryStatus.addEventListener('change', () => this.applyFilters());
+        }
+        if (filterDemand) {
+            filterDemand.addEventListener('change', () => this.applyFilters());
+        }
 
         // Set up credit history modal event
-        document.getElementById('creditHistoryModal').addEventListener('show.bs.modal', () => {
-            this.populateCreditHistory();
-        });
+        if (creditHistoryModal) {
+            creditHistoryModal.addEventListener('show.bs.modal', () => {
+                this.populateCreditHistory();
+            });
+        }
     }
 }
 
@@ -897,3 +952,129 @@ function addSelectedSku() {
     const modal = bootstrap.Modal.getInstance(document.getElementById('addInventoryModal'));
     modal.hide();
 }
+
+// Submit inventory adjustment
+function submitInventoryAdjustment() {
+    const quantity = parseInt(document.getElementById('adjustQuantity').value);
+    const reason = document.getElementById('adjustReason').value;
+    const otherReason = document.getElementById('otherReason').value;
+    
+    if (!quantity || !reason) {
+        alert('Please fill in all required fields');
+        return;
+    }
+
+    if (reason === 'other' && !otherReason) {
+        alert('Please specify the other reason');
+        return;
+    }
+
+    const finalReason = reason === 'other' ? otherReason : reason;
+    // Add your inventory adjustment logic here
+    
+    alert('Inventory adjustment submitted successfully!');
+    bootstrap.Modal.getInstance(document.getElementById('adjustInventoryModal')).hide();
+}
+
+function filterAvailableSkus() {
+    const searchTerm = document.getElementById('skuSearch').value.toLowerCase();
+    const category = document.getElementById('skuFilterCategory').value;
+    const brand = document.getElementById('skuFilterBrand').value;
+
+    if (!masterSKUs || !Array.isArray(masterSKUs)) {
+        console.error('Master SKUs not properly initialized');
+        return;
+    }
+
+    const filteredSkus = masterSKUs.filter(sku => {
+        const matchesSearch = !searchTerm || 
+                             sku.skuName.toLowerCase().includes(searchTerm) ||
+                             sku.skuId.toLowerCase().includes(searchTerm);
+        const matchesCategory = !category || sku.category.toLowerCase() === category.toLowerCase();
+        const matchesBrand = !brand || sku.brand.toLowerCase() === brand.toLowerCase();
+
+        return matchesSearch && matchesCategory && matchesBrand;
+    });
+
+    const skuSelect = document.getElementById('availableSkus');
+    if (!skuSelect) {
+        console.error('SKU select element not found');
+        return;
+    }
+
+    skuSelect.innerHTML = '<option value="">Select a SKU</option>';
+
+    if (filteredSkus.length === 0) {
+        const option = document.createElement('option');
+        option.value = '';
+        option.textContent = 'No SKUs found';
+        option.disabled = true;
+        skuSelect.appendChild(option);
+    } else {
+        filteredSkus.forEach(sku => {
+            const option = document.createElement('option');
+            option.value = sku.skuId;
+            option.textContent = `${sku.skuName} (${sku.skuId})`;
+            skuSelect.appendChild(option);
+        });
+    }
+}
+
+function addSelectedSku() {
+    const selectedSkuId = document.getElementById('availableSkus').value;
+    if (!selectedSkuId) {
+        alert('Please select a SKU to add');
+        return;
+    }
+
+    const selectedSku = masterSKUs.find(sku => sku.skuId === selectedSkuId);
+    if (!selectedSku) {
+        alert('Selected SKU not found');
+        return;
+    }
+
+    const existingItemIndex = inventoryData.findIndex(i => i.skuId === selectedSkuId);
+    if (existingItemIndex !== -1) {
+        alert('This SKU is already in your inventory');
+        return;
+    }
+
+    inventoryData.push({
+        ...selectedSku,
+        totalPurchased: 0,
+        totalSold: 0,
+        currentStock: 0,
+        inventoryStatus: 'normal',
+        demand: 'normal',
+        lastPurchase: '-',
+        openPOs: 0
+    });
+
+    inventoryManager.populateTable();
+    const modal = bootstrap.Modal.getInstance(document.getElementById('addInventoryModal'));
+    modal.hide();
+}
+
+// Submit inventory adjustment
+function submitInventoryAdjustment() {
+    const quantity = parseInt(document.getElementById('adjustQuantity').value);
+    const reason = document.getElementById('adjustReason').value;
+    const otherReason = document.getElementById('otherReason').value;
+    
+    if (!quantity || !reason) {
+        alert('Please fill in all required fields');
+        return;
+    }
+
+    if (reason === 'other' && !otherReason) {
+        alert('Please specify the other reason');
+        return;
+    }
+
+    const finalReason = reason === 'other' ? otherReason : reason;
+    // Add your inventory adjustment logic here
+    
+    alert('Inventory adjustment submitted successfully!');
+    $('#adjustInventoryModal').modal('hide');
+}
+    

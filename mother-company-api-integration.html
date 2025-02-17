@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Integration Management - Mother Company Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/mother-company-dashboard.css" rel="stylesheet">
+    <link href="css/common-dashboard.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="index.html">
+                    <img src="images/titleicon.ico" alt="FraMaSaaS AI" class="me-2" style="width: 32px; height: 32px;">
+                    <span class="h3 mb-0 me-2">FraMaSaaS AI</span>
+                </a>
+                <div class="navbar-text text-light d-none d-md-block">
+                    <small class="text-light">AI based Business Growth SaaS Platform</small>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="d-flex">
+        <!-- Left Sidebar -->
+        <div class="sidebar bg-dark text-white p-3 admin-sidebar">
+            <h5 class="mb-4 py-2 border-bottom">Company Admin</h5>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2">
+                    <a href="mother-company-dashboard.html" class="nav-link text-white">
+                        <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-service.html" class="nav-link text-white">
+                        <i class="bi bi-tools me-2"></i> Service Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-franchise.html" class="nav-link text-white">
+                        <i class="bi bi-shop me-2"></i> Franchise Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-inventory.html" class="nav-link text-white">
+                        <i class="bi bi-box-seam me-2"></i> Inventory Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-orders.html" class="nav-link text-white">
+                        <i class="bi bi-cart me-2"></i> Order Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-returns.html" class="nav-link text-white">
+                        <i class="bi bi-arrow-return-left me-2"></i> Return Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-credits.html" class="nav-link text-white">
+                        <i class="bi bi-credit-card me-2"></i> Credit Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-commission.html" class="nav-link text-white">
+                        <i class="bi bi-percent me-2"></i> Commission Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-dispute.html" class="nav-link text-white">
+                        <i class="bi bi-exclamation-triangle me-2"></i> Dispute Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-schemes.html" class="nav-link text-white">
+                        <i class="bi bi-gift me-2"></i> Scheme Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-allocation-rules.html" class="nav-link text-white">
+                        <i class="bi bi-diagram-3 me-2"></i> Service Allocation Rule
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="mother-company-api-integration.html" class="nav-link text-white active">
+                        <i class="bi bi-code-slash me-2"></i> API Integration
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>API Integration Management</h2>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addApiConfigModal">
+                    <i class="bi bi-plus-circle me-2"></i>Add API Configuration
+                </button>
+            </div>
+
+            <!-- Filters -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" id="searchApi" placeholder="Search APIs...">
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select" id="eventTypeFilter">
+                        <option value="">All Event Types</option>
+                        <option value="service">Service Events</option>
+                        <option value="order">Order Events</option>
+                        <option value="payment">Payment Events</option>
+                        <option value="engineer">Engineer Events</option>
+                        <option value="franchise">Franchise Events</option>
+                        <option value="inventory">Inventory Events</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select" id="statusFilter">
+                        <option value="">All Statuses</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="error">Error</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- API Configurations Table -->
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Event Type</th>
+                            <th>API Name</th>
+                            <th>Endpoint URL</th>
+                            <th>Method</th>
+                            <th>Last Triggered</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="apiConfigTable">
+                        <!-- Table content will be dynamically populated -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit API Configuration Modal -->
+    <div class="modal fade" id="addApiConfigModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">API Configuration</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="apiConfigForm">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Event Type</label>
+                                <select class="form-select" id="eventType" required>
+                                    <option value="">Select Event Type</option>
+                                    <option value="service_create">Service Creation</option>
+                                    <option value="service_assign_franchise">Service Assignment to Franchise</option>
+                                    <option value="service_assign_engineer">Service Assignment to Engineer</option>
+                                    <option value="service_update">Service Update</option>
+                                    <option value="service_cancel">Service Cancellation</option>
+                                    <option value="service_complete">Service Completion</option>
+                                    <option value="order_spare_parts">Spare Parts Order</option>
+                                    <option value="invoice_generate">Invoice Generation</option>
+                                    <option value="payment_link_share">Payment Link Share</option>
+                                    <option value="payment_success">Payment Success</option>
+                                    <option value="warranty_payment">Warranty Plan Payment</option>
+                                    <option value="engineer_add">Engineer Addition</option>
+                                    <option value="franchise_order">Franchise Order</option>
+                                    <option value="shipment_create">Shipment Creation</option>
+                                    <option value="shipment_dispatch">Shipment Dispatch</option>
+                                    <option value="shipment_deliver">Shipment Delivery</option>
+                                    <option value="return_initiate">Return Initiation</option>
+                                    <option value="return_status">Return Status Update</option>
+                                    <option value="dispute_create">Dispute Creation</option>
+                                    <option value="dispute_update">Dispute Update</option>
+                                    <option value="credit_ledger">Credit Ledger Entry</option>
+                                    <option value="credit_limit">Credit Limit Update</option>
+                                    <option value="credit_block">Credit Block</option>
+                                    <option value="credit_overdue">Credit Overdue</option>
+                                    <option value="franchise_payment">Franchise Payment</option>
+                                    <option value="payout_update">Payout Update</option>
+                                    <option value="purchase_order">Purchase Order</option>
+                                    <option value="vendor_add">Vendor Addition</option>
+                                    <option value="inventory_adjust">Inventory Adjustment</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">API Name</label>
+                                <input type="text" class="form-control" id="apiName" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">API Description</label>
+                            <textarea class="form-control" id="apiDescription" rows="2"></textarea>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <label class="form-label">Endpoint URL</label>
+                                <input type="url" class="form-control" id="endpointUrl" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">HTTP Method</label>
+                                <select class="form-select" id="httpMethod" required>
+                                    <option value="GET">GET</option>
+                                    <option value="POST">POST</option>
+                                    <option value="PUT">PUT</option>
+                                    <option value="PATCH">PATCH</option>
+                                    <option value="DELETE">DELETE</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Authentication</label>
+                            <select class="form-select" id="authType">
+                                <option value="none">No Authentication</option>
+                                <option value="basic">Basic Auth</option>
+                                <option value="bearer">Bearer Token</option>
+                                <option value="apikey">API Key</option>
+                            </select>
+                        </div>
+                        <div id="authDetails" class="d-none">
+                            <div id="basicAuthFields" class="d-none">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Username</label>
+                                        <input type="text" class="form-control" id="authUsername">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="authPassword">
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="bearerTokenField" class="d-none mb-3">
+                                <label class="form-label">Bearer Token</label>
+                                <input type="text" class="form-control" id="bearerToken">
+                            </div>
+                            <div id="apiKeyFields" class="d-none">
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">API Key</label>
+                                        <input type="text" class="form-control" id="apiKey">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Key Location</label>
+                                        <select class="form-select" id="apiKeyLocation">
+                                            <option value="header">Header</option>
+                                            <option value="query">Query Parameter</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Key Name</label>
+                                        <input type="text" class="form-control" id="apiKeyName">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <label class="form-label">API Parameters</label>
+                                <button type="button" class="btn btn-sm btn-primary" id="addApiParamBtn">
+                                    <i class="bi bi-plus-circle me-1"></i>Add Parameter
+                                </button>
+                            </div>
+                            <div id="apiParamsContainer">
+                                <!-- API parameter inputs will be dynamically added here -->
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Event Parameters</label>
+                                <div id="eventParametersList" class="parameter-container source-params">
+                                    <!-- Event parameters will be dynamically populated -->
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Parameter Mapping</label>
+                                <div id="apiParametersList" class="parameter-container api-params">
+                                    <!-- API parameters will be dynamically populated for mapping -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Parameter Mapping Instructions</label>
+                            <p class="text-muted small">Drag parameters from the Event Parameters list to the API Parameters list to create mappings. Parameters can be mapped to multiple destinations.</p>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-info" id="testApiBtn">
+                        <i class="bi bi-play-circle me-2"></i>Test API
+                    </button>
+                    <button type="button" class="btn btn-primary" id="saveApiBtn">
+                        <i class="bi bi-save me-2"></i>Save Configuration
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test API Response Modal -->
+    <div class="modal fade" id="testApiResponseModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">API Test Results</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Request Details</label>
+                        <pre class="bg-light p-3 rounded" id="apiRequestDetails"></pre>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Response</label>
+                        <pre class="bg-light p-3 rounded" id="apiResponseDetails"></pre>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.js"></script>
+    <script src="js/api-integration.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>
