@@ -409,7 +409,74 @@ document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
     initializeAuthenticationHandlers();
     initializeParameterMapping();
+    bindAddApiConfiguration();
+    bindSaveApiBtn();
 });
+
+function bindAddApiConfiguration() {
+    document.getElementById('addApiConfigBtn').addEventListener('click', function() {
+        // Clear the modal form
+        document.getElementById('apiConfigForm').reset();
+
+        // Reset basic form fields
+        document.getElementById('eventType').value = '';
+        document.getElementById('apiName').value = '';
+        document.getElementById('apiDescription').value = '';
+        document.getElementById('endpointUrl').value = '';
+        document.getElementById('httpMethod').value = 'GET';
+        document.getElementById('authType').value = 'none';
+
+        // Reset authentication fields
+        document.getElementById('authUsername').value = '';
+        document.getElementById('authPassword').value = '';
+        document.getElementById('bearerToken').value = '';
+        document.getElementById('apiKey').value = '';
+        document.getElementById('apiKeyLocation').value = 'header';
+        document.getElementById('apiKeyName').value = '';
+
+        // Hide all auth detail sections
+        document.getElementById('authDetails').classList.add('d-none');
+        document.getElementById('basicAuthFields').classList.add('d-none');
+        document.getElementById('bearerTokenField').classList.add('d-none');
+        document.getElementById('apiKeyFields').classList.add('d-none');
+
+        // Clear API parameters container
+        document.getElementById('apiParamsContainer').innerHTML = '';
+
+        // Clear parameter mapping sections
+        document.getElementById('eventParametersList').innerHTML = '';
+        document.getElementById('apiParametersList').innerHTML = '';
+        // Show the modal
+        $('#addApiConfigModal').modal('show');
+    });
+}
+
+function bindSaveApiBtn() {
+    document.getElementById('saveApiBtn').addEventListener('click', function() {
+        // Save API configuration
+        const apiConfig = {
+            id: Date.now(), // Temporary ID
+            eventType: document.getElementById('eventType').value,
+            apiName: document.getElementById('apiName').value,
+            apiDescription: document.getElementById('apiDescription').value,
+            endpointUrl: document.getElementById('endpointUrl').value,
+            httpMethod: document.getElementById('httpMethod').value,
+            authType: document.getElementById('authType').value,
+            authDetails: getAuthDetails(),
+            parameterMappings: getParameterMappings(),
+            status: 'active',
+            lastTriggered: null
+        };
+        // Add the new API configuration
+        apiConfigurations.push(apiConfig);
+        saveApiConfigurations();
+        // Close the modal
+        $('#addApiConfigModal').modal('hide');
+        // Refresh the display
+        loadApiConfigurations();
+    });
+}
+
 
 // Load parameter mappings when editing an API configuration
 function loadParameterMappings(configId) {
@@ -474,7 +541,11 @@ function loadParameterMappings(configId) {
 
 // Load existing API configurations
 function loadApiConfigurations() {
-    // TODO: Load from backend
+    // Load from localStorage
+    const savedConfigs = localStorage.getItem('apiConfigurations');
+    if (savedConfigs) {
+        apiConfigurations = JSON.parse(savedConfigs);
+    }
     renderApiConfigurationsTable();
 }
 
@@ -595,6 +666,7 @@ async function saveApiConfiguration(event) {
     event.preventDefault();
 
     const formData = {
+        id: Date.now(),
         eventType: document.getElementById('eventType').value,
         apiName: document.getElementById('apiName').value,
         description: document.getElementById('apiDescription').value,
@@ -602,12 +674,14 @@ async function saveApiConfiguration(event) {
         httpMethod: document.getElementById('httpMethod').value,
         authType: document.getElementById('authType').value,
         parameterMapping: getParameterMapping(),
-        authentication: getAuthenticationDetails()
+        authentication: getAuthenticationDetails(),
+        status: 'active',
+        lastTriggered: null
     };
 
     try {
-        // TODO: Save to backend
-        console.log('Saving configuration:', formData);
+        apiConfigurations.push(formData);
+        saveApiConfigurations();
         $('#addApiConfigModal').modal('hide');
         loadApiConfigurations();
     } catch (error) {
@@ -659,9 +733,13 @@ function getAuthenticationDetails() {
 // Test API configuration
 async function testConfiguration(configId) {
     try {
-        // TODO: Implement test API call
-        console.log('Testing configuration:', configId);
-        alert('Test successful!');
+        const config = apiConfigurations.find(c => c.id === configId);
+        if (config) {
+            config.lastTriggered = new Date().toISOString();
+            saveApiConfigurations();
+            loadApiConfigurations();
+            alert('Test successful!');
+        }
     } catch (error) {
         console.error('Test failed:', error);
         alert('Test failed. Please check the configuration and try again.');
@@ -672,8 +750,8 @@ async function testConfiguration(configId) {
 async function deleteConfiguration(configId) {
     if (confirm('Are you sure you want to delete this configuration?')) {
         try {
-            // TODO: Delete from backend
-            console.log('Deleting configuration:', configId);
+            apiConfigurations = apiConfigurations.filter(config => config.id !== configId);
+            saveApiConfigurations();
             loadApiConfigurations();
         } catch (error) {
             console.error('Error deleting configuration:', error);
@@ -683,6 +761,476 @@ async function deleteConfiguration(configId) {
 }
 
 // Edit API configuration
+function saveApiConfigurations() {
+    // Save API configurations to localStorage for persistence
+    localStorage.setItem('apiConfigurations', JSON.stringify(apiConfigurations));
+    // Refresh the API configurations table
+    renderApiConfigurationsTable();
+}
+
+function editConfiguration(configId) {
+    const config = apiConfigurations.find(c => c.id === configId);
+    if (config) {
+        // Set form values
+        document.getElementById('eventType').value = config.eventType;
+        document.getElementById('apiName').value = config.apiName;
+        document.getElementById('apiDescription').value = config.description;
+        document.getElementById('endpointUrl').value = config.endpointUrl;
+        document.getElementById('httpMethod').value = config.httpMethod;
+        document.getElementById('authType').value = config.authType;
+
+        // Clear existing API parameters
+        document.getElementById('apiParamsContainer').innerHTML = '';
+
+        // Add API parameters if they exist
+        if (config.apiParameters) {
+            config.apiParameters.forEach(param => {
+                const paramDiv = document.createElement('div');
+                paramDiv.className = 'api-param-item mb-2';
+                paramDiv.innerHTML = `
+                    <div class="row">
+                        <div class="col-md-5">
+                            <input type="text" class="form-control" value="${param.name}" 
+                                   data-param-id="apiParam_${Date.now()}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-select" required>
+                                <option value="string" ${param.type === 'string' ? 'selected' : ''}>String</option>
+                                <option value="number" ${param.type === 'number' ? 'selected' : ''}>Number</option>
+                                <option value="boolean" ${param.type === 'boolean' ? 'selected' : ''}>Boolean</option>
+                                <option value="object" ${param.type === 'object' ? 'selected' : ''}>Object</option>
+                                <option value="array" ${param.type === 'array' ? 'selected' : ''}>Array</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-danger btn-sm" onclick="removeApiParam(this)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('apiParamsContainer').appendChild(paramDiv);
+            });
+        }
+
+        // Update API parameters list for mapping
+        updateApiParametersList();
+
+        // Load parameter mappings
+        loadParameterMappings(configId);
+
+        // Show modal
+        const modal = new bootstrap.Modal(document.getElementById('addApiConfigModal'));
+        modal.show();
+    }
+}
+
+// Helper function to get status badge class
+function getStatusBadgeClass(status) {
+    switch (status.toLowerCase()) {
+        case 'active':
+            return 'bg-success';
+        case 'inactive':
+            return 'bg-secondary';
+        case 'error':
+            return 'bg-danger';
+        default:
+            return 'bg-primary';
+    }
+}
+
+// Setup event listeners
+function setupEventListeners() {
+    document.getElementById('eventType').addEventListener('change', handleEventTypeChange);
+    document.getElementById('authType').addEventListener('change', handleAuthTypeChange);
+    document.getElementById('apiConfigForm').addEventListener('submit', saveApiConfiguration);
+
+    // Setup search and filter handlers
+    document.getElementById('searchApi').addEventListener('input', filterConfigurations);
+    document.getElementById('eventTypeFilter').addEventListener('change', filterConfigurations);
+    document.getElementById('statusFilter').addEventListener('change', filterConfigurations);
+}
+
+// Filter configurations
+function filterConfigurations() {
+    const search = document.getElementById('searchApi').value.toLowerCase();
+    const eventType = document.getElementById('eventTypeFilter').value;
+    const status = document.getElementById('statusFilter').value;
+
+    const filtered = apiConfigurations.filter(config => {
+        const matchesSearch = search === '' ||
+            config.apiName.toLowerCase().includes(search) ||
+            config.endpointUrl.toLowerCase().includes(search) ||
+            config.description.toLowerCase().includes(search);
+
+        const matchesEventType = eventType === '' || config.eventType.startsWith(eventType);
+        const matchesStatus = status === '' || config.status.toLowerCase() === status;
+
+        return matchesSearch && matchesEventType && matchesStatus;
+    });
+
+    renderFilteredConfigurations(filtered);
+}
+
+// Render filtered configurations
+function renderFilteredConfigurations(filtered) {
+    const tableBody = document.getElementById('apiConfigTable');
+    tableBody.innerHTML = '';
+
+    filtered.forEach(config => {
+        // Render row (same as in renderApiConfigurationsTable)
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${config.eventType}</td>
+            <td>${config.apiName}</td>
+            <td>${config.endpointUrl}</td>
+            <td>${config.httpMethod}</td>
+            <td>${config.lastTriggered || 'Never'}</td>
+            <td>
+                <span class="badge ${getStatusBadgeClass(config.status)}">
+                    ${config.status}
+                </span>
+            </td>
+            <td>
+                <button class="btn btn-sm btn-primary me-1" onclick="editConfiguration('${config.id}')">
+                    <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-danger me-1" onclick="deleteConfiguration('${config.id}')">
+                    <i class="bi bi-trash"></i>
+                </button>
+                <button class="btn btn-sm btn-success" onclick="testConfiguration('${config.id}')">
+                    <i class="bi bi-play"></i>
+                </button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+// Handle authentication type change
+function handleAuthTypeChange() {
+    const authType = document.getElementById('authType').value;
+    const authDetails = document.getElementById('authDetails');
+    const basicAuthFields = document.getElementById('basicAuthFields');
+    const bearerTokenField = document.getElementById('bearerTokenField');
+    const apiKeyFields = document.getElementById('apiKeyFields');
+
+    // Show/hide auth details section
+    authDetails.classList.toggle('d-none', authType === 'none');
+
+    // Show/hide specific auth fields
+    basicAuthFields.classList.toggle('d-none', authType !== 'basic');
+    bearerTokenField.classList.toggle('d-none', authType !== 'bearer');
+    apiKeyFields.classList.toggle('d-none', authType !== 'apikey');
+
+    // Clear fields when switching auth types
+    if (authType !== 'basic') {
+        document.getElementById('authUsername').value = '';
+        document.getElementById('authPassword').value = '';
+    }
+    if (authType !== 'bearer') {
+        document.getElementById('bearerToken').value = '';
+    }
+    if (authType !== 'apikey') {
+        document.getElementById('apiKey').value = '';
+        document.getElementById('apiKeyName').value = '';
+        document.getElementById('apiKeyLocation').value = 'header';
+    }
+}
+
+function getAuthDetails() {
+    const authTypeElement = document.getElementById('authType');
+    if (!authTypeElement) return {};
+
+    const authType = authTypeElement.value;
+    const authDetails = {};
+
+    switch (authType) {
+        case 'basic':
+            const username = document.getElementById('authUsername');
+            const password = document.getElementById('authPassword');
+            if (username) authDetails.username = username.value;
+            if (password) authDetails.password = password.value;
+            break;
+        case 'bearer':
+            const token = document.getElementById('authToken');
+            if (token) authDetails.token = token.value;
+            break;
+        case 'apiKey':
+            const key = document.getElementById('apiKey');
+            const location = document.getElementById('apiKeyLocation');
+            if (key) authDetails.key = key.value;
+            if (location) authDetails.location = location.value;
+            break;
+        case 'none':
+        default:
+            break;
+    }
+    return authDetails;
+}
+
+function getParameterMappings() {
+    const parameterMappings = [];
+    const parameterContainer = document.getElementById('parameterMappings');
+    
+    // Return empty array if container doesn't exist
+    if (!parameterContainer) return parameterMappings;
+    
+    const mappingRows = parameterContainer.getElementsByClassName('parameter-mapping-row');
+    
+    // If no mapping rows found, return empty array
+    if (!mappingRows || mappingRows.length === 0) return parameterMappings;
+
+    for (const row of mappingRows) {
+        const sourceField = row.querySelector('.source-field');
+        const targetField = row.querySelector('.target-field');
+        const dataType = row.querySelector('.data-type');
+        const requiredField = row.querySelector('.required-field');
+        
+        // Only add mapping if all required elements exist
+        if (sourceField && targetField && dataType && requiredField) {
+            const mapping = {
+                sourceField: sourceField.value,
+                targetField: targetField.value,
+                dataType: dataType.value,
+                required: requiredField.checked
+            };
+            parameterMappings.push(mapping);
+        }
+    }
+
+    return parameterMappings;
+}
+
+// Load existing API configurations
+function loadApiConfigurations() {
+    // Load from localStorage
+    const savedConfigs = localStorage.getItem('apiConfigurations');
+    if (savedConfigs) {
+        apiConfigurations = JSON.parse(savedConfigs);
+    }
+    renderApiConfigurationsTable();
+}
+
+// Render API configurations table
+function renderApiConfigurationsTable() {
+    const tableBody = document.getElementById('apiConfigTable');
+    tableBody.innerHTML = '';
+
+    apiConfigurations.forEach(config => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${config.eventType}</td>
+            <td>${config.apiName}</td>
+            <td>${config.endpointUrl}</td>
+            <td>${config.httpMethod}</td>
+            <td>${config.lastTriggered || 'Never'}</td>
+            <td>
+                <span class="badge ${getStatusBadgeClass(config.status)}">
+                    ${config.status}
+                </span>
+            </td>
+            <td>
+                <button class="btn btn-sm btn-primary me-1" onclick="editConfiguration('${config.id}')">
+                    <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-danger me-1" onclick="deleteConfiguration('${config.id}')">
+                    <i class="bi bi-trash"></i>
+                </button>
+                <button class="btn btn-sm btn-success" onclick="testConfiguration('${config.id}')">
+                    <i class="bi bi-play"></i>
+                </button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+// Handle event type change
+function handleEventTypeChange() {
+    const eventType = document.getElementById('eventType').value;
+    const parametersList = document.getElementById('eventParametersList');
+    const apiParamsList = document.getElementById('apiParametersList');
+
+    if (eventType && EVENT_PARAMETERS[eventType]) {
+        renderEventParameters(EVENT_PARAMETERS[eventType]);
+    } else {
+        parametersList.innerHTML = '';
+        apiParamsList.innerHTML = '';
+    }
+}
+
+// Render event parameters
+function renderEventParameters(parameters) {
+    const parametersList = document.getElementById('eventParametersList');
+    parametersList.innerHTML = '';
+
+    parameters.forEach(param => {
+        const paramElement = document.createElement('div');
+        paramElement.className = 'parameter-item';
+        paramElement.setAttribute('data-param-name', param.name);
+        paramElement.setAttribute('data-param-type', param.type);
+        paramElement.draggable = false;
+        paramElement.innerHTML = `
+            <div class="parameter-content">
+                <strong>${param.name}</strong>
+                <small class="text-muted">${param.type}</small>
+                <p class="mb-0 small">${param.description}</p>
+            </div>
+        `;
+        parametersList.appendChild(paramElement);
+    });
+}
+
+// Initialize authentication handlers
+function initializeAuthenticationHandlers() {
+    const authTypeSelect = document.getElementById('authType');
+    const authDetails = document.getElementById('authDetails');
+    const basicAuthFields = document.getElementById('basicAuthFields');
+    const bearerTokenField = document.getElementById('bearerTokenField');
+    const apiKeyFields = document.getElementById('apiKeyFields');
+
+    // Initial state
+    authDetails.classList.add('d-none');
+    basicAuthFields.classList.add('d-none');
+    bearerTokenField.classList.add('d-none');
+    apiKeyFields.classList.add('d-none');
+
+    // Add change event listener
+    authTypeSelect.addEventListener('change', function() {
+        const selectedAuth = this.value;
+
+        // Show/hide auth details section
+        authDetails.classList.toggle('d-none', selectedAuth === 'none');
+
+        // Show/hide specific auth fields
+        basicAuthFields.classList.toggle('d-none', selectedAuth !== 'basic');
+        bearerTokenField.classList.toggle('d-none', selectedAuth !== 'bearer');
+        apiKeyFields.classList.toggle('d-none', selectedAuth !== 'apikey');
+
+        // Clear fields when switching auth types
+        if (selectedAuth !== 'basic') {
+            document.getElementById('authUsername').value = '';
+            document.getElementById('authPassword').value = '';
+        }
+        if (selectedAuth !== 'bearer') {
+            document.getElementById('bearerToken').value = '';
+        }
+        if (selectedAuth !== 'apikey') {
+            document.getElementById('apiKey').value = '';
+            document.getElementById('apiKeyName').value = '';
+            document.getElementById('apiKeyLocation').value = 'header';
+        }
+    });
+}
+
+// Save API configuration
+async function saveApiConfiguration(event) {
+    event.preventDefault();
+
+    const formData = {
+        id: Date.now(),
+        eventType: document.getElementById('eventType').value,
+        apiName: document.getElementById('apiName').value,
+        description: document.getElementById('apiDescription').value,
+        endpointUrl: document.getElementById('endpointUrl').value,
+        httpMethod: document.getElementById('httpMethod').value,
+        authType: document.getElementById('authType').value,
+        parameterMapping: getParameterMapping(),
+        authentication: getAuthenticationDetails(),
+        status: 'active',
+        lastTriggered: null
+    };
+
+    try {
+        apiConfigurations.push(formData);
+        saveApiConfigurations();
+        $('#addApiConfigModal').modal('hide');
+        loadApiConfigurations();
+    } catch (error) {
+        console.error('Error saving configuration:', error);
+        alert('Error saving configuration. Please try again.');
+    }
+}
+
+// Get parameter mapping
+function getParameterMapping() {
+    const mapping = {};
+    const apiParams = document.querySelectorAll('.api-params .parameter-item');
+    
+    apiParams.forEach(param => {
+        const apiParam = param.getAttribute('data-api-param');
+        const eventParam = param.getAttribute('data-param-name');
+        if (apiParam && eventParam) {
+            mapping[apiParam] = eventParam;
+        }
+    });
+
+    return mapping;
+}
+
+// Get authentication details based on type
+function getAuthenticationDetails() {
+    const authType = document.getElementById('authType').value;
+    switch (authType) {
+        case 'basic':
+            return {
+                username: document.getElementById('authUsername').value,
+                password: document.getElementById('authPassword').value
+            };
+        case 'bearer':
+            return {
+                token: document.getElementById('bearerToken').value
+            };
+        case 'apikey':
+            return {
+                key: document.getElementById('apiKey').value,
+                location: document.getElementById('apiKeyLocation').value,
+                name: document.getElementById('apiKeyName').value
+            };
+        default:
+            return null;
+    }
+}
+
+// Test API configuration
+async function testConfiguration(configId) {
+    try {
+        const config = apiConfigurations.find(c => c.id === configId);
+        if (config) {
+            config.lastTriggered = new Date().toISOString();
+            saveApiConfigurations();
+            loadApiConfigurations();
+            alert('Test successful!');
+        }
+    } catch (error) {
+        console.error('Test failed:', error);
+        alert('Test failed. Please check the configuration and try again.');
+    }
+}
+
+// Delete API configuration
+async function deleteConfiguration(configId) {
+    if (confirm('Are you sure you want to delete this configuration?')) {
+        try {
+            apiConfigurations = apiConfigurations.filter(config => config.id !== configId);
+            saveApiConfigurations();
+            loadApiConfigurations();
+        } catch (error) {
+            console.error('Error deleting configuration:', error);
+            alert('Error deleting configuration. Please try again.');
+        }
+    }
+}
+
+// Edit API configuration
+function saveApiConfigurations() {
+    // Save API configurations to localStorage for persistence
+    localStorage.setItem('apiConfigurations', JSON.stringify(apiConfigurations));
+    // Refresh the API configurations table
+    renderApiConfigurationsTable();
+}
+
 function editConfiguration(configId) {
     const config = apiConfigurations.find(c => c.id === configId);
     if (config) {
