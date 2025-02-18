@@ -569,15 +569,12 @@ class InventoryManager {
                         ${item.returnStatus || 'No Return'}
                     </span>
                 </td>
-                <td>
+                <td id="actionButtons-${item.skuId}">
                     <button class="btn btn-sm btn-primary me-1" onclick="inventoryManager.openOrderModal('${item.skuId}')">
                         <i class="bi bi-cart-plus"></i> Order
                     </button>
                     <button class="btn btn-sm btn-warning" onclick="inventoryManager.openReturnModal('${item.skuId}')"}>
                         <i class="bi bi-arrow-return-left"></i> Return
-                    </button>
-                    <button class="btn btn-sm btn-danger me-1" onclick="inventoryManager.openAdjustModal('${item.skuId}')">
-                        <i class="bi bi-wrench-adjustable-circle"></i> Adjust
                     </button>
                 </td>
             `;
@@ -640,25 +637,6 @@ class InventoryManager {
         const modal = new bootstrap.Modal(document.getElementById('returnModal'));
         modal.show();
     }
-
-    openAdjustModal(skuId) {
-        const item = this.inventoryData.find(i => i.skuId === skuId);
-        document.getElementById('adjustItemSelect').textContent = `${item.skuName} (${item.skuId}) - ₹${item.offerPrice}`;
-        document.getElementById('adjustQuantity').value = '';
-        document.getElementById('adjustReason').value = '';
-        document.getElementById('otherReason').value = '';
-        document.getElementById('otherReasonContainer').style.display = 'none';
-        
-        const modal = new bootstrap.Modal(document.getElementById('adjustInventoryModal'));
-        modal.show();
-
-        // Add event listener for reason change
-        document.getElementById('adjustReason').addEventListener('change', (e) => {
-            const otherReasonContainer = document.getElementById('otherReasonContainer');
-            otherReasonContainer.style.display = e.target.value === 'other' ? 'block' : 'none';
-        });
-    }
-
 
     openReturnModal(skuId) {
         const item = this.inventoryData.find(i => i.skuId === skuId);
@@ -953,29 +931,6 @@ function addSelectedSku() {
     modal.hide();
 }
 
-// Submit inventory adjustment
-function submitInventoryAdjustment() {
-    const quantity = parseInt(document.getElementById('adjustQuantity').value);
-    const reason = document.getElementById('adjustReason').value;
-    const otherReason = document.getElementById('otherReason').value;
-    
-    if (!quantity || !reason) {
-        alert('Please fill in all required fields');
-        return;
-    }
-
-    if (reason === 'other' && !otherReason) {
-        alert('Please specify the other reason');
-        return;
-    }
-
-    const finalReason = reason === 'other' ? otherReason : reason;
-    // Add your inventory adjustment logic here
-    
-    alert('Inventory adjustment submitted successfully!');
-    bootstrap.Modal.getInstance(document.getElementById('adjustInventoryModal')).hide();
-}
-
 function filterAvailableSkus() {
     const searchTerm = document.getElementById('skuSearch').value.toLowerCase();
     const category = document.getElementById('skuFilterCategory').value;
@@ -1053,28 +1008,5 @@ function addSelectedSku() {
     inventoryManager.populateTable();
     const modal = bootstrap.Modal.getInstance(document.getElementById('addInventoryModal'));
     modal.hide();
-}
-
-// Submit inventory adjustment
-function submitInventoryAdjustment() {
-    const quantity = parseInt(document.getElementById('adjustQuantity').value);
-    const reason = document.getElementById('adjustReason').value;
-    const otherReason = document.getElementById('otherReason').value;
-    
-    if (!quantity || !reason) {
-        alert('Please fill in all required fields');
-        return;
-    }
-
-    if (reason === 'other' && !otherReason) {
-        alert('Please specify the other reason');
-        return;
-    }
-
-    const finalReason = reason === 'other' ? otherReason : reason;
-    // Add your inventory adjustment logic here
-    
-    alert('Inventory adjustment submitted successfully!');
-    $('#adjustInventoryModal').modal('hide');
 }
     

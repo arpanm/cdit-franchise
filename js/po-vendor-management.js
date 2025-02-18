@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDashboardStats();
     populateVendors();
     populateVendorsTable();
-    setupEventListeners();
     populatePoSkuList();
 });
 
@@ -161,23 +160,6 @@ function deleteVendor(vendorId) {
             modal.hide();
         };
     }
-}
-
-
-
-// Setup event listeners
-function setupEventListeners() {
-    // Search inventory
-    document.getElementById('searchInventory').addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        const rows = document.getElementById('inventoryTableBody').getElementsByTagName('tr');
-        
-        Array.from(rows).forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(searchTerm) ? '' : 'none';
-        });
-    });
-
 }
 
 // Add new item to purchase order

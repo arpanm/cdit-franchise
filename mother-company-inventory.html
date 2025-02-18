@@ -158,14 +158,53 @@
 
                 <!-- Inventory Table -->
                 <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" id="searchSku" placeholder="Search SKU/Name">
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-select" id="filterCategory">
+                                    <option value="">All Categories</option>
+                                    <option value="spare">Spare Parts</option>
+                                    <option value="accessory">Accessories</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-select" id="filterBrand">
+                                    <option value="">All Brands</option>
+                                    <option value="samsung">Samsung</option>
+                                    <option value="lg">LG</option>
+                                    <option value="whirlpool">Whirlpool</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-select" id="filterInventoryStatus">
+                                    <option value="">All Inventory Status</option>
+                                    <option value="low">Low</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-select" id="filterDemand">
+                                    <option value="">All Demand</option>
+                                    <option value="low">Low</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                            <div class="col-md-1">
+                                <button class="btn btn-primary w-100" onclick="applyFilters()">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">Current Inventory</h5>
-                        <div class="d-flex gap-2">
-                            <input type="text" class="form-control" placeholder="Search items..." id="searchInventory">
-                            <select class="form-select" id="categoryFilter">
-                                <option value="">All Categories</option>
-                            </select>
-                        </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -444,12 +483,144 @@
         </div>
     </div>
 
+    <!-- Order Modal -->
+    <div class="modal fade" id="orderModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Purchase Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="orderForm">
+                        <div class="mb-3">
+                            <label class="form-label">SKU Details</label>
+                            <p id="orderSkuDetails" class="form-text"></p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Quantity</label>
+                            <input type="number" class="form-control" id="orderQuantity" required min="1">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Total Amount</label>
+                            <p id="orderTotalAmount" class="form-text">₹0</p>
+                        </div>
+                        <div class="alert alert-warning" id="orderCreditWarning" style="display: none;">
+                            Insufficient credit balance!
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="createPurchaseOrder()">Create Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Return Modal -->
+    <div class="modal fade" id="returnModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Initiate Return</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="returnForm">
+                        <div class="mb-3">
+                            <label class="form-label">SKU Details</label>
+                            <p id="returnSkuDetails" class="form-text"></p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Return Quantity</label>
+                            <input type="number" class="form-control" id="returnQuantity" required min="1">
+                            <div class="text-danger mt-1" id="returnQuantityWarning" style="display: none;"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Reason for Return</label>
+                            <textarea class="form-control" id="returnReason" required rows="3"></textarea>
+                        </div>
+                        <div class="alert alert-info">
+                            Return request will be sent for approval. Credit will be updated once approved.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="initiateReturn()">Submit Return</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Goods Receive Modal -->
+    <div class="modal fade" id="goodsReceiveModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Goods Receive</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="goodsReceiveForm">
+                        <input type="hidden" id="receiveSkuId">
+                        <input type="hidden" id="receiveType">
+                        
+                        <div id="poFields">
+                            <div class="mb-3">
+                                <label class="form-label">Purchase Order Number</label>
+                                <select class="form-select" id="poNumber" required>
+                                    <option value="">Select PO</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div id="returnFields">
+                            <div class="mb-3">
+                                <label class="form-label">Return Request Number</label>
+                                <select class="form-select" id="returnNumber" required>
+                                    <option value="">Select Return Request</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Received Quantity</label>
+                            <input type="number" class="form-control" id="receiveQuantity" required min="1">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Quality Status</label>
+                            <select class="form-select" id="qualityStatus" required>
+                                <option value="">Select Status</option>
+                                <option value="passed">Passed</option>
+                                <option value="failed">Failed</option>
+                                <option value="partial">Partially Passed</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Remarks</label>
+                            <textarea class="form-control" id="receiveRemarks" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="submitGoodsReceive()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <script src="js/inventory-dashboard.js" defer></script>
+    <script src="js/inventory-dashboard.js"></script>
     <script src="js/po-vendor-management.js"></script>
-    <script src="js/login.js" defer></script>
+    <script src="js/goods-receive.js"></script>
+    <script src="js/login.js"></script>
 </body>
 </html>
