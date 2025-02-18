@@ -59,6 +59,11 @@
                     </a>
                 </li>
                 <li class="nav-item mb-2">
+                    <a href="franchise-customer-return.html" class="nav-link text-white active">
+                        <i class="bi bi-arrow-return-left me-2"></i> Customer Returns
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
                     <a href="#" class="nav-link text-white">
                         <i class="bi bi-gear me-2"></i> Settings
                     </a>
@@ -70,126 +75,139 @@
                 </li>
             </ul>
         </div>
-        <!-- Main Content -->
-        <div class="main-content p-4 w-100">
-            <h2>Service Management</h2>
-            
-            <!-- Dashboard Content -->
-            <div class="row mb-4">
-                <!-- Summary Cards -->
+
+        <main class="flex-grow-1 p-4">
+            <div class="container-fluid">
+                <!-- Page Heading -->
                 <div class="row mb-4">
-                    <div class="col-md-4">
-                        <div class="card bg-primary text-white">
-                            <div class="card-body">
-                                <h6 class="card-title">Total Active Requests</h6>
-                                <h2 class="mb-0">45</h2>
-                                <small>+5 from yesterday</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card bg-warning text-dark">
-                            <div class="card-body">
-                                <h6 class="card-title">Pending Payments</h6>
-                                <h2 class="mb-0">₹18,200</h2>
-                                <small>12 transactions pending</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card bg-danger text-white">
-                            <div class="card-body">
-                                <h6 class="card-title">SLA Deadline Alerts</h6>
-                                <h2 class="mb-0">9</h2>
-                                <small>Immediate Service Needed</small>
-                            </div>
-                        </div>
+                    <div class="col-12">
+                        <h2 class="fw-bold text-dark">Service Management</h2>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="franchise-finance.html" class="text-decoration-none">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Service</li>
+                            </ol>
+                        </nav>
                     </div>
                 </div>
-                <!-- Top Filter Bar -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <div class="row g-3">
-                            <div class="col-md-2">
-                                <select class="form-select" id="locationFilter">
-                                    <option>All Locations</option>
-                                    <option>Mumbai</option>
-                                    <option>Delhi</option>
-                                    <option>Bangalore</option>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <select class="form-select" id="brandFilter">
-                                    <option>All Brands</option>
-                                    <option>Samsung</option>
-                                    <option>LG</option>
-                                    <option>Whirlpool</option>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <select class="form-select" id="statusFilter">
-                                    <option>All Status</option>
-                                    <option>Pending</option>
-                                    <option>In Progress</option>
-                                    <option>Completed</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="dateRangeFilter" placeholder="Select Date Range" readonly>
-                                    <span class="input-group-text"><i class="bi bi-calendar-range"></i></span>
+            
+                <!-- Dashboard Content -->
+                <div class="row mb-4">
+                    <!-- Summary Cards -->
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body">
+                                    <h6 class="card-title">Total Active Requests</h6>
+                                    <h2 class="mb-0">45</h2>
+                                    <small>+5 from yesterday</small>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="searchFilter" placeholder="Order ID / Phone">
-                                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-warning text-dark">
+                                <div class="card-body">
+                                    <h6 class="card-title">Pending Payments</h6>
+                                    <h2 class="mb-0">₹18,200</h2>
+                                    <small>12 transactions pending</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-danger text-white">
+                                <div class="card-body">
+                                    <h6 class="card-title">SLA Deadline Alerts</h6>
+                                    <h2 class="mb-0">9</h2>
+                                    <small>Immediate Service Needed</small>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- Service Request Table -->
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Service Requests</h5>
-                        <div class="btn-group">
-                            <button class="btn btn-success btn-sm me-2" data-bs-toggle="modal" data-bs-target="#addServiceRequestModal">
-                                <i class="bi bi-plus-circle me-1"></i> Add Service Request
-                            </button>
-                            <button class="btn btn-primary btn-sm" data-action="assign" disabled>Bulk Assign</button>
-                            <button class="btn btn-success btn-sm ms-2">Export to Excel</button>
+                    <!-- Top Filter Bar -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-2">
+                                    <select class="form-select" id="locationFilter">
+                                        <option>All Locations</option>
+                                        <option>Mumbai</option>
+                                        <option>Delhi</option>
+                                        <option>Bangalore</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <select class="form-select" id="brandFilter">
+                                        <option>All Brands</option>
+                                        <option>Samsung</option>
+                                        <option>LG</option>
+                                        <option>Whirlpool</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <select class="form-select" id="statusFilter">
+                                        <option>All Status</option>
+                                        <option>Pending</option>
+                                        <option>In Progress</option>
+                                        <option>Completed</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="dateRangeFilter" placeholder="Select Date Range" readonly>
+                                        <span class="input-group-text"><i class="bi bi-calendar-range"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="searchFilter" placeholder="Order ID / Phone">
+                                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover" id="serviceRequestsTable">
-                                <thead>
-                                    <tr>
-                                        <th><input type="checkbox" class="form-check-input"></th>
-                                        <th data-column="id">Request ID <span class="sort-indicator"></span></th>
-                                        <th data-column="customer">Customer <span class="sort-indicator"></span></th>
-                                        <th data-column="brand">Brand <span class="sort-indicator"></span></th>
-                                        <th data-column="paymentStatus">Payment Status <span class="sort-indicator"></span></th>
-                                        <th data-column="serviceType">Service Type <span class="sort-indicator"></span></th>
-                                        <th data-column="status">Status <span class="sort-indicator"></span></th>
-                                        <th data-column="createdDate">Created Date <span class="sort-indicator"></span></th>
-                                        <th data-column="slaDeadline">SLA Deadline <span class="sort-indicator"></span></th>
-                                        <th data-column="slaDeadline">Location <span class="sort-indicator"></span></th>
-                                        <th data-column="engineer">Assigned Engineer <span class="sort-indicator"></span></th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                </thead>
-                                <tbody>
-                                    <!-- Table body will be populated dynamically by service-requests.js -->
-                                </tbody>
-                            </table>
+                    <!-- Service Request Table -->
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Service Requests</h5>
+                            <div class="btn-group">
+                                <button class="btn btn-success btn-sm me-2" data-bs-toggle="modal" data-bs-target="#addServiceRequestModal">
+                                    <i class="bi bi-plus-circle me-1"></i> Add Service Request
+                                </button>
+                                <button class="btn btn-primary btn-sm" data-action="assign" disabled>Bulk Assign</button>
+                                <button class="btn btn-success btn-sm ms-2">Export to Excel</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="serviceRequestsTable">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" class="form-check-input"></th>
+                                            <th data-column="id">Request ID <span class="sort-indicator"></span></th>
+                                            <th data-column="customer">Customer <span class="sort-indicator"></span></th>
+                                            <th data-column="brand">Brand <span class="sort-indicator"></span></th>
+                                            <th data-column="paymentStatus">Payment Status <span class="sort-indicator"></span></th>
+                                            <th data-column="serviceType">Service Type <span class="sort-indicator"></span></th>
+                                            <th data-column="status">Status <span class="sort-indicator"></span></th>
+                                            <th data-column="createdDate">Created Date <span class="sort-indicator"></span></th>
+                                            <th data-column="slaDeadline">SLA Deadline <span class="sort-indicator"></span></th>
+                                            <th data-column="slaDeadline">Location <span class="sort-indicator"></span></th>
+                                            <th data-column="engineer">Assigned Engineer <span class="sort-indicator"></span></th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Table body will be populated dynamically by service-requests.js -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>

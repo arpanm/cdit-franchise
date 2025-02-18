@@ -59,6 +59,11 @@
                     </a>
                 </li>
                 <li class="nav-item mb-2">
+                    <a href="franchise-customer-return.html" class="nav-link text-white active">
+                        <i class="bi bi-arrow-return-left me-2"></i> Customer Returns
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
                     <a href="#" class="nav-link text-white">
                         <i class="bi bi-gear me-2"></i> Settings
                     </a>
@@ -71,136 +76,146 @@
             </ul>
         </div>
 
-        <!-- Main Content -->
-        <div class="main-content p-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Inventory Management</h2>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addInventoryModal">
-                    <i class="bi bi-plus-circle me-2"></i>Add New Item
-                </button>
-            </div>
+        <main class="flex-grow-1 p-4">
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h2 class="fw-bold text-dark">Inventory Management</h2>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="franchise-finance.html" class="text-decoration-none">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Inventory</li>
+                            </ol>
+                        </nav>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addInventoryModal">
+                            <i class="bi bi-plus-circle me-2"></i>Add New Item
+                        </button>
+                    </div>
+                </div>
 
-            <div class="row mb-4">
-                <div class="col-md-4">
-                    <div class="card bg-primary text-white">
-                        <div class="card-body">
-                            <h6 class="card-title">Total Inventory</h6>
-                            <h2 class="mb-0">₹308,200</h2>
-                            <small>115 Items</small>
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">Total Inventory</h6>
+                                <h2 class="mb-0">₹308,200</h2>
+                                <small>115 Items</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-warning text-dark">
+                            <div class="card-body">
+                                <h6 class="card-title">Low Stock Items</h6>
+                                <h2 class="mb-0">32</h2>
+                                <small>Immediate Ordering Needed</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-danger text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">Ageing Inventory</h6>
+                                <h2 class="mb-0">₹18,200</h2>
+                                <small>3 Items</small>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card bg-warning text-dark">
-                        <div class="card-body">
-                            <h6 class="card-title">Low Stock Items</h6>
-                            <h2 class="mb-0">32</h2>
-                            <small>Immediate Ordering Needed</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card bg-danger text-white">
-                        <div class="card-body">
-                            <h6 class="card-title">Ageing Inventory</h6>
-                            <h2 class="mb-0">₹18,200</h2>
-                            <small>3 Items</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Credit Balance Section -->
-            <div class="alert alert-info mb-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <i class="bi bi-wallet2"></i>
-                        <strong>Available Credit Balance:</strong>
-                        <span id="creditBalance">₹50,000</span>
+                <!-- Credit Balance Section -->
+                <div class="alert alert-info mb-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="bi bi-wallet2"></i>
+                            <strong>Available Credit Balance:</strong>
+                            <span id="creditBalance">₹50,000</span>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#creditHistoryModal">
+                            <i class="bi bi-clock-history"></i> View History
+                        </button>
                     </div>
-                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#creditHistoryModal">
-                        <i class="bi bi-clock-history"></i> View History
-                    </button>
                 </div>
-            </div>
 
-            <!-- Filters Section -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-3">
-                            <input type="text" class="form-control" id="searchSku" placeholder="Search SKU/Name">
-                        </div>
-                        <div class="col-md-2">
-                            <select class="form-select" id="filterCategory">
-                                <option value="">All Categories</option>
-                                <option value="spare">Spare Parts</option>
-                                <option value="accessory">Accessories</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <select class="form-select" id="filterBrand">
-                                <option value="">All Brands</option>
-                                <option value="samsung">Samsung</option>
-                                <option value="lg">LG</option>
-                                <option value="whirlpool">Whirlpool</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <select class="form-select" id="filterInventoryStatus">
-                                <option value="">All Inventory Status</option>
-                                <option value="low">Low</option>
-                                <option value="normal">Normal</option>
-                                <option value="high">High</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <select class="form-select" id="filterDemand">
-                                <option value="">All Demand</option>
-                                <option value="low">Low</option>
-                                <option value="normal">Normal</option>
-                                <option value="high">High</option>
-                            </select>
-                        </div>
-                        <div class="col-md-1">
-                            <button class="btn btn-primary w-100" onclick="applyFilters()">
-                                <i class="bi bi-search"></i>
-                            </button>
+                <!-- Filters Section -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" id="searchSku" placeholder="Search SKU/Name">
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-select" id="filterCategory">
+                                    <option value="">All Categories</option>
+                                    <option value="spare">Spare Parts</option>
+                                    <option value="accessory">Accessories</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-select" id="filterBrand">
+                                    <option value="">All Brands</option>
+                                    <option value="samsung">Samsung</option>
+                                    <option value="lg">LG</option>
+                                    <option value="whirlpool">Whirlpool</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-select" id="filterInventoryStatus">
+                                    <option value="">All Inventory Status</option>
+                                    <option value="low">Low</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-select" id="filterDemand">
+                                    <option value="">All Demand</option>
+                                    <option value="low">Low</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                            <div class="col-md-1">
+                                <button class="btn btn-primary w-100" onclick="applyFilters()">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Inventory Table -->
-            <div class="card">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover" id="inventoryTable">
-                            <thead>
-                                <tr>
-                                    <th>SKU ID</th>
-                                    <th>SKU Name</th>
-                                    <th>Category</th>
-                                    <th>Brand</th>
-                                    <th>MRP (₹)</th>
-                                    <th>Offer Price (₹)</th>
-                                    <th>Commission %</th>
-                                    <th>Purchased</th>
-                                    <th>Sold</th>
-                                    <th>Stock</th>
-                                    <th>Inventory</th>
-                                    <th>Demand</th>
-                                    <th>Open POs</th>
-                                    <th>Return</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="inventoryTableBody"></tbody>
-                        </table>
+                <!-- Inventory Table -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover" id="inventoryTable">
+                                <thead>
+                                    <tr>
+                                        <th>SKU ID</th>
+                                        <th>SKU Name</th>
+                                        <th>Category</th>
+                                        <th>Brand</th>
+                                        <th>MRP (₹)</th>
+                                        <th>Offer Price (₹)</th>
+                                        <th>Commission %</th>
+                                        <th>Purchased</th>
+                                        <th>Sold</th>
+                                        <th>Stock</th>
+                                        <th>Inventory</th>
+                                        <th>Demand</th>
+                                        <th>Open POs</th>
+                                        <th>Return</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventoryTableBody"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <!-- Order Modal -->

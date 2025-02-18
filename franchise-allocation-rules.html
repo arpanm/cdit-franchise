@@ -58,6 +58,11 @@
                     </a>
                 </li>
                 <li class="nav-item mb-2">
+                    <a href="franchise-customer-return.html" class="nav-link text-white active">
+                        <i class="bi bi-arrow-return-left me-2"></i> Customer Returns
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
                     <a href="#" class="nav-link text-white">
                         <i class="bi bi-gear me-2"></i> Settings
                     </a>
@@ -70,89 +75,101 @@
             </ul>
         </div>
 
-        <!-- Main Content -->
-        <div class="main-content p-4 w-100">
-            <h2 class="mb-4">Engineer Allocation Rules</h2>
+        <main class="flex-grow-1 p-4">
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h2 class="fw-bold text-dark">Engineer Allocation Rules</h2>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="franchise-finance.html" class="text-decoration-none">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Allocation</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
 
-            <!-- Summary Cards -->
-            <div class="row mb-4">
-                <div class="col-md-4">
-                    <div class="card bg-primary text-white">
-                        <div class="card-body">
-                            <h6 class="card-title mb-3">Active Rules</h6>
-                            <h2 class="mb-0" id="activeRules">5</h2>
+                <!-- Summary Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h6 class="card-title mb-3">Active Rules</h6>
+                                <h2 class="mb-0" id="activeRules">5</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h6 class="card-title mb-3">Average Allocation Time</h6>
+                                <h2 class="mb-0" id="avgAllocationTime">30s</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <h6 class="card-title mb-3">Success Rate</h6>
+                                <h2 class="mb-0" id="successRate">95%</h2>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card bg-success text-white">
-                        <div class="card-body">
-                            <h6 class="card-title mb-3">Average Allocation Time</h6>
-                            <h2 class="mb-0" id="avgAllocationTime">30s</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card bg-info text-white">
-                        <div class="card-body">
-                            <h6 class="card-title mb-3">Success Rate</h6>
-                            <h2 class="mb-0" id="successRate">95%</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Filters and Add Rule Button -->
-            <div class="row mb-4">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col-md-3">
-                                    <select class="form-select" id="statusFilter">
-                                        <option value="">All Status</option>
-                                        <option value="active">Active</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="inactive">Inactive</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control" id="searchInput" placeholder="Search rules...">
-                                </div>
-                                <div class="col-md-3 text-end">
-                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRuleModal">
-                                        <i class="bi bi-plus"></i> Add New Rule
-                                    </button>
+                <!-- Filters and Add Rule Button -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-md-3">
+                                        <select class="form-select" id="statusFilter">
+                                            <option value="">All Status</option>
+                                            <option value="active">Active</option>
+                                            <option value="pending">Pending</option>
+                                            <option value="inactive">Inactive</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="searchInput" placeholder="Search rules...">
+                                    </div>
+                                    <div class="col-md-3 text-end">
+                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRuleModal">
+                                            <i class="bi bi-plus"></i> Add New Rule
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Rules Table -->
-            <div class="card">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover" id="rulesTable">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Selection Rules</th>
-                                    <th>Sorting Rule</th>
-                                    <th>Selected Engineers</th>
-                                    <th>Priority</th>
-                                    <th>Last Updated</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                <!-- Rules Table -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="rulesTable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Selection Rules</th>
+                                        <th>Sorting Rule</th>
+                                        <th>Selected Engineers</th>
+                                        <th>Priority</th>
+                                        <th>Last Updated</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <!-- Add Rule Modal -->

@@ -1,383 +1,392 @@
-// Mock data for return requests
-let returnRequests = [
-    {
-        id: 'RET001',
-        franchiseName: 'Mumbai Central Franchise',
-        location: 'mumbai',
-        product: 'Samsung Refrigerator RT42K5068S8',
-        serialNumber: 'SRF2023001',
-        purchaseDate: '2023-01-15',
-        returnReason: 'Defective Cooling',
-        description: 'Unit not maintaining temperature properly after multiple repairs',
-        requestDate: '2023-09-15',
-        status: 'pending',
-        contact: '+91 9876543210'
-    },
-    {
-        id: 'RET002',
-        franchiseName: 'Delhi North Franchise',
-        location: 'delhi',
-        product: 'LG Washing Machine WM1234',
-        serialNumber: 'LWM2023002',
-        purchaseDate: '2023-03-20',
-        returnReason: 'Motor Malfunction',
-        description: 'Machine making loud noise and stopping mid-cycle',
-        requestDate: '2023-09-18',
-        status: 'approved',
-        contact: '+91 9876543211'
-    },
-    {
-        id: 'RET003',
-        franchiseName: 'Bangalore Tech Park',
-        location: 'bangalore',
-        product: 'Whirlpool AC WAC8500',
-        serialNumber: 'WAC2023003',
-        purchaseDate: '2023-04-10',
-        returnReason: 'Not Cooling',
-        description: 'AC not providing adequate cooling despite multiple service visits',
-        requestDate: '2023-09-20',
-        status: 'rejected',
-        contact: '+91 9876543212'
-    },
-    {
-        id: 'RET004',
-        franchiseName: 'Chennai Central',
-        location: 'chennai',
-        product: 'Samsung TV UA55AU7700',
-        serialNumber: 'STV2023004',
-        purchaseDate: '2023-05-05',
-        returnReason: 'Display Issues',
-        description: 'Screen showing vertical lines and flickering',
-        requestDate: '2023-09-22',
-        status: 'pending',
-        contact: '+91 9876543213'
-    },
-    {
-        id: 'RET005',
-        franchiseName: 'Mumbai West Franchise',
-        location: 'mumbai',
-        product: 'LG Microwave MS2595DIS',
-        serialNumber: 'LMW2023005',
-        purchaseDate: '2023-02-28',
-        returnReason: 'Not Heating',
-        description: 'Microwave not heating food properly, turntable not working',
-        requestDate: '2023-09-25',
-        status: 'approved',
-        contact: '+91 9876543214'
-    },
-    {
-        id: 'RET006',
-        franchiseName: 'Delhi South Franchise',
-        location: 'delhi',
-        product: 'Whirlpool Dishwasher WFO3O33DL',
-        serialNumber: 'WDW2023006',
-        purchaseDate: '2023-06-15',
-        returnReason: 'Water Leakage',
-        description: 'Significant water leakage during operation',
-        requestDate: '2023-09-28',
-        status: 'pending',
-        contact: '+91 9876543215'
-    },
-    {
-        id: 'RET007',
-        franchiseName: 'Bangalore Electronic City',
-        location: 'bangalore',
-        product: 'Samsung Refrigerator RF28R7551SR',
-        serialNumber: 'SRF2023007',
-        purchaseDate: '2023-07-01',
-        returnReason: 'Ice Maker Defect',
-        description: 'Ice maker not functioning, water dispenser leaking',
-        requestDate: '2023-09-30',
-        status: 'approved',
-        contact: '+91 9876543216'
-    },
-    {
-        id: 'RET008',
-        franchiseName: 'Chennai North',
-        location: 'chennai',
-        product: 'LG Air Purifier AS330DWR0',
-        serialNumber: 'LAP2023008',
-        purchaseDate: '2023-03-10',
-        returnReason: 'Sensor Malfunction',
-        description: 'Air quality sensor showing incorrect readings',
-        requestDate: '2023-10-02',
-        status: 'rejected',
-        contact: '+91 9876543217'
-    },
-    {
-        id: 'RET009',
-        franchiseName: 'Mumbai South Franchise',
-        location: 'mumbai',
-        product: 'Whirlpool Water Purifier WP2000',
-        serialNumber: 'WWP2023009',
-        purchaseDate: '2023-08-05',
-        returnReason: 'Filter Issues',
-        description: 'Water tastes bad, filter warning light always on',
-        requestDate: '2023-10-05',
-        status: 'pending',
-        contact: '+91 9876543218'
-    },
-    {
-        id: 'RET010',
-        franchiseName: 'Delhi East Franchise',
-        location: 'delhi',
-        product: 'Samsung Washing Machine WW90T504DAN',
-        serialNumber: 'SWM2023010',
-        purchaseDate: '2023-04-20',
-        returnReason: 'Door Lock Failure',
-        description: 'Door not locking properly, machine won\'t start',
-        requestDate: '2023-10-08',
-        status: 'rejected',
-        contact: '+91 9876543219'
-    },
-    {
-        id: 'RET011',
-        franchiseName: 'Bangalore South',
-        location: 'bangalore',
-        product: 'LG TV OLED65C1PUB',
-        serialNumber: 'LTV2023011',
-        purchaseDate: '2023-05-15',
-        returnReason: 'Screen Burn-in',
-        description: 'Visible screen burn-in affecting viewing experience',
-        requestDate: '2023-10-10',
-        status: 'pending',
-        contact: '+91 9876543220'
+// Return Requests Management Module
+
+class ReturnRequestsManager {
+    constructor() {
+        this.returnRequestsTable = document.getElementById('returnRequestsTable');
+        this.returnRequestForm = document.getElementById('returnRequestForm');
+        this.returnReasons = [
+            'Defective Product',
+            'Wrong Item Received',
+            'Size/Fit Issue',
+            'Quality Not as Expected',
+            'Damaged in Transit',
+            'Other'
+        ];
+        // Mock data for return requests
+        this.mockReturnRequests = [
+            {
+                id: 1,
+                customerName: 'John Doe',
+                productDetails: 'Laptop Model X1',
+                returnReason: 'Defective Product',
+                description: 'Device not powering on',
+                status: 'Pending',
+                submittedDate: new Date().toISOString()
+            },
+            {
+                id: 2,
+                customerName: 'Jane Smith',
+                productDetails: 'Wireless Mouse M2',
+                returnReason: 'Wrong Item Received',
+                description: 'Received black color instead of white',
+                status: 'Approved',
+                submittedDate: new Date().toISOString()
+            }
+        ];
+        this.initializeEventListeners();
+        this.modal = null;
+        this.currentRequest = null;
+        this.initializeModal();
     }
-];
 
-
-// Initialize date range picker
-$(document).ready(function() {
-    $('#dateRangeFilter').daterangepicker({
-        opens: 'left',
-        autoUpdateInput: false,
-        locale: {
-            cancelLabel: 'Clear'
+    initializeEventListeners() {
+        if (this.returnRequestForm) {
+            this.returnRequestForm.addEventListener('submit', (e) => this.handleReturnRequestSubmit(e));
         }
-    });
 
-    $('#dateRangeFilter').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
-        filterRequests();
-    });
-
-    $('#dateRangeFilter').on('cancel.daterangepicker', function(ev, picker) {
-        $(this).val('');
-        filterRequests();
-    });
-
-    // Initialize other filters
-    $('#statusFilter, #locationFilter').on('change', filterRequests);
-    $('#searchFilter').on('input', filterRequests);
-
-    // Initial load
-    updateDashboardCounts();
-    displayReturnRequests(returnRequests);
-});
-
-// Filter return requests based on selected criteria
-function filterRequests() {
-    const status = $('#statusFilter').val();
-    const location = $('#locationFilter').val();
-    const dateRange = $('#dateRangeFilter').val();
-    const searchTerm = $('#searchFilter').val().toLowerCase();
-
-    let filtered = returnRequests;
-
-    // Apply filters
-    if (status) {
-        filtered = filtered.filter(request => request.status === status);
+        // Delegate table action buttons
+        if (this.returnRequestsTable) {
+            this.returnRequestsTable.addEventListener('click', (e) => {
+                if (e.target.classList.contains('approve-btn')) {
+                    this.approveReturnRequest(e.target.dataset.id);
+                } else if (e.target.classList.contains('reject-btn')) {
+                    this.rejectReturnRequest(e.target.dataset.id);
+                } else if (e.target.classList.contains('download-certificate-btn')) {
+                    this.downloadReturnCertificate(e.target.dataset.id);
+                }
+            });
+        }
     }
 
-    if (location) {
-        filtered = filtered.filter(request => request.location === location);
+    async loadReturnRequests() {
+        try {
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 500));
+            this.displayReturnRequests(this.mockReturnRequests);
+        } catch (error) {
+            console.error('Error loading return requests:', error);
+            alert('Failed to load return requests. Please try again.');
+        }
     }
 
-    if (dateRange) {
-        const [start, end] = dateRange.split(' - ').map(date => new Date(date));
-        filtered = filtered.filter(request => {
-            const requestDate = new Date(request.requestDate);
-            return requestDate >= start && requestDate <= end;
+    displayReturnRequests(requests) {
+        if (!this.returnRequestsTable) return;
+
+        // The table body is the returnRequestsTable element itself since it has the id
+        const tbody = this.returnRequestsTable;
+        if (!tbody) {
+            console.error('Table body element not found in the return requests table');
+            return;
+        }
+
+        tbody.innerHTML = '';
+
+        requests.forEach(request => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${request.id}</td>
+                <td>${request.customerName}</td>
+                <td>${request.productDetails}</td>
+                <td>${request.returnReason}</td>
+                <td>${new Date(request.submittedDate).toLocaleDateString()}</td>
+                <td>${request.status}</td>
+                <td>
+                    <button class="btn btn-info btn-sm view-btn" id="view-${request.id}" data-id="${request.id}">View</button>
+                    <button class="btn btn-success btn-sm approve-btn" data-id="${request.id}"
+                            ${request.status !== 'Pending' ? 'disabled' : ''}>Approve</button>
+                    <button class="btn btn-danger btn-sm reject-btn" data-id="${request.id}"
+                            ${request.status !== 'Pending' ? 'disabled' : ''}>Reject</button>
+                    ${request.status === 'Approved' ? `
+                    <button class="btn btn-primary btn-sm download-certificate-btn" data-id="${request.id}">
+                        <i class="bi bi-download"></i> Certificate
+                    </button>` : ''}
+                </td>
+            `;
+            tbody.appendChild(row);
         });
     }
 
-    if (searchTerm) {
-        filtered = filtered.filter(request =>
-            request.id.toLowerCase().includes(searchTerm) ||
-            request.franchiseName.toLowerCase().includes(searchTerm) ||
-            request.product.toLowerCase().includes(searchTerm)
-        );
+    async approveReturnRequest(returnId) {
+        try {
+            const approvalModal = new bootstrap.Modal(document.getElementById('approvalModal'));
+            approvalModal.show();
+
+            // Remove existing event listeners
+            const confirmBtn = document.getElementById('confirmApproval');
+            const newConfirmBtn = confirmBtn.cloneNode(true);
+            confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+
+            newConfirmBtn.addEventListener('click', async () => {
+                const reasonCode = document.getElementById('reasonCode').value;
+                const comments = document.getElementById('comments').value;
+
+                if (!reasonCode) {
+                    alert('Please select a reason code');
+                    return;
+                }
+
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                // Update mock data
+                const request = this.mockReturnRequests.find(r => r.id === parseInt(returnId));
+                if (request) {
+                    request.status = 'Approved';
+                    request.reasonCode = reasonCode;
+                    request.comments = comments;
+                }
+
+                approvalModal.hide();
+                this.loadReturnRequests();
+                alert('Return request approved successfully');
+            });
+        } catch (error) {
+            console.error('Error approving return request:', error);
+            alert('Failed to approve return request. Please try again.');
+        }
     }
 
-    displayReturnRequests(filtered);
-}
+    async rejectReturnRequest(returnId) {
+        try {
+            const rejectionModal = new bootstrap.Modal(document.getElementById('rejectionModal'));
+            rejectionModal.show();
 
-// Display filtered return requests in the table
-function displayReturnRequests(requests) {
-    const tbody = $('#returnRequestsTableBody');
-    tbody.empty();
+            // Remove existing event listeners
+            const confirmBtn = document.getElementById('confirmRejection');
+            const newConfirmBtn = confirmBtn.cloneNode(true);
+            confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
 
-    requests.forEach(request => {
-        const row = `
-            <tr>
-                <td>${request.id}</td>
-                <td>${request.franchiseName}</td>
-                <td>${request.product}<br><small class="text-muted">SN: ${request.serialNumber}</small></td>
-                <td>${request.returnReason}</td>
-                <td>${formatDate(request.requestDate)}</td>
-                <td><span class="badge bg-${getStatusBadgeClass(request.status)}">${capitalizeFirst(request.status)}</span></td>
-                <td>
-                    <button class="btn btn-sm btn-primary me-1" onclick="viewReturnDetails('${request.id}')">View Details</button>
-                    ${request.status === 'pending' ? `
-                        <button class="btn btn-sm btn-success me-1" onclick="handleReturnAction('approve', '${request.id}')">Approve</button>
-                        <button class="btn btn-sm btn-danger" onclick="handleReturnAction('reject', '${request.id}')">Reject</button>
-                    ` : ''}
-                </td>
-            </tr>
+            newConfirmBtn.addEventListener('click', async () => {
+                const rejectionReason = document.getElementById('rejectionReason').value;
+
+                if (!rejectionReason) {
+                    alert('Please provide a rejection reason');
+                    return;
+                }
+
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                // Update mock data
+                const request = this.mockReturnRequests.find(r => r.id === parseInt(returnId));
+                if (request) {
+                    request.status = 'Rejected';
+                    request.rejectionReason = rejectionReason;
+                }
+
+                rejectionModal.hide();
+                this.loadReturnRequests();
+                alert('Return request rejected successfully');
+            });
+        } catch (error) {
+            console.error('Error rejecting return request:', error);
+            alert('Failed to reject return request. Please try again.');
+        }
+    }
+
+    async downloadReturnCertificate(returnId) {
+        try {
+            // Simulate API call to generate certificate
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            const request = this.mockReturnRequests.find(r => r.id === parseInt(returnId));
+            if (!request) {
+                throw new Error('Return request not found');
+            }
+
+            // Generate a simple text certificate (in real implementation, this would be a PDF or other document)
+            const certificateContent = `
+                Return Certificate
+                ------------------
+                Return ID: ${request.id}
+                Customer: ${request.customerName}
+                Product: ${request.productDetails}
+                Status: ${request.status}
+                Date: ${new Date().toLocaleDateString()}
+            `;
+
+            // Create a blob and download it
+            const blob = new Blob([certificateContent], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `return-certificate-${request.id}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (error) {
+            console.error('Error downloading return certificate:', error);
+            alert('Failed to download return certificate. Please try again.');
+        }
+    }
+
+    initializeModal() {
+        const modalHtml = `
+            <div class="modal fade" id="returnRequestDetailsModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Return Request Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="fw-bold">Return ID:</label>
+                                <p id="returnId"></p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="fw-bold">Customer Name:</label>
+                                <p id="customerName"></p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="fw-bold">Product Details:</label>
+                                <p id="productDetails"></p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="fw-bold">Return Reason:</label>
+                                <p id="returnReason"></p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="fw-bold">Status:</label>
+                                <p id="status"></p>
+                            </div>
+                        </div>
+                        <div class="modal-footer" id="modalActions">
+                            <!-- Buttons will be added dynamically based on status -->
+                        </div>
+                    </div>
+                </div>
+            </div>
         `;
-        tbody.append(row);
-    });
-}
 
-// View return request details in modal
-function viewReturnDetails(requestId) {
-    const request = returnRequests.find(r => r.id === requestId);
-    if (!request) return;
+        // Add modal to document
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        this.modal = new bootstrap.Modal(document.getElementById('returnRequestDetailsModal'));
 
-    // Populate modal fields
-    $('#modalRequestId').text(request.id);
-    $('#modalStatus').html(`<span class="badge bg-${getStatusBadgeClass(request.status)}">${capitalizeFirst(request.status)}</span>`);
-    $('#modalRequestDate').text(formatDate(request.requestDate));
-    $('#modalFranchiseName').text(request.franchiseName);
-    $('#modalLocation').text(capitalizeFirst(request.location));
-    $('#modalContact').text(request.contact);
-    $('#modalProduct').text(request.product);
-    $('#modalSerialNumber').text(request.serialNumber);
-    $('#modalPurchaseDate').text(formatDate(request.purchaseDate));
-    $('#modalReason').text(request.returnReason);
-    $('#modalDescription').text(request.description);
+        // Initialize event listeners
+        document.getElementById('modalActions').addEventListener('click', (e) => {
+            if (e.target.id === 'approveBtn') {
+                this.handleApprove();
+            } else if (e.target.id === 'rejectBtn') {
+                this.handleReject();
+            } else if (e.target.id === 'downloadCertificateBtn') {
+                this.handleDownloadCertificate();
+            }
+        });
+    }
 
-    // Show/hide action buttons based on status
-    const actionButtons = $('#modalActions').find('button[onclick^="handleReturnAction"]');
-    actionButtons.toggle(request.status === 'pending');
+    show(reqId) {
+        var returnRequest = this.mockReturnRequests.find(req => req.id == reqId);
+        this.currentRequest = returnRequest;
+        
+        // Update modal content
+        document.getElementById('returnId').textContent = returnRequest.id;
+        document.getElementById('customerName').textContent = returnRequest.customerName;
+        document.getElementById('productDetails').textContent = returnRequest.productDetails;
+        document.getElementById('returnReason').textContent = returnRequest.returnReason;
+        document.getElementById('status').textContent = returnRequest.status;
 
-    // Show modal
-    new bootstrap.Modal(document.getElementById('returnDetailsModal')).show();
-}
+        // Update action buttons based on status
+        const actionsContainer = document.getElementById('modalActions');
+        actionsContainer.innerHTML = '';
 
-// Handle return request actions (approve/reject)
-function handleReturnAction(action) {
-    const requestId = document.getElementById('modalRequestId').textContent;
-    const request = returnRequests.find(r => r.id === requestId);
-    if (!request) return;
+        if (returnRequest.status === 'Pending') {
+            actionsContainer.innerHTML = `
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="rejectBtn">Reject</button>
+                <button type="button" class="btn btn-success" id="approveBtn">Approve</button>
+            `;
+        } else if (returnRequest.status === 'Approved') {
+            actionsContainer.innerHTML = `
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="downloadCertificateBtn">
+                    <i class="bi bi-download"></i> Download Certificate
+                </button>
+            `;
+        } else {
+            actionsContainer.innerHTML = `
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            `;
+        }
 
-    if (action === 'approve') {
-        // Show courier details modal
-        new bootstrap.Modal(document.getElementById('courierDetailsModal')).show();
-    } else if (action === 'reject') {
-        // Show rejection reason modal
-        new bootstrap.Modal(document.getElementById('rejectionReasonModal')).show();
+        this.modal.show();
+    }
+
+    handleApprove() {
+        const approvalModal = new bootstrap.Modal(document.getElementById('approvalModal'));
+        this.modal.hide();
+        // Call the approveReturnRequest with the current request's ID
+        this.approveReturnRequest(this.currentRequest.id);
+    }
+
+    handleReject() {
+        const rejectionModal = new bootstrap.Modal(document.getElementById('rejectionModal'));
+        this.modal.hide();
+        // Call the rejectReturnRequest with the current request's ID
+        this.rejectReturnRequest(this.currentRequest.id);
+    }
+
+    handleDownloadCertificate() {
+        // Generate and download return certificate
+        const certificate = this.generateReturnCertificate();
+        const blob = new Blob([certificate], { type: 'text/html' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `return-certificate-${this.currentRequest.id}.html`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+    }
+
+    generateReturnCertificate() {
+        return `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Return Certificate #${this.currentRequest.id}</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 40px; }
+                    .header { text-align: center; margin-bottom: 30px; }
+                    .content { margin-bottom: 20px; }
+                    .footer { margin-top: 50px; text-align: center; }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <h1>Return Certificate</h1>
+                    <h2>Certificate #${this.currentRequest.id}</h2>
+                </div>
+                <div class="content">
+                    <p><strong>Customer Name:</strong> ${this.currentRequest.customerName}</p>
+                    <p><strong>Product Details:</strong> ${this.currentRequest.productDetails}</p>
+                    <p><strong>Return Reason:</strong> ${this.currentRequest.returnReason}</p>
+                    <p><strong>Return Date:</strong> ${new Date().toLocaleDateString()}</p>
+                    <p><strong>Status:</strong> Approved</p>
+                </div>
+                <div class="footer">
+                    <p>This certificate confirms that the return request has been approved.</p>
+                    <p>Generated on ${new Date().toLocaleString()}</p>
+                </div>
+            </body>
+            </html>
+        `;
     }
 }
 
-// Submit courier details and approve return
-function submitCourierDetails() {
-    const requestId = document.getElementById('modalRequestId').textContent;
-    const request = returnRequests.find(r => r.id === requestId);
-    if (!request) return;
-
-    const courierId = document.getElementById('courierId').value;
-    const returnOrderId = document.getElementById('returnOrderId').value;
-
-    if (!courierId || !returnOrderId) {
-        alert('Please fill in all courier details');
-        return;
+// Initialize the return requests manager when the DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const returnRequestsManager = new ReturnRequestsManager();
+    returnRequestsManager.loadReturnRequests();
+    
+    // Use event delegation for view buttons
+    if (returnRequestsManager.returnRequestsTable) {
+        returnRequestsManager.returnRequestsTable.addEventListener('click', (e) => {
+            if (e.target.classList.contains('view-btn')) {
+                returnRequestsManager.show(e.target.dataset.id);
+            }
+        });
     }
-
-    // Update request status and add courier details
-    request.status = 'approved';
-    request.courierDetails = {
-        courierId: courierId,
-        returnOrderId: returnOrderId
-    };
-
-    // Show success message
-    alert(`Return request ${requestId} has been approved`);
-
-    // Close both modals
-    bootstrap.Modal.getInstance(document.getElementById('courierDetailsModal')).hide();
-    bootstrap.Modal.getInstance(document.getElementById('returnDetailsModal')).hide();
-
-    // Reset form
-    document.getElementById('courierDetailsForm').reset();
-
-    // Update dashboard and table
-    updateDashboardCounts();
-    filterRequests();
-}
-
-// Submit rejection reason and reject return
-function submitRejectionReason() {
-    const requestId = document.getElementById('modalRequestId').textContent;
-    const request = returnRequests.find(r => r.id === requestId);
-    if (!request) return;
-
-    const rejectionReason = document.getElementById('rejectionReason').value;
-
-    if (!rejectionReason) {
-        alert('Please select a rejection reason');
-        return;
-    }
-
-    // Update request status and add rejection reason
-    request.status = 'rejected';
-    request.rejectionReason = rejectionReason;
-
-    // Show success message
-    alert(`Return request ${requestId} has been rejected`);
-
-    // Close both modals
-    bootstrap.Modal.getInstance(document.getElementById('rejectionReasonModal')).hide();
-    bootstrap.Modal.getInstance(document.getElementById('returnDetailsModal')).hide();
-
-    // Reset form
-    document.getElementById('rejectionReasonForm').reset();
-
-    // Update dashboard and table
-    updateDashboardCounts();
-    filterRequests();
-}
-
-// Update dashboard summary counts
-function updateDashboardCounts() {
-    const counts = returnRequests.reduce((acc, request) => {
-        acc[request.status]++;
-        return acc;
-    }, { pending: 0, approved: 0, rejected: 0 });
-
-    $('#pendingCount').text(counts.pending);
-    $('#approvedCount').text(counts.approved);
-    $('#rejectedCount').text(counts.rejected);
-}
-
-// Utility functions
-function formatDate(dateStr) {
-    return new Date(dateStr).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-    });
-}
-
-function getStatusBadgeClass(status) {
-    const classes = {
-        pending: 'warning',
-        approved: 'success',
-        rejected: 'danger'
-    };
-    return classes[status] || 'secondary';
-}
-
-function capitalizeFirst(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
+});

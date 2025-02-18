@@ -58,6 +58,11 @@
                     </a>
                 </li>
                 <li class="nav-item mb-2">
+                    <a href="franchise-customer-return.html" class="nav-link text-white active">
+                        <i class="bi bi-arrow-return-left me-2"></i> Customer Returns
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
                     <a href="#" class="nav-link text-white">
                         <i class="bi bi-gear me-2"></i> Settings
                     </a>
@@ -70,250 +75,262 @@
             </ul>
         </div>
 
-        <!-- Main Content -->
-        <div class="main-content p-4 w-100">
-            <h2 class="mb-4">Finance Dashboard</h2>
+        <main class="flex-grow-1 p-4">
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h2 class="fw-bold text-dark">Finance Dashboard</h2>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="franchise-finance.html" class="text-decoration-none">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Finance</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
 
-            <!-- Summary Cards -->
-            <div class="row mb-4">
-                <div class="col-md-4">
-                    <div class="card bg-primary text-white">
-                        <div class="card-body">
-                            <h6 class="card-title">Total Commissions</h6>
-                            <h2 class="mb-0">₹25,000</h2>
-                            <small>This Month</small>
+                <!-- Summary Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">Total Commissions</h6>
+                                <h2 class="mb-0">₹25,000</h2>
+                                <small>This Month</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-warning text-dark">
+                            <div class="card-body">
+                                <h6 class="card-title">Pending Receivables</h6>
+                                <h2 class="mb-0">₹12,300</h2>
+                                <small>From 8 transactions</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">Service Fees Earned</h6>
+                                <h2 class="mb-0">₹45,000</h2>
+                                <small>This Month</small>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card bg-warning text-dark">
-                        <div class="card-body">
-                            <h6 class="card-title">Pending Receivables</h6>
-                            <h2 class="mb-0">₹12,300</h2>
-                            <small>From 8 transactions</small>
+
+                <!-- Graph Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Monthly Commissions (Last 12 months)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="commissionsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Month</th>
+                                        <th>Commission Against Sales</th>
+                                        <th>Payment Against Services</th>
+                                        <th>Total Commission</th>
+                                        <th>Payment Received</th>
+                                        <th>Payment Pending</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card bg-success text-white">
-                        <div class="card-body">
-                            <h6 class="card-title">Service Fees Earned</h6>
-                            <h2 class="mb-0">₹45,000</h2>
-                            <small>This Month</small>
+
+                <!-- Service Funnel Report -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Service Request Pipeline (Last 30 days)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="serviceFunnelTable">
+                                <thead>
+                                    <tr>
+                                        <th>Stage</th>
+                                        <th>Count</th>
+                                        <th>Progress</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service Engineer Payout Report -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Service Engineer Payout Report</h5>
+                        <div>
+                            <select class="form-select form-select-sm d-inline-block w-auto me-2" id="engineerPayoutMonth">
+                                <option value="2024-01">January 2024</option>
+                                <option value="2023-12">December 2023</option>
+                                <option value="2023-11">November 2023</option>
+                            </select>
+                            <button class="btn btn-sm btn-primary" onclick="exportPayoutReport()">Export Report</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover" id="engineerPayoutTable">
+                                <thead>
+                                    <tr>
+                                        <th>Engineer Name</th>
+                                        <th>Services Attended</th>
+                                        <th>Spares Sold (₹)</th>
+                                        <th>Accessories Sold (₹)</th>
+                                        <th>Attendance</th>
+                                        <th>Conveyance (₹)</th>
+                                        <th>Target Achievement</th>
+                                        <th>Total Payout (₹)</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="table-info">
+                                        <td><strong>Total</strong></td>
+                                        <td id="totalServices">0</td>
+                                        <td id="totalSpares">₹0</td>
+                                        <td id="totalAccessories">₹0</td>
+                                        <td>-</td>
+                                        <td id="totalConveyance">₹0</td>
+                                        <td>-</td>
+                                        <td id="totalPayout">₹0</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payout Table -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Payout History</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Transaction ID</th>
+                                        <th>Amount</th>
+                                        <th>Invoice</th>
+                                        <th>TCS/TDS Certificate</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payoutTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dispute History Table -->
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Dispute History</h5>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#disputeModal" onclick="openDisputeModal()">
+                            <i class="bi bi-plus-circle me-2"></i>Create Dispute
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Transaction ID</th>
+                                        <th>Dispute Type</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Submitted Date</th>
+                                        <th>Resolution</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="disputeTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Commission and Performance Schemes -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Commission & Performance Schemes</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered schemes-table" id="schemesTable">
+                                <thead>
+                                    <tr>
+                                        <th>Scheme Name & Type</th>
+                                        <th>Eligibility Criteria</th>
+                                        <th>Reward Details</th>
+                                        <th>Validity Period</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="schemesTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Franchise Ledger Section -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Franchise Ledger</h5>
+                        <div class="d-flex gap-2">
+                            <select class="form-select form-select-sm" id="ledgerFilter" style="width: auto;">
+                                <option value="all">All Transactions</option>
+                                <option value="credit">Credits</option>
+                                <option value="debit">Debits</option>
+                                <option value="commission">Commissions</option>
+                                <option value="returns">Returns</option>
+                                <option value="schemes">Scheme Rewards</option>
+                            </select>
+                            <input type="month" class="form-control form-control-sm" id="ledgerMonth">
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="ledgerTable">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Description</th>
+                                        <th>Category</th>
+                                        <th>Credit (₹)</th>
+                                        <th>Debit (₹)</th>
+                                        <th>Balance (₹)</th>
+                                        <th>Reference</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ledgerTableBody"></tbody>
+                                <tfoot>
+                                    <tr class="table-dark fw-bold">
+                                        <td colspan="3">Current Balance</td>
+                                        <td id="totalCredit">₹0</td>
+                                        <td id="totalDebit">₹0</td>
+                                        <td id="netBalance">₹0</td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Graph Section -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Monthly Commissions (Last 12 months)</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="commissionsTable">
-                            <thead>
-                                <tr>
-                                    <th>Month</th>
-                                    <th>Commission Against Sales</th>
-                                    <th>Payment Against Services</th>
-                                    <th>Total Commission</th>
-                                    <th>Payment Received</th>
-                                    <th>Payment Pending</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Service Funnel Report -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Service Request Pipeline (Last 30 days)</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="serviceFunnelTable">
-                            <thead>
-                                <tr>
-                                    <th>Stage</th>
-                                    <th>Count</th>
-                                    <th>Progress</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Service Engineer Payout Report -->
-            <div class="card mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">Service Engineer Payout Report</h5>
-                    <div>
-                        <select class="form-select form-select-sm d-inline-block w-auto me-2" id="engineerPayoutMonth">
-                            <option value="2024-01">January 2024</option>
-                            <option value="2023-12">December 2023</option>
-                            <option value="2023-11">November 2023</option>
-                        </select>
-                        <button class="btn btn-sm btn-primary" onclick="exportPayoutReport()">Export Report</button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover" id="engineerPayoutTable">
-                            <thead>
-                                <tr>
-                                    <th>Engineer Name</th>
-                                    <th>Services Attended</th>
-                                    <th>Spares Sold (₹)</th>
-                                    <th>Accessories Sold (₹)</th>
-                                    <th>Attendance</th>
-                                    <th>Conveyance (₹)</th>
-                                    <th>Target Achievement</th>
-                                    <th>Total Payout (₹)</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                            <tfoot>
-                                <tr class="table-info">
-                                    <td><strong>Total</strong></td>
-                                    <td id="totalServices">0</td>
-                                    <td id="totalSpares">₹0</td>
-                                    <td id="totalAccessories">₹0</td>
-                                    <td>-</td>
-                                    <td id="totalConveyance">₹0</td>
-                                    <td>-</td>
-                                    <td id="totalPayout">₹0</td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Payout Table -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Payout History</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Transaction ID</th>
-                                    <th>Amount</th>
-                                    <th>Invoice</th>
-                                    <th>TCS/TDS Certificate</th>
-                                </tr>
-                            </thead>
-                            <tbody id="payoutTableBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Dispute History Table -->
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">Dispute History</h5>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#disputeModal" onclick="openDisputeModal()">
-                        <i class="bi bi-plus-circle me-2"></i>Create Dispute
-                    </button>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Transaction ID</th>
-                                    <th>Dispute Type</th>
-                                    <th>Description</th>
-                                    <th>Status</th>
-                                    <th>Submitted Date</th>
-                                    <th>Resolution</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="disputeTableBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Commission and Performance Schemes -->
-            <div class="card mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">Commission & Performance Schemes</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered schemes-table" id="schemesTable">
-                            <thead>
-                                <tr>
-                                    <th>Scheme Name & Type</th>
-                                    <th>Eligibility Criteria</th>
-                                    <th>Reward Details</th>
-                                    <th>Validity Period</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="schemesTableBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <!-- Franchise Ledger Section -->
-            <div class="card mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">Franchise Ledger</h5>
-                    <div class="d-flex gap-2">
-                        <select class="form-select form-select-sm" id="ledgerFilter" style="width: auto;">
-                            <option value="all">All Transactions</option>
-                            <option value="credit">Credits</option>
-                            <option value="debit">Debits</option>
-                            <option value="commission">Commissions</option>
-                            <option value="returns">Returns</option>
-                            <option value="schemes">Scheme Rewards</option>
-                        </select>
-                        <input type="month" class="form-control form-control-sm" id="ledgerMonth">
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped" id="ledgerTable">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Description</th>
-                                    <th>Category</th>
-                                    <th>Credit (₹)</th>
-                                    <th>Debit (₹)</th>
-                                    <th>Balance (₹)</th>
-                                    <th>Reference</th>
-                                </tr>
-                            </thead>
-                            <tbody id="ledgerTableBody"></tbody>
-                            <tfoot>
-                                <tr class="table-dark fw-bold">
-                                    <td colspan="3">Current Balance</td>
-                                    <td id="totalCredit">₹0</td>
-                                    <td id="totalDebit">₹0</td>
-                                    <td id="netBalance">₹0</td>
-                                    <td></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </main>
     </div>
 
     <!-- Dispute Modal -->
