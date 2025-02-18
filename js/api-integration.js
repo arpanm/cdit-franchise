@@ -14,12 +14,20 @@ let apiConfigurations = [
         lastTriggered: '2024-01-15 14:30:00',
         authType: 'bearer',
         parameterMappings: [
-            { sourceParam: 'serviceId', targetParam: 'requestId' },
-            { sourceParam: 'customerName', targetParam: 'customer' },
-            { sourceParam: 'customerContact', targetParam: 'contact' },
-            { sourceParam: 'serviceType', targetParam: 'service' },
-            { sourceParam: 'description', targetParam: 'serviceDescription' },
-            { sourceParam: 'priority', targetParam: 'servicePriority' }
+            { sourceParam: 'serviceId', targetParam: 'requestId', description: 'Maps service ID to request ID' },
+            { sourceParam: 'customerName', targetParam: 'customer', description: 'Maps customer name' },
+            { sourceParam: 'customerContact', targetParam: 'contact', description: 'Maps contact information' },
+            { sourceParam: 'serviceType', targetParam: 'service', description: 'Maps service type' },
+            { sourceParam: 'description', targetParam: 'serviceDescription', description: 'Maps service description' },
+            { sourceParam: 'priority', targetParam: 'servicePriority', description: 'Maps service priority' }
+        ],
+        apiParameters: [
+            { name: 'requestId', type: 'string', required: true },
+            { name: 'customer', type: 'string', required: true },
+            { name: 'contact', type: 'string', required: true },
+            { name: 'service', type: 'string', required: true },
+            { name: 'serviceDescription', type: 'string', required: true },
+            { name: 'servicePriority', type: 'string', required: true }
         ]
     },
     {
@@ -31,7 +39,19 @@ let apiConfigurations = [
         httpMethod: 'POST',
         status: 'active',
         lastTriggered: '2024-01-14 09:15:00',
-        authType: 'apikey'
+        authType: 'apikey',
+        parameterMappings: [
+            { sourceParam: 'serviceId', targetParam: 'requestId', description: 'Maps service ID' },
+            { sourceParam: 'franchiseId', targetParam: 'franchiseCode', description: 'Maps franchise ID' },
+            { sourceParam: 'assignmentDate', targetParam: 'assignedAt', description: 'Maps assignment date' },
+            { sourceParam: 'assignedBy', targetParam: 'assignerName', description: 'Maps assigner name' }
+        ],
+        apiParameters: [
+            { name: 'requestId', type: 'string', required: true },
+            { name: 'franchiseCode', type: 'string', required: true },
+            { name: 'assignedAt', type: 'datetime', required: true },
+            { name: 'assignerName', type: 'string', required: true }
+        ]
     },
     {
         id: 'api003',
@@ -42,7 +62,21 @@ let apiConfigurations = [
         httpMethod: 'PUT',
         status: 'error',
         lastTriggered: '2024-01-13 16:45:00',
-        authType: 'basic'
+        authType: 'basic',
+        parameterMappings: [
+            { sourceParam: 'serviceId', targetParam: 'requestId', description: 'Maps service ID' },
+            { sourceParam: 'completionDate', targetParam: 'completedAt', description: 'Maps completion date' },
+            { sourceParam: 'completionNotes', targetParam: 'notes', description: 'Maps completion notes' },
+            { sourceParam: 'engineerId', targetParam: 'technicianId', description: 'Maps engineer ID' },
+            { sourceParam: 'serviceStatus', targetParam: 'status', description: 'Maps service status' }
+        ],
+        apiParameters: [
+            { name: 'requestId', type: 'string', required: true },
+            { name: 'completedAt', type: 'datetime', required: true },
+            { name: 'notes', type: 'string', required: false },
+            { name: 'technicianId', type: 'string', required: true },
+            { name: 'status', type: 'string', required: true }
+        ]
     },
     {
         id: 'api004',
@@ -53,7 +87,19 @@ let apiConfigurations = [
         httpMethod: 'POST',
         status: 'inactive',
         lastTriggered: '2024-01-10 11:20:00',
-        authType: 'none'
+        authType: 'none',
+        parameterMappings: [
+            { sourceParam: 'serviceId', targetParam: 'requestId', description: 'Maps service ID' },
+            { sourceParam: 'cancellationReason', targetParam: 'reason', description: 'Maps cancellation reason' },
+            { sourceParam: 'cancelledBy', targetParam: 'initiator', description: 'Maps cancellation initiator' },
+            { sourceParam: 'cancellationDate', targetParam: 'cancelledAt', description: 'Maps cancellation date' }
+        ],
+        apiParameters: [
+            { name: 'requestId', type: 'string', required: true },
+            { name: 'reason', type: 'string', required: true },
+            { name: 'initiator', type: 'string', required: true },
+            { name: 'cancelledAt', type: 'datetime', required: true }
+        ]
     }
 ];
 let eventParameters = {};
@@ -363,25 +409,68 @@ document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
     initializeAuthenticationHandlers();
     initializeParameterMapping();
+});
 
-    // Load existing parameter mappings
-    const selectedConfig = apiConfigurations.find(config => config.id === 'api001');
+// Load parameter mappings when editing an API configuration
+function loadParameterMappings(configId) {
+    const selectedConfig = apiConfigurations.find(config => config.id === configId);
     if (selectedConfig && selectedConfig.parameterMappings) {
-        Object.entries(selectedConfig.parameterMappings).forEach(([apiParam, eventParam]) => {
-            const sourceElement = document.querySelector(`[data-param-name="${eventParam}"]`);
-            const targetElement = document.querySelector(`[data-api-param="${apiParam}"]`);
-            if (sourceElement && targetElement) {
-                parameterMappings.push({
-                    source: sourceElement,
-                    target: targetElement,
-                    sourceParam: eventParam,
-                    targetParam: apiParam
-                });
+        // Clear existing mappings
+        parameterMappings = [];
+        
+        // Load event parameters for the selected event type
+        const eventType = selectedConfig.eventType;
+        if (EVENT_PARAMETERS[eventType]) {
+            const eventParamsList = document.getElementById('eventParametersList');
+            eventParamsList.innerHTML = '';
+            
+            EVENT_PARAMETERS[eventType].forEach(param => {
+                const paramElement = document.createElement('div');
+                paramElement.className = 'parameter-item';
+                paramElement.setAttribute('data-param-name', param.name);
+                paramElement.innerHTML = `
+                    <div class="parameter-content">
+                        <strong>${param.name}</strong>
+                        <small class="text-muted">${param.type}</small>
+                    </div>
+                    <div class="parameter-connector"></div>
+                `;
+                eventParamsList.appendChild(paramElement);
+            });
+        }
+        
+        // Load API parameters
+        if (selectedConfig.apiParameters) {
+            const apiParamsList = document.getElementById('apiParametersList');
+            apiParamsList.innerHTML = '';
+            
+            selectedConfig.apiParameters.forEach(param => {
+                const paramElement = document.createElement('div');
+                paramElement.className = 'parameter-item';
+                paramElement.setAttribute('data-api-param', param.name);
+                paramElement.innerHTML = `
+                    <div class="parameter-content">
+                        <strong>${param.name}</strong>
+                        <small class="text-muted">${param.type}</small>
+                    </div>
+                `;
+                apiParamsList.appendChild(paramElement);
+            });
+        }
+        
+        // Initialize parameter mapping after loading parameters
+        initializeParameterMapping();
+        
+        // Restore saved mappings
+        selectedConfig.parameterMappings.forEach(mapping => {
+            const sourceParam = document.querySelector(`#eventParametersList [data-param-name="${mapping.sourceParam}"]`);
+            const targetParam = document.querySelector(`#apiParametersList [data-api-param="${mapping.targetParam}"]`);
+            if (sourceParam && targetParam) {
+                createMapping(sourceParam, targetParam);
             }
         });
-        updateArrows();
     }
-});
+}
 
 // Load existing API configurations
 function loadApiConfigurations() {
@@ -597,7 +686,7 @@ async function deleteConfiguration(configId) {
 function editConfiguration(configId) {
     const config = apiConfigurations.find(c => c.id === configId);
     if (config) {
-        // Populate form with configuration details
+        // Set form values
         document.getElementById('eventType').value = config.eventType;
         document.getElementById('apiName').value = config.apiName;
         document.getElementById('apiDescription').value = config.description;
@@ -605,11 +694,49 @@ function editConfiguration(configId) {
         document.getElementById('httpMethod').value = config.httpMethod;
         document.getElementById('authType').value = config.authType;
 
-        handleEventTypeChange();
-        handleAuthTypeChange();
+        // Clear existing API parameters
+        document.getElementById('apiParamsContainer').innerHTML = '';
+
+        // Add API parameters if they exist
+        if (config.apiParameters) {
+            config.apiParameters.forEach(param => {
+                const paramDiv = document.createElement('div');
+                paramDiv.className = 'api-param-item mb-2';
+                paramDiv.innerHTML = `
+                    <div class="row">
+                        <div class="col-md-5">
+                            <input type="text" class="form-control" value="${param.name}" 
+                                   data-param-id="apiParam_${Date.now()}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-select" required>
+                                <option value="string" ${param.type === 'string' ? 'selected' : ''}>String</option>
+                                <option value="number" ${param.type === 'number' ? 'selected' : ''}>Number</option>
+                                <option value="boolean" ${param.type === 'boolean' ? 'selected' : ''}>Boolean</option>
+                                <option value="object" ${param.type === 'object' ? 'selected' : ''}>Object</option>
+                                <option value="array" ${param.type === 'array' ? 'selected' : ''}>Array</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-danger btn-sm" onclick="removeApiParam(this)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('apiParamsContainer').appendChild(paramDiv);
+            });
+        }
+
+        // Update API parameters list for mapping
+        updateApiParametersList();
+
+        // Load parameter mappings
+        loadParameterMappings(configId);
 
         // Show modal
-        $('#addApiConfigModal').modal('show');
+        const modal = new bootstrap.Modal(document.getElementById('addApiConfigModal'));
+        modal.show();
     }
 }
 
