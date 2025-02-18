@@ -570,11 +570,11 @@ class InventoryManager {
                     </span>
                 </td>
                 <td id="actionButtons-${item.skuId}">
-                    <button class="btn btn-sm btn-primary me-1" onclick="inventoryManager.openOrderModal('${item.skuId}')">
-                        <i class="bi bi-cart-plus"></i> Order
+                    <button class="btn btn-sm btn-primary me-1" onclick="inventoryManager.openOrderModal('${item.skuId}')" title="Create new order">
+                        <i class="bi bi-cart-plus"></i>
                     </button>
-                    <button class="btn btn-sm btn-warning" onclick="inventoryManager.openReturnModal('${item.skuId}')"}>
-                        <i class="bi bi-arrow-return-left"></i> Return
+                    <button class="btn btn-sm btn-warning" onclick="inventoryManager.openReturnModal('${item.skuId}')" title="Initiate return">
+                        <i class="bi bi-arrow-return-left"></i>
                     </button>
                 </td>
             `;
@@ -829,6 +829,10 @@ class InventoryManager {
                 this.populateCreditHistory();
             });
         }
+
+        // Initialize Bootstrap tooltips
+        const tooltipTriggerList = document.querySelectorAll('[title]');
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
     }
 }
 

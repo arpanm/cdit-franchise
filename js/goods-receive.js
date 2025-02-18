@@ -86,6 +86,9 @@ function submitGoodsReceive() {
 // Initialize page
 document.addEventListener('DOMContentLoaded', () => {
     showButtons();
+    // Initialize Bootstrap tooltips
+    const tooltipTriggerList = document.querySelectorAll('[title]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 });
 
 
@@ -139,19 +142,19 @@ function showButtons() {
         if (item.openPOs > 0) {
             const receiveButton = document.createElement('span');
             receiveButton.innerHTML = `
-                <button class="btn btn-sm btn-success me-1" onclick="openGoodsReceiveModal('${item.skuId}', 'PO')">
-                    <i class="bi bi-plus"></i> Receive
+                <button class="btn btn-sm btn-success me-1" onclick="openGoodsReceiveModal('${item.skuId}', 'PO')" title="Receive Inventory">
+                    <i class="bi bi-plus"></i>
                 </button>
-                <button class="btn btn-sm btn-danger me-1" onclick="openAdjustModal('${item.skuId}')">
-                    <i class="bi bi-wrench-adjustable-circle"></i> Adjust
+                <button class="btn btn-sm btn-danger me-1" onclick="openAdjustModal('${item.skuId}')" title="Adjust Inventory">
+                    <i class="bi bi-wrench-adjustable-circle"></i>
                 </button>
             `;
             actionButtonSection.appendChild(receiveButton);
         } else {
             const receiveButton = document.createElement('span');
             receiveButton.innerHTML = `
-                <button class="btn btn-sm btn-danger me-1" onclick="openAdjustModal('${item.skuId}')">
-                    <i class="bi bi-wrench-adjustable-circle"></i> Adjust
+                <button class="btn btn-sm btn-danger me-1" onclick="openAdjustModal('${item.skuId}')" title="Adjust Inventory">
+                    <i class="bi bi-wrench-adjustable-circle"></i>
                 </button>
             `;
             actionButtonSection.appendChild(receiveButton);

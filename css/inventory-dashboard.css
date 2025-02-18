@@ -46,8 +46,14 @@
 }
 
 .btn-sm {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
+    padding: 0.1rem 0.25rem;
+    font-size: 0.7rem;
+    line-height: 1.1;
+    border-radius: 0.2rem;
+}
+
+.inventory-actions .btn {
+    margin: 0 0.1rem;
 }
 
 .filters-row {
