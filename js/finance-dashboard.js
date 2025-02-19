@@ -528,7 +528,7 @@ class FinanceDashboard {
                 <td>₹${engineer.conveyance.toLocaleString()}</td>
                 <td>
                     <div class="d-flex align-items-center">
-                        <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                        <div class="progress progress-custom-thin flex-grow-1 me-2">
                             <div class="progress-bar ${this.getAchievementClass(engineer.targetAchievement)}" 
                                  style="width: ${engineer.targetAchievement}%"></div>
                         </div>
