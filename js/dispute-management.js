@@ -65,6 +65,10 @@ function initializeDashboard() {
     updateDisputeSummary();
     populateFranchiseFilter();
     displayDisputes(mockDisputes);
+
+    // Initialize Bootstrap tooltips
+    const tooltipTriggerList = document.querySelectorAll('[title]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 }
 
 // Setup event listeners
@@ -173,7 +177,18 @@ function displayDisputes(disputes) {
             <td>${formatDate(dispute.date)}</td>
             <td><span class="badge ${getStatusBadgeClass(dispute.status)}">${capitalizeFirst(dispute.status)}</span></td>
             <td>
-                <button class="btn btn-sm btn-primary" onclick="viewDisputeDetails('${dispute.id}')">View Details</button>
+                <button class="btn btn-sm btn-primary" onclick="viewDisputeDetails('${dispute.id}')" title="View Details">
+                    <i class="bi bi-eye"></i>
+                </button>
+                <button class="btn btn-sm btn-success me-2" onclick="showResolveModal('${dispute.id}')" title="Resolve Dispute">
+                    <i class="bi bi-check-circle"></i>
+                </button>
+                <button class="btn btn-sm btn-danger me-2" onclick="showRejectModal('${dispute.id}')" title="Reject Dispute">
+                    <i class="bi bi-x-circle"></i>
+                </button>
+                <button class="btn btn-sm btn-warning" onclick="requestMoreInfo('${dispute.id}')" title="Request More Information">
+                    <i class="bi bi-question-circle"></i>
+                </button>
             </td>
         `;
         tbody.appendChild(row);

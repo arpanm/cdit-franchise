@@ -295,6 +295,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initial table population
     updateTable();
+
+    // Initialize Bootstrap tooltips
+    const tooltipTriggerList = document.querySelectorAll('[title]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 });
 
 // Function to filter service requests
@@ -389,9 +393,13 @@ function updateTable() {
         row.append(`<td>
             <button class="btn btn-primary btn-sm" 
                 ${request.engineer ? 'disabled' : ''}
-                onclick="engineerManager.showAssignmentModal()">Assign</button>
+                onclick="engineerManager.showAssignmentModal()" title="Assign Engineer">
+                <i class="bi bi-person-plus"></i>
+            </button>
             <button class="btn btn-info btn-sm ms-1" 
-                onclick="window.location.href='service-details.html?id=${request.id}'">View</button>
+                onclick="window.location.href='service-details.html?id=${request.id}'" title="View Details">
+                <i class="bi bi-eye"></i>
+            </button>
         </td>`);
 
         tbody.append(row);

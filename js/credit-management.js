@@ -89,6 +89,10 @@ function initializeDashboard() {
     updateCreditOverview();
     populateFranchiseTable();
     populateFranchiseDropdowns();
+
+    // Initialize Bootstrap tooltips
+    const tooltipTriggerList = document.querySelectorAll('[title]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 }
 
 // Setup event listeners
@@ -150,8 +154,17 @@ function populateFranchiseTable() {
             <td>${franchise.creditPeriod}</td>
             <td><span class="badge ${getStatusBadgeClass(franchise.status)}">${franchise.status}</span></td>
             <td>
-                <button class="btn btn-sm btn-primary me-2" onclick="viewTransactions('${franchise.id}')">View Transactions</button>
-                <button class="btn btn-sm btn-warning" onclick="editCredit('${franchise.id}')">Edit Credit</button>
+                <button class="btn btn-sm btn-primary me-2" onclick="viewTransactions('${franchise.id}')" title="View Transactions">
+                    <i class="bi bi-eye"></i>
+                </button>
+                <button class="btn btn-sm btn-warning" onclick="editCredit('${franchise.id}')" title="Edit Credit">
+                    <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-${franchise.status === 'Blocked' ? 'success' : 'danger'}" 
+                        onclick="toggleFranchiseStatus('${franchise.id}')" 
+                        title="${franchise.status === 'Blocked' ? 'Unblock' : 'Block'} Franchise">
+                    <i class="bi bi-${franchise.status === 'Blocked' ? 'unlock' : 'lock'}"></i>
+                </button>
             </td>
         `;
         tableBody.appendChild(row);

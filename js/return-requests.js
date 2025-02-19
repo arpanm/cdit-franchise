@@ -67,6 +67,10 @@ class ReturnRequestsManager {
             console.error('Error loading return requests:', error);
             alert('Failed to load return requests. Please try again.');
         }
+
+    // Initialize Bootstrap tooltips
+    const tooltipTriggerList = document.querySelectorAll('[title]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
     }
 
     displayReturnRequests(requests) {
@@ -91,14 +95,20 @@ class ReturnRequestsManager {
                 <td>${new Date(request.submittedDate).toLocaleDateString()}</td>
                 <td>${request.status}</td>
                 <td>
-                    <button class="btn btn-info btn-sm view-btn" id="view-${request.id}" data-id="${request.id}">View</button>
+                    <button class="btn btn-info btn-sm view-btn" id="view-${request.id}" data-id="${request.id}" title="View Details">
+                        <i class="bi bi-eye"></i>
+                    </button>
                     <button class="btn btn-success btn-sm approve-btn" data-id="${request.id}"
-                            ${request.status !== 'Pending' ? 'disabled' : ''}>Approve</button>
+                            ${request.status !== 'Pending' ? 'disabled' : ''} title="Approve Return">
+                        <i class="bi bi-check-circle"></i>
+                    </button>
                     <button class="btn btn-danger btn-sm reject-btn" data-id="${request.id}"
-                            ${request.status !== 'Pending' ? 'disabled' : ''}>Reject</button>
+                            ${request.status !== 'Pending' ? 'disabled' : ''} title="Reject Return">
+                        <i class="bi bi-x-circle"></i>
+                    </button>
                     ${request.status === 'Approved' ? `
-                    <button class="btn btn-primary btn-sm download-certificate-btn" data-id="${request.id}">
-                        <i class="bi bi-download"></i> Certificate
+                    <button class="btn btn-primary btn-sm download-certificate-btn" data-id="${request.id}" title="Download Certificate">
+                        <i class="bi bi-download"></i>
                     </button>` : ''}
                 </td>
             `;

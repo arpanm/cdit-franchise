@@ -56,6 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
 function initializeDashboard() {
     updateSchemeSummary();
     displaySchemes(mockSchemes);
+
+    // Initialize Bootstrap tooltips
+    const tooltipTriggerList = document.querySelectorAll('[title]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 }
 
 // Setup event listeners
@@ -151,9 +155,15 @@ function displaySchemes(schemes) {
             <td>${formatDate(scheme.validTo)}</td>
             <td><span class="badge ${getStatusBadgeClass(scheme.status)}">${capitalizeFirst(scheme.status)}</span></td>
             <td>
-                <button class="btn btn-sm btn-info me-2" onclick="viewScheme('${scheme.id}')">View</button>
-                <button class="btn btn-sm btn-warning me-2" onclick="editScheme('${scheme.id}')">Edit</button>
-                <button class="btn btn-sm btn-danger" onclick="deleteScheme('${scheme.id}')">Delete</button>
+                <button class="btn btn-sm btn-info me-2" onclick="viewScheme('${scheme.id}')" title="View Details">
+                    <i class="bi bi-eye"></i>
+                </button>
+                <button class="btn btn-sm btn-warning me-2" onclick="editScheme('${scheme.id}')" title="Edit Scheme">
+                    <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-danger" onclick="deleteScheme('${scheme.id}')" title="Delete Scheme">
+                    <i class="bi bi-trash"></i>
+                </button>
             </td>
         `;
         tbody.appendChild(row);
