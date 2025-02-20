@@ -411,6 +411,66 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeParameterMapping();
     bindAddApiConfiguration();
     bindSaveApiBtn();
+
+    // Add event listener for Parse cURL button
+    document.getElementById('parseCurlBtn').addEventListener('click', function() {
+        const curlCommand = document.getElementById('curlCommand').value;
+        if (curlCommand.trim()) {
+            // Clear existing parameters
+            document.getElementById('apiParamsContainer').innerHTML = '';
+            parseCurlCommand(curlCommand);
+        }
+    });
+    
+    // Initialize API parameters list when modal is shown
+    $('#addApiConfigModal').on('shown.bs.modal', function() {
+        updateApiParametersList();
+        // Update event parameters based on selected event type
+        const eventType = document.getElementById('eventType').value;
+        if (eventType && EVENT_PARAMETERS[eventType]) {
+            const eventParamsList = document.getElementById('eventParametersList');
+            eventParamsList.innerHTML = '';
+            
+            EVENT_PARAMETERS[eventType].forEach(param => {
+                const paramElement = document.createElement('div');
+                paramElement.className = 'parameter-item';
+                paramElement.setAttribute('data-param-name', param.name);
+                paramElement.innerHTML = `
+                    <div class="parameter-content">
+                        <strong>${param.name}</strong>
+                        <small class="text-muted">${param.type}</small>
+                    </div>
+                `;
+                eventParamsList.appendChild(paramElement);
+            });
+            
+            initializeParameterMapping();
+        }
+    });
+    
+    // Update event parameters when event type changes
+    document.getElementById('eventType').addEventListener('change', function() {
+        const eventType = this.value;
+        if (EVENT_PARAMETERS[eventType]) {
+            const eventParamsList = document.getElementById('eventParametersList');
+            eventParamsList.innerHTML = '';
+            
+            EVENT_PARAMETERS[eventType].forEach(param => {
+                const paramElement = document.createElement('div');
+                paramElement.className = 'parameter-item';
+                paramElement.setAttribute('data-param-name', param.name);
+                paramElement.innerHTML = `
+                    <div class="parameter-content">
+                        <strong>${param.name}</strong>
+                        <small class="text-muted">${param.type}</small>
+                    </div>
+                `;
+                eventParamsList.appendChild(paramElement);
+            });
+            
+            initializeParameterMapping();
+        }
+    });
 });
 
 function bindAddApiConfiguration() {
@@ -938,190 +998,113 @@ function handleAuthTypeChange() {
     }
 }
 
-function getAuthDetails() {
-    const authTypeElement = document.getElementById('authType');
-    if (!authTypeElement) return {};
 
-    const authType = authTypeElement.value;
-    const authDetails = {};
 
-    switch (authType) {
-        case 'basic':
-            const username = document.getElementById('authUsername');
-            const password = document.getElementById('authPassword');
-            if (username) authDetails.username = username.value;
-            if (password) authDetails.password = password.value;
-            break;
-        case 'bearer':
-            const token = document.getElementById('authToken');
-            if (token) authDetails.token = token.value;
-            break;
-        case 'apiKey':
-            const key = document.getElementById('apiKey');
-            const location = document.getElementById('apiKeyLocation');
-            if (key) authDetails.key = key.value;
-            if (location) authDetails.location = location.value;
-            break;
-        case 'none':
-        default:
-            break;
-    }
-    return authDetails;
-}
-
-function getParameterMappings() {
-    const parameterMappings = [];
-    const parameterContainer = document.getElementById('parameterMappings');
+function parseJsonToParams(obj, prefix = '') {
+    let params = [];
     
-    // Return empty array if container doesn't exist
-    if (!parameterContainer) return parameterMappings;
-    
-    const mappingRows = parameterContainer.getElementsByClassName('parameter-mapping-row');
-    
-    // If no mapping rows found, return empty array
-    if (!mappingRows || mappingRows.length === 0) return parameterMappings;
-
-    for (const row of mappingRows) {
-        const sourceField = row.querySelector('.source-field');
-        const targetField = row.querySelector('.target-field');
-        const dataType = row.querySelector('.data-type');
-        const requiredField = row.querySelector('.required-field');
+    for (const [key, value] of Object.entries(obj)) {
+        const paramName = prefix ? `${prefix}.${key}` : key;
         
-        // Only add mapping if all required elements exist
-        if (sourceField && targetField && dataType && requiredField) {
-            const mapping = {
-                sourceField: sourceField.value,
-                targetField: targetField.value,
-                dataType: dataType.value,
-                required: requiredField.checked
-            };
-            parameterMappings.push(mapping);
+        if (value === null) {
+            params.push({ name: paramName, type: 'string' });
+        } else if (typeof value === 'object') {
+            if (Array.isArray(value)) {
+                params.push({ name: paramName, type: 'array' });
+                if (value.length > 0) {
+                    // Add a sample item type if array is not empty
+                    params = params.concat(parseJsonToParams({
+                        [`${paramName}[0]`]: value[0]
+                    }));
+                }
+            } else {
+                params.push({ name: paramName, type: 'object' });
+                params = params.concat(parseJsonToParams(value, paramName));
+            }
+        } else {
+            params.push({ name: paramName, type: inferType(value) });
         }
     }
-
-    return parameterMappings;
+    
+    return params;
 }
 
-// Load existing API configurations
-function loadApiConfigurations() {
-    // Load from localStorage
-    const savedConfigs = localStorage.getItem('apiConfigurations');
-    if (savedConfigs) {
-        apiConfigurations = JSON.parse(savedConfigs);
-    }
-    renderApiConfigurationsTable();
+function inferType(value) {
+    if (value === null) return 'string';
+    if (typeof value === 'boolean') return 'boolean';
+    if (!isNaN(value) && value !== '') return 'number';
+    if (Array.isArray(value)) return 'array';
+    if (typeof value === 'object') return 'object';
+    return 'string';
 }
 
-// Render API configurations table
-function renderApiConfigurationsTable() {
-    const tableBody = document.getElementById('apiConfigTable');
-    tableBody.innerHTML = '';
+// Parse cURL command and extract parameters
+function parseCurlCommand(curlCommand) {
+    // Extract URL and its parameters
+    const urlMatch = curlCommand.match(/curl ['"](.*?)['"]/);
+    if (!urlMatch) return;
+    
+    const url = urlMatch[1];
+    try {
+        // Parse URL parameters
+        const urlObj = new URL(url);
+        urlObj.searchParams.forEach((value, key) => {
+            addApiParameter(key, typeof value === 'number' ? 'number' : 'string');
+        });
 
-    apiConfigurations.forEach(config => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${config.eventType}</td>
-            <td>${config.apiName}</td>
-            <td>${config.endpointUrl}</td>
-            <td>${config.httpMethod}</td>
-            <td>${config.lastTriggered || 'Never'}</td>
-            <td>
-                <span class="badge ${getStatusBadgeClass(config.status)}">
-                    ${config.status}
-                </span>
-            </td>
-            <td>
-                <button class="btn btn-sm btn-primary me-1" onclick="editConfiguration('${config.id}')">
-                    <i class="bi bi-pencil"></i>
-                </button>
-                <button class="btn btn-sm btn-danger me-1" onclick="deleteConfiguration('${config.id}')">
-                    <i class="bi bi-trash"></i>
-                </button>
-                <button class="btn btn-sm btn-success" onclick="testConfiguration('${config.id}')">
-                    <i class="bi bi-play"></i>
-                </button>
-            </td>
-        `;
-        tableBody.appendChild(row);
-    });
-}
+        // Extract and parse request body
+        const dataRawMatch = curlCommand.match(/--data-raw ['"](.*?)['"]/);
+        if (dataRawMatch) {
+            const rawData = dataRawMatch[1].replace(/\\n/g, '\n');
+            const jsonObjects = rawData.split('\n').filter(line => line.trim());
+            
+            jsonObjects.forEach(jsonStr => {
+                try {
+                    const jsonObj = JSON.parse(jsonStr);
+                    parseRequestBodyParams(jsonObj);
+                } catch (e) {
+                    console.error('Error parsing JSON object:', e);
+                }
+            });
+        }
 
-// Handle event type change
-function handleEventTypeChange() {
-    const eventType = document.getElementById('eventType').value;
-    const parametersList = document.getElementById('eventParametersList');
-    const apiParamsList = document.getElementById('apiParametersList');
+        // Extract headers
+        const headerMatches = curlCommand.matchAll(/-H ['"](.*?): (.*?)['"]\s*\\/g);
+        for (const match of headerMatches) {
+            const [_, headerName, headerValue] = match;
+            addApiParameter(headerName.toLowerCase(), 'string');
+        }
 
-    if (eventType && EVENT_PARAMETERS[eventType]) {
-        renderEventParameters(EVENT_PARAMETERS[eventType]);
-    } else {
-        parametersList.innerHTML = '';
-        apiParamsList.innerHTML = '';
+    } catch (error) {
+        console.error('Error parsing cURL command:', error);
     }
 }
 
-// Render event parameters
-function renderEventParameters(parameters) {
-    const parametersList = document.getElementById('eventParametersList');
-    parametersList.innerHTML = '';
-
-    parameters.forEach(param => {
-        const paramElement = document.createElement('div');
-        paramElement.className = 'parameter-item';
-        paramElement.setAttribute('data-param-name', param.name);
-        paramElement.setAttribute('data-param-type', param.type);
-        paramElement.draggable = false;
-        paramElement.innerHTML = `
-            <div class="parameter-content">
-                <strong>${param.name}</strong>
-                <small class="text-muted">${param.type}</small>
-                <p class="mb-0 small">${param.description}</p>
-            </div>
-        `;
-        parametersList.appendChild(paramElement);
-    });
-}
-
-// Initialize authentication handlers
-function initializeAuthenticationHandlers() {
-    const authTypeSelect = document.getElementById('authType');
-    const authDetails = document.getElementById('authDetails');
-    const basicAuthFields = document.getElementById('basicAuthFields');
-    const bearerTokenField = document.getElementById('bearerTokenField');
-    const apiKeyFields = document.getElementById('apiKeyFields');
-
-    // Initial state
-    authDetails.classList.add('d-none');
-    basicAuthFields.classList.add('d-none');
-    bearerTokenField.classList.add('d-none');
-    apiKeyFields.classList.add('d-none');
-
-    // Add change event listener
-    authTypeSelect.addEventListener('change', function() {
-        const selectedAuth = this.value;
-
-        // Show/hide auth details section
-        authDetails.classList.toggle('d-none', selectedAuth === 'none');
-
-        // Show/hide specific auth fields
-        basicAuthFields.classList.toggle('d-none', selectedAuth !== 'basic');
-        bearerTokenField.classList.toggle('d-none', selectedAuth !== 'bearer');
-        apiKeyFields.classList.toggle('d-none', selectedAuth !== 'apikey');
-
-        // Clear fields when switching auth types
-        if (selectedAuth !== 'basic') {
-            document.getElementById('authUsername').value = '';
-            document.getElementById('authPassword').value = '';
+// Parse request body parameters recursively
+function parseRequestBodyParams(obj, prefix = '') {
+    if (typeof obj !== 'object' || obj === null) {
+        if (prefix) {
+            addApiParameter(prefix, inferType(obj));
         }
-        if (selectedAuth !== 'bearer') {
-            document.getElementById('bearerToken').value = '';
+        return;
+    }
+
+    for (const key in obj) {
+        const value = obj[key];
+        const newPrefix = prefix ? `${prefix}.${key}` : key;
+
+        if (Array.isArray(value)) {
+            addApiParameter(newPrefix, 'array');
+            if (value.length > 0) {
+                parseRequestBodyParams(value[0], `${newPrefix}[]`);
+            }
+        } else if (typeof value === 'object' && value !== null) {
+            addApiParameter(newPrefix, 'object');
+            parseRequestBodyParams(value, newPrefix);
+        } else {
+            addApiParameter(newPrefix, inferType(value));
         }
-        if (selectedAuth !== 'apikey') {
-            document.getElementById('apiKey').value = '';
-            document.getElementById('apiKeyName').value = '';
-            document.getElementById('apiKeyLocation').value = 'header';
-        }
-    });
+    }
 }
 
 // Save API configuration
@@ -1399,4 +1382,146 @@ function handleAuthTypeChange() {
         document.getElementById('apiKeyName').value = '';
         document.getElementById('apiKeyLocation').value = 'header';
     }
+}
+
+// Parse cURL command
+document.getElementById('parseCurlBtn').addEventListener('click', function() {
+    const curlCommand = document.getElementById('curlCommand').value.trim();
+    if (!curlCommand) {
+        alert('Please enter a cURL command');
+        return;
+    }
+
+    try {
+        // Extract URL
+        const urlMatch = curlCommand.match(/curl ['"](.+?)['"]/);
+        if (urlMatch && urlMatch[1]) {
+            document.getElementById('endpointUrl').value = urlMatch[1];
+        }
+
+        // Extract HTTP method
+        const methodMatch = curlCommand.match(/-X ([A-Z]+)/);
+        if (methodMatch && methodMatch[1]) {
+            document.getElementById('httpMethod').value = methodMatch[1];
+        } else {
+            document.getElementById('httpMethod').value = 'GET';
+        }
+
+        // Extract headers and auth
+        const headerMatches = curlCommand.matchAll(/-H ['"](.+?)['"]|--header ['"](.+?)['"]|--header=(.+?)(?=\s|$)/g);
+        for (const match of headerMatches) {
+            const header = match[1] || match[2] || match[3];
+            const [key, value] = header.split(': ');
+
+            // Handle Authorization header
+            if (key.toLowerCase() === 'authorization') {
+                if (value.startsWith('Bearer ')) {
+                    document.getElementById('authType').value = 'bearer';
+                    document.getElementById('bearerToken').value = value.replace('Bearer ', '');
+                } else if (value.startsWith('Basic ')) {
+                    document.getElementById('authType').value = 'basic';
+                    const credentials = atob(value.replace('Basic ', '')).split(':');
+                    document.getElementById('authUsername').value = credentials[0];
+                    document.getElementById('authPassword').value = credentials[1];
+                }
+            }
+            // Handle API Key in header
+            else if (value.match(/^[A-Za-z0-9-_=]+$/)) {
+                document.getElementById('authType').value = 'apikey';
+                document.getElementById('apiKeyLocation').value = 'header';
+                document.getElementById('apiKeyName').value = key;
+                document.getElementById('apiKey').value = value;
+            }
+        }
+
+        // Extract data parameters
+        const dataMatch = curlCommand.match(/-d ['"](.*?)['"]|--data ['"](.*?)['"]|--data=(.*?)(?=\s|$)/g);
+        if (dataMatch) {
+            document.getElementById('apiParamsContainer').innerHTML = '';
+            const data = dataMatch[0].replace(/-d |--data |['"]|--data=/g, '');
+            try {
+                // Parse JSON data
+                const jsonData = JSON.parse(data);
+                
+                // Function to recursively process JSON object
+                function processJsonObject(obj, prefix = '') {
+                    if (typeof obj === 'object' && obj !== null) {
+                        Object.entries(obj).forEach(([key, value]) => {
+                            const paramName = prefix ? `${prefix}.${key}` : key;
+                            if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+                                processJsonObject(value, paramName);
+                            } else {
+                                addApiParameter(paramName, Array.isArray(value) ? 'array' : typeof value);
+                            }
+                        });
+                    }
+                }
+                
+                // Process the JSON data
+                processJsonObject(jsonData);
+            } catch (e) {
+                // Handle non-JSON data
+                const params = new URLSearchParams(data);
+                params.forEach((value, key) => {
+                    addApiParameter(key, 'string');
+                });
+            }
+        }
+
+        // Show auth fields based on type
+        const authType = document.getElementById('authType').value;
+        document.getElementById('authDetails').classList.remove('d-none');
+        document.getElementById('basicAuthFields').classList.add('d-none');
+        document.getElementById('bearerTokenField').classList.add('d-none');
+        document.getElementById('apiKeyFields').classList.add('d-none');
+
+        if (authType === 'basic') {
+            document.getElementById('basicAuthFields').classList.remove('d-none');
+        } else if (authType === 'bearer') {
+            document.getElementById('bearerTokenField').classList.remove('d-none');
+        } else if (authType === 'apikey') {
+            document.getElementById('apiKeyFields').classList.remove('d-none');
+        }
+
+        // Update API parameters list for mapping
+        updateApiParametersList();
+
+    } catch (error) {
+        console.error('Error parsing cURL command:', error);
+        alert('Failed to parse cURL command. Please check the format.');
+    }
+});
+
+// Helper function to add API parameter
+function addApiParameter(name, type) {
+    const container = document.getElementById('apiParamsContainer');
+    const paramId = 'apiParam_' + Date.now();
+    
+    const paramDiv = document.createElement('div');
+    paramDiv.className = 'api-param-item mb-2';
+    paramDiv.innerHTML = `
+        <div class="row">
+            <div class="col-md-5">
+                <input type="text" class="form-control" placeholder="Parameter Name" 
+                       value="${name}" data-param-id="${paramId}" required>
+            </div>
+            <div class="col-md-4">
+                <select class="form-select" required>
+                    <option value="string" ${type === 'string' ? 'selected' : ''}>String</option>
+                    <option value="number" ${type === 'number' ? 'selected' : ''}>Number</option>
+                    <option value="boolean" ${type === 'boolean' ? 'selected' : ''}>Boolean</option>
+                    <option value="object" ${type === 'object' ? 'selected' : ''}>Object</option>
+                    <option value="array" ${type === 'array' ? 'selected' : ''}>Array</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-danger btn-sm" onclick="removeApiParam(this)">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+        </div>
+    `;
+    
+    container.appendChild(paramDiv);
+    updateApiParametersList();
 }

@@ -266,8 +266,12 @@ function loadServiceRequests() {
             <td>${request.assignedFranchise || '-'}</td>
             <td>${request.createdDate}</td>
             <td>
-                <button class="btn btn-primary btn-sm" ${isCompleted ? 'disabled' : ''} onclick="showAssignFranchiseModal('${request.id}')">Assign</button>
-                <button class="btn btn-info btn-sm ms-1" onclick="viewServiceDetails('${request.id}')">View</button>
+                <button class="btn btn-primary btn-sm me-2" ${isCompleted ? 'disabled' : ''} onclick="showAssignFranchiseModal('${request.id}')" title="Assign Franchise">
+                    <i class="bi bi-person-plus"></i>
+                </button>
+                <button class="btn btn-info btn-sm" onclick="viewServiceDetails('${request.id}')" title="View Details">
+                    <i class="bi bi-eye"></i>
+                </button>
             </td>
         `;
 
@@ -281,6 +285,10 @@ function loadServiceRequests() {
             bulkAssignBtn.disabled = checkedBoxes.length === 0;
         });
     });
+
+    // Initialize Bootstrap tooltips
+    const tooltipTriggerList = document.querySelectorAll('[title]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 }
 
 // Populate franchise dropdown in the assign franchise modal
@@ -579,12 +587,14 @@ function updateServiceRequestsTable(filteredRequests) {
         row.append(`<td>${request.location}</td>`);
         row.append(`<td>${request.assignedFranchise || '-'}</td>`);
         row.append(`<td>${request.createdDate}</td>`);
+        const isCompleted = request.status === 'Completed';
         row.append(`<td>
-            <button class="btn btn-primary btn-sm" 
-                ${request.assignedFranchise ? 'disabled' : ''}
-                onclick="showAssignFranchiseModal('${request.id}')">Assign</button>
-            <button class="btn btn-info btn-sm ms-1" 
-                onclick="viewServiceDetails('${request.id}')">View</button>
+            <button class="btn btn-primary btn-sm me-2" ${isCompleted ? 'disabled' : ''} onclick="showAssignFranchiseModal('${request.id}')" title="Assign Franchise">
+                <i class="bi bi-person-plus"></i>
+            </button>
+            <button class="btn btn-info btn-sm" onclick="viewServiceDetails('${request.id}')" title="View Details">
+                <i class="bi bi-eye"></i>
+            </button>
         </td>`);
 
         tbody.append(row);
