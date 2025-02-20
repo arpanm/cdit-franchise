@@ -570,10 +570,10 @@ class InventoryManager {
                     </span>
                 </td>
                 <td id="actionButtons-${item.skuId}">
-                    <button class="btn btn-sm btn-primary me-1" onclick="inventoryManager.openOrderModal('${item.skuId}')" title="Create new order">
+                    <button class="btn btn-primary me-1" onclick="inventoryManager.openOrderModal('${item.skuId}')" title="Create new order">
                         <i class="bi bi-cart-plus"></i>
                     </button>
-                    <button class="btn btn-sm btn-warning" onclick="inventoryManager.openReturnModal('${item.skuId}')" title="Initiate return">
+                    <button class="btn btn-warning" onclick="inventoryManager.openReturnModal('${item.skuId}')" title="Initiate return">
                         <i class="bi bi-arrow-return-left"></i>
                     </button>
                 </td>
@@ -795,6 +795,7 @@ class InventoryManager {
         });
     
         this.populateTable(filteredData);
+        showButtons();
     }
 
     initialize() {

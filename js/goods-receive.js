@@ -142,10 +142,10 @@ function showButtons() {
         if (item.openPOs > 0) {
             const receiveButton = document.createElement('span');
             receiveButton.innerHTML = `
-                <button class="btn btn-sm btn-success me-1" onclick="openGoodsReceiveModal('${item.skuId}', 'PO')" title="Receive Inventory">
+                <button class="btn btn-success me-1" onclick="openGoodsReceiveModal('${item.skuId}', 'PO')" title="Receive Inventory">
                     <i class="bi bi-plus"></i>
                 </button>
-                <button class="btn btn-sm btn-danger me-1" onclick="openAdjustModal('${item.skuId}')" title="Adjust Inventory">
+                <button class="btn btn-danger me-1" onclick="openAdjustModal('${item.skuId}')" title="Adjust Inventory">
                     <i class="bi bi-wrench-adjustable-circle"></i>
                 </button>
             `;
@@ -153,7 +153,7 @@ function showButtons() {
         } else {
             const receiveButton = document.createElement('span');
             receiveButton.innerHTML = `
-                <button class="btn btn-sm btn-danger me-1" onclick="openAdjustModal('${item.skuId}')" title="Adjust Inventory">
+                <button class="btn btn-danger me-1" onclick="openAdjustModal('${item.skuId}')" title="Adjust Inventory">
                     <i class="bi bi-wrench-adjustable-circle"></i>
                 </button>
             `;

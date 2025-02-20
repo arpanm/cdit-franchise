@@ -734,7 +734,7 @@ async function saveApiConfiguration(event) {
         httpMethod: document.getElementById('httpMethod').value,
         authType: document.getElementById('authType').value,
         parameterMapping: getParameterMapping(),
-        authentication: getAuthenticationDetails(),
+        authentication: getAuthDetails(),
         status: 'active',
         lastTriggered: null
     };
@@ -766,8 +766,21 @@ function getParameterMapping() {
     return mapping;
 }
 
+// Get parameter mappings
+function getParameterMappings() {
+    const mappings = [];
+    parameterMappings.forEach(mapping => {
+        mappings.push({
+            sourceParam: mapping.sourceParam,
+            targetParam: mapping.targetParam,
+            description: `Maps ${mapping.sourceParam} to ${mapping.targetParam}`
+        });
+    });
+    return mappings;
+}
+
 // Get authentication details based on type
-function getAuthenticationDetails() {
+function getAuthDetails() {
     const authType = document.getElementById('authType').value;
     switch (authType) {
         case 'basic':
@@ -1120,7 +1133,7 @@ async function saveApiConfiguration(event) {
         httpMethod: document.getElementById('httpMethod').value,
         authType: document.getElementById('authType').value,
         parameterMapping: getParameterMapping(),
-        authentication: getAuthenticationDetails(),
+        authentication: getAuthDetails(),
         status: 'active',
         lastTriggered: null
     };
@@ -1152,8 +1165,21 @@ function getParameterMapping() {
     return mapping;
 }
 
+// Get parameter mappings
+function getParameterMappings() {
+    const mappings = [];
+    parameterMappings.forEach(mapping => {
+        mappings.push({
+            sourceParam: mapping.sourceParam,
+            targetParam: mapping.targetParam,
+            description: `Maps ${mapping.sourceParam} to ${mapping.targetParam}`
+        });
+    });
+    return mappings;
+}
+
 // Get authentication details based on type
-function getAuthenticationDetails() {
+function getAuthDetails() {
     const authType = document.getElementById('authType').value;
     switch (authType) {
         case 'basic':
