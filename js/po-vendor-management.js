@@ -63,13 +63,13 @@ function populateVendorsTable() {
                 <td>${vendor.phone}</td>
                 <td><span class="badge ${vendor.status === 'active' ? 'bg-success' : 'bg-danger'}">${vendor.status}</span></td>
                 <td>
-                    <button class="btn btn-info me-1" onclick="viewVendor('${vendor.id}')">
+                    <button class="btn btn-sm btn-info me-1" onclick="viewVendor('${vendor.id}')">
                         <i class="bi bi-eye"></i>
                     </button>
-                    <button class="btn btn-warning me-1" onclick="editVendor('${vendor.id}')">
+                    <button class="btn btn-sm btn-warning me-1" onclick="editVendor('${vendor.id}')">
                         <i class="bi bi-pencil"></i>
                     </button>
-                    <button class="btn btn-danger" onclick="deleteVendor('${vendor.id}')">
+                    <button class="btn btn-sm btn-danger" onclick="deleteVendor('${vendor.id}')">
                         <i class="bi bi-trash"></i>
                     </button>
                 </td>
@@ -188,7 +188,7 @@ function addPoItem() {
             <input type="number" class="form-control" readonly>
         </div>
         <div class="col-md-1 d-flex align-items-end">
-            <button type="button" class="btn btn-danger" onclick="removePoItem(this)">
+            <button type="button" class="btn btn-sm btn-danger" onclick="removePoItem(this)">
                 <i class="bi bi-trash"></i>
             </button>
         </div>

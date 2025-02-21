@@ -269,11 +269,11 @@ function initializePOTable() {
             <td>₹${po.receivedAmount}</td>
             <td><span class="badge ${getStatusBadgeClass(po.status)}">${formatStatus(po.status)}</span></td>
             <td>
-                <button class="btn btn-info me-1" onclick="viewPO('${po.id}')">
+                <button class="btn btn-sm btn-info me-1" onclick="viewPO('${po.id}')">
                     <i class="bi bi-eye"></i>
                 </button>
                 ${po.status === 'created' ? `
-                    <button class="btn btn-success" onclick="showApprovalModal('${po.id}')">
+                    <button class="btn btn-sm btn-success" onclick="showApprovalModal('${po.id}')">
                         <i class="bi bi-check-circle"></i>
                     </button>
                 ` : ''}
