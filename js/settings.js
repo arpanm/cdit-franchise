@@ -67,13 +67,12 @@ function editUser(userId) {
     form.fullName.value = mockUser.name;
     form.email.value = mockUser.email;
 
-    setRolesDropdown(mockUser.role, 'editRoleDropDown');
+    setRolesDropdown(getRoles(), mockUser.role, 'editRoleDropDown');
 
     $('#editUserModal').modal('show');
 }
 
-function setRolesDropdown(selectedRole, dropdownId) {
-    const roles = getRoles();
+function setRolesDropdown(roles, selectedRole, dropdownId) {
     const dropdown = document.getElementById(dropdownId);
     if (!dropdown) return;
     dropdown.innerHTML =  `
@@ -284,9 +283,134 @@ function addRole() {
     $('#addRoleModal').modal('show');
 }
 
-// Initialize
+// Franchise User Management Functions
+function loadFranchiseUsers(franchiseId = '') {
+    // TODO: Fetch franchise users from API
+    const mockFranchiseUsers = [
+        { id: 1, name: 'John Smith', email: 'john@franchise1.com', franchise: 'Franchise 1', role: 'Manager', status: 'Active' },
+        { id: 2, name: 'Jane Doe', email: 'jane@franchise2.com', franchise: 'Franchise 2', role: 'Admin', status: 'Active' },
+        { id: 3, name: 'Mike Johnson', email: 'mike@franchise1.com', franchise: 'Franchise 1', role: 'Support', status: 'Inactive' }
+    ];
+
+    const filteredUsers = franchiseId ? 
+        mockFranchiseUsers.filter(user => user.franchise === franchiseId) : 
+        mockFranchiseUsers;
+
+    displayFranchiseUsers(filteredUsers);
+}
+
+function displayFranchiseUsers(users) {
+    const tbody = document.getElementById('franchiseUsersTableBody');
+    if (!tbody) return;
+
+    tbody.innerHTML = users.map(user => `
+        <tr>
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+            <td>${user.franchise}</td>
+            <td>${user.role}</td>
+            <td>
+                <span class="badge bg-${user.status === 'Active' ? 'success' : 'danger'}">
+                    ${user.status}
+                </span>
+            </td>
+            <td>
+                <button class="btn btn-sm btn-outline-primary me-1" onclick="editFranchiseUser(${user.id})">
+                    <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-${user.status === 'Active' ? 'outline-danger' : 'outline-success'}" 
+                        onclick="toggleFranchiseUserStatus(${user.id})">
+                    <i class="bi bi-${user.status === 'Active' ? 'lock' : 'unlock'}"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function addFranchiseUser() {
+    // Clear the form
+    const form = document.getElementById('addFranchiseUserForm');
+    if (form) {
+        form.reset();
+        loadFranchises('franchiseDropDown');
+        setRolesDropdown(getFranchiseRoles(), null, 'addFranchiseRoleDropDown');
+    }
+}
+
+function saveFranchiseUser(name) {
+    const form = document.getElementById(name);
+    const formData = new FormData(form);
+    // TODO: API call to save franchise user
+    console.log('Saving new franchise user:', Object.fromEntries(formData));
+    $(name).modal('hide');
+    showToast('Franchise user added successfully');
+    loadFranchiseUsers();
+}
+
+function loadFranchises(name) {
+    // TODO: Fetch franchises from API
+    const mockFranchises = [
+        { id: 1, name: 'Franchise 1' },
+        { id: 2, name: 'Franchise 2' },
+        { id: 3, name: 'Franchise 3' }
+    ];
+
+    const franchiseFilter = document.getElementById(name);
+    if (franchiseFilter) {
+        franchiseFilter.innerHTML = `
+            <option value="">All Franchises</option>
+            ${mockFranchises.map(franchise => 
+                `<option value="${franchise.name}">${franchise.name}</option>`
+            ).join('')}
+        `;
+    }
+}
+
+function toggleFranchiseUserStatus(userId) {
+    // TODO: API call to toggle franchise user status
+    console.log('Toggling status for franchise user:', userId);
+    showToast('Franchise user status updated successfully');
+    loadFranchiseUsers(document.getElementById('franchiseFilter').value);
+}
+
+function editFranchiseUser(userId) {
+    // TODO: Fetch franchise user details from API
+    const mockUser = {
+        id: userId,
+        name: 'John Smith',
+        email: 'john@franchise1.com',
+        franchise: 'Franchise 1',
+        role: 'Manager'
+    };
+
+    const form = document.getElementById('editFranchiseUserForm');
+    if (form) {
+        loadFranchises('editFranchiseDropDown');
+        form.userId.value = mockUser.id;
+        form.fullName.value = mockUser.name;
+        form.email.value = mockUser.email;
+        form.franchise.value = mockUser.franchise;
+        loadFranchises('franchiseDropDown');
+        setRolesDropdown(getFranchiseRoles(), mockUser.role, 'editFranchiseRoleDropDown');
+        form.role.value = mockUser.role;
+    }
+
+    $('#editFranchiseUserModal').modal('show');
+}
+
+// Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
     loadUsers();
     loadRoles();
-    setRolesDropdown(null, 'addRoleDropDown');
+    loadFranchises('franchiseFilter');
+    loadFranchiseUsers();
+    setRolesDropdown(getRoles(), null, 'addRoleDropDown');
+
+    // Add franchise filter change event listener
+    const franchiseFilter = document.getElementById('franchiseFilter');
+    if (franchiseFilter) {
+        franchiseFilter.addEventListener('change', (e) => {
+            loadFranchiseUsers(e.target.value);
+        });
+    }
 });

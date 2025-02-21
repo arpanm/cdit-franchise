@@ -98,7 +98,14 @@ function loadFranchiseRoles() {
     if (!document.getElementById('franchiseRolesTableBody')) return;
 
     // TODO: Fetch roles from API
-    const mockRoles = [
+    mockRoles = getFranchiseRoles();
+    
+    displayFranchiseRoles(mockRoles);
+}
+
+// Mock function to fetch roles
+function getFranchiseRoles() {
+    return [
         { 
             id: 1, 
             name: 'Admin', 
@@ -124,8 +131,6 @@ function loadFranchiseRoles() {
             permissions: ['view_reports', 'manage_service', 'manage-return', 'manage_inventory']
         }
     ];
-    
-    displayFranchiseRoles(mockRoles);
 }
 
 // Function to display franchise roles
