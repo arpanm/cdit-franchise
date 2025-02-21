@@ -108,6 +108,15 @@ function checkLoginStatus() {
             window.location.href = 'mother-company-dashboard.html';
         }
     }
+    // check user
+    if (isLoggedIn && currentPage.startsWith('mother-company') && username !== 'madmin') {
+        logout();
+        window.location.href = 'login.html';
+    }
+    if (isLoggedIn && currentPage.startsWith('franchise') && username !== 'admin') {
+        logout();
+        window.location.href = 'login.html';
+    }
 }
 
 function logout () {

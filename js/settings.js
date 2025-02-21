@@ -8,6 +8,7 @@ function loadUsers() {
     // TODO: Fetch users from API
     const mockUsers = [
         { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin', status: 'Active' },
+        { id: 1, name: 'admin', email: 'admin@eframasaas.ai', role: 'Admin', status: 'Active' },
         { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Manager', status: 'Active' }
     ];
     displayUsers(mockUsers);
@@ -43,7 +44,7 @@ function displayUsers(users) {
 function saveNewUser() {
     const form = document.getElementById('addUserForm');
     const formData = new FormData(form);
-    
+
     // TODO: API call to save user
     console.log('Saving new user:', Object.fromEntries(formData));
     
@@ -65,9 +66,24 @@ function editUser(userId) {
     form.userId.value = mockUser.id;
     form.fullName.value = mockUser.name;
     form.email.value = mockUser.email;
-    form.role.value = mockUser.role.toLowerCase();
+
+    setRolesDropdown(mockUser.role, 'editRoleDropDown');
 
     $('#editUserModal').modal('show');
+}
+
+function setRolesDropdown(selectedRole, dropdownId) {
+    const roles = getRoles();
+    const dropdown = document.getElementById(dropdownId);
+    if (!dropdown) return;
+    dropdown.innerHTML =  `
+            <option value="">Select Role</option>
+            ${roles.map(role => `
+                <option value="${role.value}" ${role.value === selectedRole ? 'selected' : ''}>
+                    ${role.name}
+                </option>
+            `).join('')}
+            `;
 }
 
 function updateUser() {
@@ -89,25 +105,61 @@ function toggleUserStatus(userId) {
     loadUsers();
 }
 
-// Role Management Functions (Mother Company Admin Only)
-function loadRoles() {
-    if (!document.getElementById('rolesTableBody')) return;
-
-    // TODO: Fetch roles from API
+function getRoles() {
     const mockRoles = [
         {
             id: 1,
             name: 'Admin',
             description: 'Full system access',
-            permissions: ['manage_users', 'manage_roles', 'view_reports']
+            permissions: ['manage_users', 'manage_roles', 'view_reports', 'manage_finance', 'manage_dispute', 'manage_service', 'manage-price', 'manage-return', 'manage_inventory', 'manage_po', 'manage_credit', 'manage_integration', 'manage_commission']
         },
         {
             id: 2,
             name: 'Manager',
             description: 'Limited system access',
-            permissions: ['view_reports']
+            permissions: ['view_reports', 'manage_service','manage_inventory']
+        },
+        {
+            id: 3,
+            name: 'Buyer',
+            description: 'Limited system access',
+            permissions: ['view_reports', 'manage_inventory', 'manage_po']
+        },
+        {
+            id: 4,
+            name: 'Seller',
+            description: 'Limited system access',
+            permissions: ['view_reports', 'manage_inventory', 'manage_price', 'manage_commission']
+        },
+        {
+            id: 5,
+            name: 'Support',
+            description: 'Limited system access',
+            permissions: ['view_reports', 'manage_return', 'manage_dispute']
+        },
+        {
+            id: 6,
+            name: 'Finance',
+            description: 'Limited system access',
+            permissions: ['view_reports', 'manage_finance', 'manage_credit']
+        },
+        {
+            id: 7,
+            name: 'IT',
+            description: 'Limited system access',
+            permissions: ['view_reports', 'manage_integration', 'manage_commission']
         }
     ];
+    return mockRoles;
+}
+
+// Role Management Functions (Mother Company Admin Only)
+function loadRoles() {
+    if (!document.getElementById('rolesTableBody')) return;
+
+    // TODO: Fetch roles from API
+    const mockRoles = getRoles();
+    
     displayRoles(mockRoles);
 }
 
@@ -135,15 +187,25 @@ function displayRoles(roles) {
     `).join('');
 }
 
-function loadPermissions() {
+function loadPermissions(name) {
     // TODO: Fetch available permissions from API
     const mockPermissions = [
         { id: 1, name: 'manage_users', label: 'Manage Users' },
         { id: 2, name: 'manage_roles', label: 'Manage Roles' },
-        { id: 3, name: 'view_reports', label: 'View Reports' }
+        { id: 3, name: 'view_reports', label: 'View All Tables' },
+        { id: 4, name: 'manage_finance', label: 'Manage Finance Actions' },
+        { id: 5, name: 'manage_dispute', label: 'Manage Dispute' },
+        { id: 6, name: 'manage_service', label: 'Manage Service' },
+        { id: 7, name: 'manage-price', label: 'Manage Selling Price' },
+        { id: 8, name: 'manage-return', label: 'Manage Return' },
+        { id: 9, name: 'manage_inventory', label: 'Manage Inventory' },
+        { id: 10, name: 'manage_po', label: 'Manage Vendor & Purchase' },
+        { id: 11, name: 'manage_credit', label: 'Manage Credit' },
+        { id: 12, name: 'manage_integration', label: 'Manage API Integration' },
+        { id: 13, name:'manage_commission', label: 'Manage Commission & Scheme' }
     ];
 
-    const container = document.getElementById('permissionsCheckboxes');
+    const container = document.getElementById(name);
     if (container) {
         container.innerHTML = mockPermissions.map(perm => `
             <div class="col-md-6 mb-2">
@@ -174,7 +236,7 @@ function saveNewRole() {
 
 function editRole(roleId) {
     // Load permissions first
-    loadPermissions();
+    loadPermissions('editPermissionsCheckboxes');
 
     // TODO: Fetch role details from API
     const mockRole = {
@@ -210,9 +272,21 @@ function updateRole() {
     loadRoles();
 }
 
+function addRole() {
+    // Clear the form
+    const form = document.getElementById('addRoleForm');
+    if (form) {
+        form.reset();
+        loadPermissions('permissionsCheckboxes');
+    }
+
+    // Show the modal
+    $('#addRoleModal').modal('show');
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     loadUsers();
     loadRoles();
-    loadPermissions();
+    setRolesDropdown(null, 'addRoleDropDown');
 });

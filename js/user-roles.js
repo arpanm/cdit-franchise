@@ -7,7 +7,7 @@ function populateRolesDropdown() {
     const roles = [
         { id: 1, name: 'Admin', value: 'admin' },
         { id: 2, name: 'Manager', value: 'manager' },
-        { id: 3, name: 'User', value: 'user' }
+        { id: 3, name: 'Engineer', value: 'engineer' }
     ];
 
     roleDropdowns.forEach(dropdown => {
