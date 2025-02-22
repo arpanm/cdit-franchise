@@ -150,10 +150,35 @@ function initializeServiceRequestsTable(filterStatus = '') {
             </td>
         </tr>
     `).join('');
+
+    // Update mobile view
+    const mobileView = document.getElementById('serviceRequestsMobile');
+    mobileView.innerHTML = filteredRequests.map(request => `
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="card-subtitle text-muted">${request.id}</h6>
+                    <span class="badge ${request.status === 'Completed' ? 'bg-success' : 'bg-warning'}">${request.status}</span>
+                </div>
+                <h5 class="card-title">${request.type}</h5>
+                <p class="card-text">
+                    <small class="text-muted">Date: ${request.date}</small><br>
+                    <small class="text-muted">Engineer: ${request.engineer}</small>
+                </p>
+                <button class="btn btn-primary w-100" onclick="viewServiceDetails('${request.id}')">View Details</button>
+            </div>
+        </div>
+    `).join('');
 }
 
 // Initialize orders table
 function initializeOrdersTable(filterStatus = '') {
+    // Mock data for testing
+    const mockOrders = [
+        { id: 'ORD001', items: 'Spare Parts x2', amount: '$150', status: 'Processing', date: '2023-10-15', actions: ['view', 'track'] },
+        { id: 'ORD002', items: 'Service Kit', amount: '$75', status: 'Delivered', date: '2023-10-14', actions: ['view'] }
+    ];
+
     // Add event listener for status filter
     const orderStatusFilter = document.getElementById('orderStatusFilter');
     if (orderStatusFilter) {
@@ -222,6 +247,29 @@ function initializeOrdersTable(filterStatus = '') {
                 }
             </td>
         </tr>
+    `).join('');
+
+    // Update mobile view
+    const mobileView = document.getElementById('ordersMobile');
+    mobileView.innerHTML = filteredOrders.map(order => `
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="card-subtitle text-muted">${order.id}</h6>
+                    <span class="badge ${order.status === 'Completed' ? 'bg-success' : 'bg-warning'}">${order.status}</span>
+                </div>
+                <h5 class="card-title">${order.items}</h5>
+                <p class="card-text">
+                    <small class="text-muted">Amount: ${order.amount}</small><br>
+                    <small class="text-muted">Date: ${order.date}</small>
+                </p>
+                ${order.status === 'Pending' ? 
+                    `<button class="btn btn-success w-100" onclick="makePayment('${order.id}')">Pay Now</button>` 
+                    : 
+                    `<button class="btn btn-primary w-100" onclick="viewOrderDetails('${order.id}')">View Invoice</button>`
+                }
+            </div>
+        </div>
     `).join('');
 }
 
