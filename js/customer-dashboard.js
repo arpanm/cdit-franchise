@@ -413,6 +413,24 @@ function loadKnowledgeBaseArticles(searchQuery = '') {
 function setupChatbot() {
     const chatMessages = document.getElementById('chatMessages');
     const chatInput = document.getElementById('chatInput');
+    const chatModal = document.getElementById('chatbotModal');
+
+    // Add restart button to chat modal header
+    const modalHeader = chatModal.querySelector('.modal-header');
+    if (modalHeader) {
+        const restartButton = document.createElement('button');
+        restartButton.className = 'btn btn-outline-secondary btn-sm me-2';
+        restartButton.innerHTML = '<i class="bi bi-arrow-counterclockwise"></i> Restart';
+        restartButton.onclick = () => {
+            chatbotEngine.resetConversation();
+            chatMessages.innerHTML = '';
+            addChatMessage('bot', 'Hello! How can I help you today?');
+        };
+        modalHeader.insertBefore(restartButton, modalHeader.querySelector('.btn-close'));
+    }
+
+    // Initialize chatbot engine with config
+    chatbotEngine = new ChatbotEngine(chatbotConfig);
 
     // Add welcome message
     addChatMessage('bot', 'Hello! How can I help you today?');
@@ -424,29 +442,12 @@ function setupChatbot() {
     });
 }
 
+// Initialize chatbot engine
+let chatbotEngine;
+
 // Process user message and generate response
 function processMessage(message) {
-    message = message.toLowerCase();
-    
-    // Check for greetings
-    if (chatbotConfig.greetings.some(greeting => message.includes(greeting))) {
-        return chatbotConfig.responses.greeting;
-    }
-    
-    // Check for farewells
-    if (chatbotConfig.farewells.some(farewell => message.includes(farewell))) {
-        return chatbotConfig.responses.farewell;
-    }
-    
-    // Check for keywords and return appropriate responses
-    for (const [category, keywords] of Object.entries(chatbotConfig.keywords)) {
-        if (keywords.some(keyword => message.includes(keyword))) {
-            return chatbotConfig.responses[category];
-        }
-    }
-    
-    // If no matching keywords found, return default response
-    return chatbotConfig.responses.default;
+    return chatbotEngine.processMessage(message);
 }
 
 // Send chat message
