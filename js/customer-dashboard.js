@@ -415,18 +415,18 @@ function setupChatbot() {
     const chatInput = document.getElementById('chatInput');
     const chatModal = document.getElementById('chatbotModal');
 
-    // Add restart button to chat modal header
-    const modalHeader = chatModal.querySelector('.modal-header');
-    if (modalHeader) {
+    // Remove restart button from header and add to footer
+    const modalFooter = chatModal.querySelector('.modal-footer');
+    if (modalFooter) {
         const restartButton = document.createElement('button');
-        restartButton.className = 'btn btn-outline-secondary btn-sm me-2';
+        restartButton.className = 'btn btn-outline-secondary me-2';
         restartButton.innerHTML = '<i class="bi bi-arrow-counterclockwise"></i> Restart';
         restartButton.onclick = () => {
             chatbotEngine.resetConversation();
             chatMessages.innerHTML = '';
             addChatMessage('bot', 'Hello! How can I help you today?');
         };
-        modalHeader.insertBefore(restartButton, modalHeader.querySelector('.btn-close'));
+        modalFooter.insertBefore(restartButton, modalFooter.lastElementChild);
     }
 
     // Initialize chatbot engine with config
