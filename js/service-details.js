@@ -249,6 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    updateTrackingFlow(serviceRequestDetails.requestInfo.status);
 });
 
 // Function to cancel request
@@ -582,4 +583,72 @@ function printAndSendInvoice() {
 
     // Show confirmation message
     alert(`Invoice generated and sent for ${paidItems.length} items`);
+}
+
+function updateTrackingFlow(currentStatus) {
+
+    // Get all tracking steps and progress bar
+    const steps = document.querySelectorAll('.timeline-step');
+    const progressBar = document.querySelector('#serviceProgressBar');
+    const trackingSection = document.querySelector('#serviceTrackingSection');
+    
+    // Show tracking section
+    if (trackingSection) {
+        trackingSection.style.display = 'block';
+    }
+
+    // Reset all steps to inactive state
+    steps.forEach(step => {
+        step.classList.remove('active', 'completed');
+        const icon = step.querySelector('.step-icon');
+        if (icon) icon.classList.remove('active', 'completed');
+    });
+
+    // Define the order of tracking steps and their corresponding progress percentages
+    const stepOrder = ['Received', 'Assigned', 'In Progress', 'Completed'];
+    const stepProgress = {
+        'Received': 25,
+        'Assigned': 50,
+        'Pending': 50,
+        'In Progress': 75,
+        'Completed': 100
+    };
+    
+    // Find the current status from history
+    const currentStepIndex = stepOrder.indexOf(currentStatus);
+
+    // Calculate progress percentage based on current status
+    const progressPercentage = stepProgress[currentStatus] || 0;
+
+    // Update progress bar
+    if (progressBar) {
+        progressBar.style.width = `${progressPercentage}%`;
+        progressBar.setAttribute('aria-valuenow', progressPercentage);
+        progressBar.textContent = `${progressPercentage}%`;
+
+        // Update progress bar color based on status
+        progressBar.className = 'progress-bar progress-bar-striped progress-bar-animated';
+        if (currentStatus === 'Completed') {
+            progressBar.classList.add('bg-success');
+        } else if (currentStatus === 'In Progress') {
+            progressBar.classList.add('bg-info');
+        } else {
+            progressBar.classList.add('bg-primary');
+        }
+    }
+
+    // Update steps based on current status
+    steps.forEach((step, index) => {
+        if (index < currentStepIndex) {
+            // Previous steps are completed
+            step.classList.add('completed');
+            const icon = step.querySelector('.step-icon');
+            if (icon) icon.classList.add('completed');
+        } else if (index === currentStepIndex) {
+            // Current step is active
+            step.classList.add('active');
+            const icon = step.querySelector('.step-icon');
+            if (icon) icon.classList.add('active');
+        }
+    });
 }
