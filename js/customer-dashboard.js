@@ -3,6 +3,29 @@ let customerData = null;
 let chatHistory = [];
 let serviceRequests = [];
 
+// Chatbot configuration
+const chatbotConfig = {
+    greetings: ['hello', 'hi', 'hey', 'greetings'],
+    farewells: ['bye', 'goodbye', 'see you', 'thanks'],
+    keywords: {
+        service: ['service', 'repair', 'maintenance', 'fix', 'broken', 'not working'],
+        warranty: ['warranty', 'guarantee', 'coverage', 'protection'],
+        order: ['order', 'purchase', 'buy', 'delivery'],
+        payment: ['payment', 'pay', 'bill', 'invoice', 'cost'],
+        status: ['status', 'track', 'progress', 'update']
+    },
+    responses: {
+        greeting: 'Hello! How can I assist you today?',
+        farewell: 'Thank you for chatting with us. Have a great day!',
+        default: 'I apologize, but I\'m not sure I understand. Could you please rephrase your question?',
+        service: 'For service-related inquiries, I can help you with:\n1. Checking service request status\n2. Scheduling a new service\n3. Technical support\nWhat would you like to know more about?',
+        warranty: 'I can help you with warranty-related questions:\n1. Check warranty status\n2. Warranty renewal\n3. Coverage details\nPlease let me know what you need.',
+        order: 'For order-related assistance, I can help with:\n1. Order status\n2. Place new order\n3. Order history\nWhat information do you need?',
+        payment: 'I can assist you with payment-related matters:\n1. Payment status\n2. Payment methods\n3. Invoice details\nHow can I help you?',
+        status: 'I can help you check the status of your:\n1. Service requests\n2. Orders\n3. Warranty\nWhich one would you like to know about?'
+    }
+};
+
 // Initialize dashboard
 document.addEventListener('DOMContentLoaded', () => {
     loadCustomerData();
@@ -401,6 +424,31 @@ function setupChatbot() {
     });
 }
 
+// Process user message and generate response
+function processMessage(message) {
+    message = message.toLowerCase();
+    
+    // Check for greetings
+    if (chatbotConfig.greetings.some(greeting => message.includes(greeting))) {
+        return chatbotConfig.responses.greeting;
+    }
+    
+    // Check for farewells
+    if (chatbotConfig.farewells.some(farewell => message.includes(farewell))) {
+        return chatbotConfig.responses.farewell;
+    }
+    
+    // Check for keywords and return appropriate responses
+    for (const [category, keywords] of Object.entries(chatbotConfig.keywords)) {
+        if (keywords.some(keyword => message.includes(keyword))) {
+            return chatbotConfig.responses[category];
+        }
+    }
+    
+    // If no matching keywords found, return default response
+    return chatbotConfig.responses.default;
+}
+
 // Send chat message
 function sendMessage() {
     const chatInput = document.getElementById('chatInput');
@@ -410,10 +458,13 @@ function sendMessage() {
         addChatMessage('user', message);
         chatInput.value = '';
 
-        // TODO: Replace with actual AI processing
+        // Process the message and get response
+        const response = processMessage(message);
+        
+        // Add slight delay to simulate processing
         setTimeout(() => {
-            addChatMessage('bot', 'I understand you need help. Let me assist you with that.');
-        }, 1000);
+            addChatMessage('bot', response);
+        }, 500);
     }
 }
 
