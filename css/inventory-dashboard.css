@@ -49,6 +49,227 @@
     margin: 0 0.1rem;
 }
 
+/* Mobile Card View Styles */
+.inventory-card {
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.inventory-card .card-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+}
+
+.inventory-card .card-value {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+}
+
+.inventory-card .card-actions {
+    border-top: 1px solid #dee2e6;
+    padding-top: 1rem;
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.inventory-card .badge {
+    font-size: 0.875rem;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Mobile Inventory Stats Bar Graph */
+@media (max-width: 768px) {
+    .inventory-stats-container {
+        background: #fff;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        margin-bottom: 1rem;
+    }
+
+    .inventory-stat-bar {
+        height: 30px;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        background: #f8f9fa;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .inventory-stat-bar .bar {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        padding: 0 1rem;
+        color: #fff;
+        font-size: 0.875rem;
+        white-space: nowrap;
+        transition: width 0.3s ease;
+    }
+
+    .inventory-stat-bar .total-inventory {
+        background-color: var(--bs-primary);
+    }
+
+    .inventory-stat-bar .low-stock {
+        background-color: var(--bs-warning);
+        color: #000;
+    }
+
+    .inventory-stat-bar .ageing-inventory {
+        background-color: var(--bs-danger);
+        color: #000;
+    }
+
+    .inventory-stat-bar .bar-label {
+        margin-right: 0.5rem;
+        font-weight: 500;
+    }
+
+    .inventory-stat-bar .bar-value {
+        font-weight: 600;
+    }
+
+    /* Hide original cards in mobile view */
+    .row.mb-4 .col-md-4 .card {
+        display: none;
+    }
+}
+
+/* Credit History Mobile Card Styles */
+.credit-history-card {
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.credit-history-card .transaction-date {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+}
+
+.credit-history-card .transaction-description {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+}
+
+.credit-history-card .transaction-amount {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.credit-history-card .amount-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+.credit-history-card .credit-amount {
+    color: #198754;
+    font-weight: 500;
+}
+
+.credit-history-card .debit-amount {
+    color: #dc3545;
+    font-weight: 500;
+}
+
+.credit-history-card .balance {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.credit-history-card .reference {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+}
+
+.credit-history-card .status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.credit-history-card.initial-credit {
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 1px solid #dee2e6;
+}
+
+.credit-history-card.initial-credit .transaction-description {
+    color: #084298;
+    font-weight: 500;
+}
+
+.credit-history-card.initial-credit .credit-amount,
+.credit-history-card.initial-credit .debit-amount {
+    color: #084298;
+    font-weight: 600;
+}
+
+.credit-history-card.initial-credit .balance {
+    color: #084298;
+    font-weight: 600;
+}
+
+.credit-history-card .balance {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.credit-history-card .reference {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+}
+
+.credit-history-card .status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+@media (max-width: 767.98px) {
+    .credit-history-table {
+        display: none;
+    }
+    
+    .credit-history-cards {
+        display: block;
+    }
+}
+
+@media (min-width: 768px) {
+    .credit-history-cards {
+        display: none;
+    }
+    
+    .credit-history-table {
+        display: table;
+    }
+}
+
 .filters-row {
     gap: 1rem;
     margin-bottom: 1rem;
@@ -58,4 +279,70 @@
     font-size: 0.875rem;
     color: #6c757d;
     margin-bottom: 0.25rem;
+}
+
+@media (max-width: 991.98px) {
+    .inventory-filters {
+        padding: 0.75rem;
+    }
+    
+    .filters-row {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .filters-row > div {
+        width: 100%;
+    }
+    
+    .modal-dialog.modal-lg {
+        max-width: 95%;
+        margin: 0.5rem auto;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .inventory-table {
+        font-size: 0.875rem;
+    }
+    
+    .inventory-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    .inventory-actions .btn {
+        width: 100%;
+        margin: 0;
+    }
+    
+    .inventory-status-badge {
+        font-size: 0.75rem;
+        display: inline-block;
+        margin-bottom: 0.25rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .inventory-filters {
+        padding: 0.5rem;
+    }
+    
+    .table-responsive {
+        margin: 0 -0.5rem;
+    }
+    
+    .inventory-table th,
+    .inventory-table td {
+        padding: 0.5rem;
+    }
+    
+    .modal-dialog.modal-lg {
+        margin: 0.25rem;
+    }
+    
+    .modal-body {
+        padding: 0.75rem;
+    }
 }

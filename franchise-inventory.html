@@ -99,9 +99,33 @@
                         </button>
                     </div>
                 </div>
-
+    
                 <div class="row mb-4">
-                    <div class="col-md-4">
+                    <!-- Mobile Stats Bar Graph -->
+                    <div class="col-12 d-md-none">
+                        <div class="inventory-stats-container">
+                            <div class="inventory-stat-bar">
+                                <div class="bar total-inventory" style="width: 100%">
+                                    <span class="bar-label">Total Inventory</span>
+                                    <span class="bar-value">₹308,200 (115 Items)</span>
+                                </div>
+                            </div>
+                            <div class="inventory-stat-bar">
+                                <div class="bar low-stock" style="width: 60%">
+                                    <span class="bar-label">Low Stock</span>
+                                    <span class="bar-value">32 Items</span>
+                                </div>
+                            </div>
+                            <div class="inventory-stat-bar">
+                                <div class="bar ageing-inventory" style="width: 30%">
+                                    <span class="bar-label">Ageing</span>
+                                    <span class="bar-value">3 Items (₹18,200)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Desktop Cards View -->
+                    <div class="col-md-4 d-none d-md-block">
                         <div class="card bg-primary text-white">
                             <div class="card-body">
                                 <h6 class="card-title">Total Inventory</h6>
@@ -129,7 +153,7 @@
                         </div>
                     </div>
                 </div>
-
+    
                 <!-- Credit Balance Section -->
                 <div class="alert alert-info mb-4">
                     <div class="d-flex justify-content-between align-items-center">
@@ -143,7 +167,7 @@
                         </button>
                     </div>
                 </div>
-
+    
                 <!-- Filters Section -->
                 <div class="card mb-4">
                     <div class="card-body">
@@ -190,9 +214,10 @@
                         </div>
                     </div>
                 </div>
-
+    
                 <!-- Inventory Table -->
-                <div class="card">
+                    <!-- Desktop Table View -->
+                <div class="card d-none d-md-block">
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-striped table-hover" id="inventoryTable">
@@ -220,281 +245,393 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Order Modal -->
-    <div class="modal fade" id="orderModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Create Purchase Order</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="orderForm">
-                        <div class="mb-3">
-                            <label class="form-label">SKU Details</label>
-                            <p id="orderSkuDetails" class="form-text"></p>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Quantity</label>
-                            <input type="number" class="form-control" id="orderQuantity" required min="1">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Total Amount</label>
-                            <p id="orderTotalAmount" class="form-text">₹0</p>
-                        </div>
-                        <div class="alert alert-warning" id="orderCreditWarning" style="display: none;">
-                            Insufficient credit balance!
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="createPurchaseOrder()">Create Order</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Return Modal -->
-    <div class="modal fade" id="returnModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Initiate Return</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="returnForm">
-                        <div class="mb-3">
-                            <label class="form-label">SKU Details</label>
-                            <p id="returnSkuDetails" class="form-text"></p>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Return Quantity</label>
-                            <input type="number" class="form-control" id="returnQuantity" required min="1">
-                            <div class="text-danger mt-1" id="returnQuantityWarning" style="display: none;"></div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Reason for Return</label>
-                            <textarea class="form-control" id="returnReason" required rows="3"></textarea>
-                        </div>
-                        <div class="alert alert-info">
-                            Return request will be sent for approval. Credit will be updated once approved.
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="initiateReturn()">Submit Return</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Credit History Modal -->
-    <div class="modal fade" id="creditHistoryModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Credit Balance History</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Description</th>
-                                    <th>Category</th>
-                                    <th>Credit (₹)</th>
-                                    <th>Debit (₹)</th>
-                                    <th>Balance (₹)</th>
-                                    <th>Reference</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="creditHistoryTableBody"></tbody>
-                            <tfoot>
-                                <tr class="table-info">
-                                    <td colspan="3"><strong>Total</strong></td>
-                                    <td id="totalCredit"></td>
-                                    <td id="totalDebit"></td>
-                                    <td id="netBalance">₹0</td>
-                                    <td colspan="2"></td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                <!-- Mobile Card View -->
+                <div class="d-md-none" id="inventoryCards">
+                    <div class="row g-3" id="mobileInventoryList">
+                        <!-- Mobile cards will be dynamically populated here -->
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </main>
+    
+        <!-- Serial Numbers Modal -->
+        <div class="modal fade" id="serialNumbersModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Serial Numbers</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Serial numbers table will be dynamically populated here -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Add/Edit Inventory Modal -->
-    <div class="modal fade" id="addInventoryModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add New Inventory Item</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="inventoryForm">
-                        <div class="row g-3">
-                            <div class="col-12 mb-3">
-                                <label class="form-label">Search SKU</label>
-                                <input type="text" class="form-control" id="skuSearch" placeholder="Search by SKU name...">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Filter Category</label>
-                                <select class="form-select" id="skuFilterCategory">
-                                    <option value="">All Categories</option>
-                                    <option value="spare">Spare Part</option>
-                                    <option value="accessory">Accessory</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Filter Brand</label>
-                                <select class="form-select" id="skuFilterBrand">
-                                    <option value="">All Brands</option>
-                                    <option value="samsung">Samsung</option>
-                                    <option value="lg">LG</option>
-                                    <option value="whirlpool">Whirlpool</option>
-                                </select>
-                            </div>
-                            <button type="button" class="btn btn-primary" onclick="filterAvailableSkus()">Search SKUs</button>
-                            <div class="col-12">
-                                <label class="form-label">Available SKUs</label>
-                                <select class="form-select" id="availableSkus" size="5" style="height: 200px;">
-                                </select>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="addSelectedSku()">Save Changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Adjust Inventory Modal -->
-    <div class="modal fade" id="adjustInventoryModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Adjust Inventory</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="adjustInventoryForm">
-                        <div class="mb-3">
-                            <label class="form-label">SKU Details</label>
-                            <p id="adjustItemSelect" class="form-text"></p>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Adjustment Quantity</label>
-                            <input type="number" class="form-control" id="adjustQuantity" required>
-                            <small class="form-text text-muted">Use negative values for reduction</small>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Reason for Adjustment</label>
-                            <select class="form-select" id="adjustReason" required>
-                                <option value="">Select a reason...</option>
-                                <option value="damaged">Damaged Stock</option>
-                                <option value="quality_failed">Quality Check Failed</option>
-                                <option value="count_adjustment">Stock Count Adjustment</option>
-                                <option value="returned_items">Returned Items</option>
-                                <option value="expired">Expired Stock</option>
-                                <option value="lost">Lost/Missing Items</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div class="mb-3" id="otherReasonContainer" style="display: none;">
-                            <label class="form-label">Other Reason</label>
-                            <textarea class="form-control" id="otherReason" rows="3"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="submitInventoryAdjustment()">Submit Adjustment</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Goods Receive Modal -->
-    <div class="modal fade" id="goodsReceiveModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Goods Receive</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="goodsReceiveForm">
-                        <input type="hidden" id="receiveSkuId">
-                        <input type="hidden" id="receiveType">
-                        
-                        <div id="poFields">
+    
+        <!-- Sell Out Modal -->
+        <div class="modal fade" id="sellOutModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Sell Out</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="sellOutForm">
                             <div class="mb-3">
-                                <label class="form-label">Purchase Order Number</label>
-                                <select class="form-select" id="poNumber" required>
-                                    <option value="">Select PO</option>
-                                </select>
+                                <label class="form-label">Retailer</label>
+                                <div class="position-relative">
+                                    <input type="text" class="form-control" id="retailerSearch" placeholder="Search retailer. Type two letter to get the list." required>
+                                    <div id="retailerSearchResults" class="dropdown-menu w-100" style="display: none;"></div>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div id="returnFields">
                             <div class="mb-3">
-                                <label class="form-label">Return Request Number</label>
-                                <select class="form-select" id="returnNumber" required>
-                                    <option value="">Select Return Request</option>
-                                </select>
+                                <label class="form-label">Price Adjustment</label>
+                                <div class="input-group">
+                                    <select class="form-select" id="priceAdjustmentType">
+                                        <option value="markup">Mark Up</option>
+                                        <option value="markdown">Mark Down</option>
+                                    </select>
+                                    <input type="number" class="form-control" id="priceAdjustmentValue" value="0" min="0">
+                                    <span class="input-group-text">%</span>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Received Quantity</label>
-                            <input type="number" class="form-control" id="receiveQuantity" required min="1">
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Quality Status</label>
-                            <select class="form-select" id="qualityStatus" required>
-                                <option value="">Select Status</option>
-                                <option value="passed">Passed</option>
-                                <option value="failed">Failed</option>
-                                <option value="partial">Partially Passed</option>
-                            </select>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Remarks</label>
-                            <textarea class="form-control" id="receiveRemarks" rows="3"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="submitGoodsReceive()">Submit</button>
+                            <div class="mb-3">
+                                <label class="form-label">Total Amount</label>
+                                <p id="sellOutTotalAmount" class="form-text fw-bold">₹0</p>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" onclick="submitSellOut()">Submit</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" type="text/javascript"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/inventory-dashboard.js"></script>
-    <script src="js/goods-receive.js"></script>
-    <script src="js/login.js"></script>
-</body>
-</html>
+    
+        <!-- Order Modal -->
+        <div class="modal fade" id="orderModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Create Purchase Order</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-info mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>Current Credit Balance:</strong>
+                                    <span id="modalCreditBalance">₹0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <form id="orderForm">
+                            <div class="mb-3">
+                                <label class="form-label">SKU Details</label>
+                                <p id="orderSkuDetails" class="form-text"></p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Quantity</label>
+                                <input type="number" class="form-control" id="orderQuantity" required min="1">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Total Amount</label>
+                                <p id="orderTotalAmount" class="form-text">₹0</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Remaining Credit Balance</label>
+                                <p id="remainingBalance" class="form-text text-success" style="background-color: #87CEEB; padding: 5px; border-radius: 4px;">₹0</p>
+                            </div>
+                            <div class="alert alert-warning" id="orderCreditWarning" style="display: none;">
+                                Insufficient credit balance!
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" onclick="createPurchaseOrder()">Create Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Return Modal -->
+        <div class="modal fade" id="returnModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Initiate Return</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="returnForm">
+                            <div class="mb-3">
+                                <label class="form-label">SKU Details</label>
+                                <p id="returnSkuDetails" class="form-text"></p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Return Quantity</label>
+                                <input type="number" class="form-control" id="returnQuantity" required min="1">
+                                <div class="text-danger mt-1" id="returnQuantityWarning" style="display: none;"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Reason for Return</label>
+                                <textarea class="form-control" id="returnReason" required rows="3"></textarea>
+                            </div>
+                            <div class="alert alert-info">
+                                Return request will be sent for approval. Credit will be updated once approved.
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" onclick="initiateReturn()">Submit Return</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Credit History Modal -->
+        <div class="modal fade" id="creditHistoryModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Credit Balance History</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Credit History Table for Desktop -->
+                        <div class="table-responsive credit-history-table">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Description</th>
+                                        <th>Category</th>
+                                        <th>Credit (₹)</th>
+                                        <th>Debit (₹)</th>
+                                        <th>Balance (₹)</th>
+                                        <th>Reference</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="creditHistoryTableBody">
+                                    <tr class="table-primary">
+                                        <td id="initialCreditDate">2023-06-11</td>
+                                        <td>Initial Credit Limit</td>
+                                        <td><span class="badge bg-primary">Initial Credit</span></td>
+                                        <td id="initialCreditAmount">-</td>
+                                        <td>-</td>
+                                        <td id="initialBalance">₹50,000</td>
+                                        <td>System Generated</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="table-info">
+                                        <td colspan="2"><strong>Current Balance</strong></td>
+                                        <td></td>
+                                        <td id="totalCredit"></td>
+                                        <td id="totalDebit"></td>
+                                        <td id="netBalance">₹0</td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <!-- Credit History Cards for Mobile -->
+                        <div class="credit-history-cards" id="creditHistoryCards">
+                            <div class="credit-history-card mb-3 initial-credit" id="mobFirstCreditCard">
+                                <div class="transaction-date">2023-06-11</div>
+                                <div class="transaction-description">Initial Credit Limit</div>
+                                <div class="mb-2">
+                                    <span class="badge bg-primary">Initial Credit</span>
+                                </div>
+                                <div class="transaction-amount">
+                                    <div>
+                                        <div class="amount-label">Credit</div>
+                                        <div class="credit-amount">-</div>
+                                    </div>
+                                    <div>
+                                        <div class="amount-label">Debit</div>
+                                        <div class="debit-amount">-</div>
+                                    </div>
+                                </div>
+                                <div class="balance">Balance: ₹50,000</div>
+                                <div class="reference">System Generated</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Add/Edit Inventory Modal -->
+        <div class="modal fade" id="addInventoryModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add New Inventory Item</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="inventoryForm">
+                            <div class="row g-3">
+                                <div class="col-12 mb-3">
+                                    <label class="form-label">Search SKU</label>
+                                    <input type="text" class="form-control" id="skuSearch" placeholder="Search by SKU name...">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Filter Category</label>
+                                    <select class="form-select" id="skuFilterCategory">
+                                        <option value="">All Categories</option>
+                                        <option value="spare">Spare Part</option>
+                                        <option value="accessory">Accessory</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Filter Brand</label>
+                                    <select class="form-select" id="skuFilterBrand">
+                                        <option value="">All Brands</option>
+                                        <option value="samsung">Samsung</option>
+                                        <option value="lg">LG</option>
+                                        <option value="whirlpool">Whirlpool</option>
+                                    </select>
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="filterAvailableSkus()">Search SKUs</button>
+                                <div class="col-12">
+                                    <label class="form-label">Available SKUs</label>
+                                    <select class="form-select" id="availableSkus" size="5" style="height: 200px;">
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="addSelectedSku()">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Adjust Inventory Modal -->
+        <div class="modal fade" id="adjustInventoryModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Adjust Inventory</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="adjustInventoryForm">
+                            <div class="mb-3">
+                                <label class="form-label">SKU Details</label>
+                                <p id="adjustItemSelect" class="form-text"></p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Adjustment Quantity</label>
+                                <input type="number" class="form-control" id="adjustQuantity" required>
+                                <small class="form-text text-muted">Use negative values for reduction</small>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Reason for Adjustment</label>
+                                <select class="form-select" id="adjustReason" required>
+                                    <option value="">Select a reason...</option>
+                                    <option value="damaged">Damaged Stock</option>
+                                    <option value="quality_failed">Quality Check Failed</option>
+                                    <option value="count_adjustment">Stock Count Adjustment</option>
+                                    <option value="returned_items">Returned Items</option>
+                                    <option value="expired">Expired Stock</option>
+                                    <option value="lost">Lost/Missing Items</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="mb-3" id="otherReasonContainer" style="display: none;">
+                                <label class="form-label">Other Reason</label>
+                                <textarea class="form-control" id="otherReason" rows="3"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" onclick="submitInventoryAdjustment()">Submit Adjustment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Goods Receive Modal -->
+        <div class="modal fade" id="goodsReceiveModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Goods Receive</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="goodsReceiveForm">
+                            <input type="hidden" id="receiveSkuId">
+                            <input type="hidden" id="receiveType">
+                            
+                            <div id="poFields">
+                                <div class="mb-3">
+                                    <label class="form-label">Purchase Order Number</label>
+                                    <select class="form-select" id="poNumber" required>
+                                        <option value="">Select PO</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div id="returnFields">
+                                <div class="mb-3">
+                                    <label class="form-label">Return Request Number</label>
+                                    <select class="form-select" id="returnNumber" required>
+                                        <option value="">Select Return Request</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Received Quantity</label>
+                                <input type="number" class="form-control" id="receiveQuantity" required min="1">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Quality Status</label>
+                                <select class="form-select" id="qualityStatus" required>
+                                    <option value="">Select Status</option>
+                                    <option value="passed">Passed</option>
+                                    <option value="failed">Failed</option>
+                                    <option value="partial">Partially Passed</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Remarks</label>
+                                <textarea class="form-control" id="receiveRemarks" rows="3"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" onclick="submitGoodsReceive()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="js/inventory-dashboard.js"></script>
+        <script src="js/goods-receive.js"></script>
+        <script src="js/serial-numbers.js"></script>
+        <script src="js/sell-out.js"></script>
+        <script src="js/login.js"></script>
+    </body>
+    </html>

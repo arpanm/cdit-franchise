@@ -24,9 +24,27 @@ function openGoodsReceiveModal(skuId, type) {
         loadPendingReturns(skuId);
     }
     
-    // Show modal
-    const modal = new bootstrap.Modal(document.getElementById('goodsReceiveModal'));
+    // Show modal with proper focus management
+    const modalElement = document.getElementById('goodsReceiveModal');
+    const modal = new bootstrap.Modal(modalElement, {
+        backdrop: true,
+        keyboard: true,
+        focus: true
+    });
     modal.show();
+    
+    // Focus management
+    const firstFocusableElement = modalElement.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (firstFocusableElement) {
+        firstFocusableElement.focus();
+    }
+    
+    // Clean up when modal is hidden
+    modalElement.addEventListener('hidden.bs.modal', () => {
+        document.querySelectorAll('[inert]').forEach(element => {
+            element.inert = false;
+        });
+    });
 }
 
 function loadPendingPOs(skuId) {
@@ -82,14 +100,6 @@ function submitGoodsReceive() {
     // Refresh inventory table
     // inventoryManager.populateTable();
 }
-
-// Initialize page
-document.addEventListener('DOMContentLoaded', () => {
-    showButtons();
-    // Initialize Bootstrap tooltips
-    const tooltipTriggerList = document.querySelectorAll('[title]');
-    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-});
 
 
 function openAdjustModal(skuId) {
@@ -159,5 +169,30 @@ function showButtons() {
             `;
             actionButtonSection.appendChild(receiveButton);
         }
+        const mobActionButtonSection = document.getElementById(`mobActionButtons-${item.skuId}`);
+        if (!mobActionButtonSection) return;
+        if (item.openPOs > 0) {
+            const receiveButton = document.createElement('span');
+            receiveButton.innerHTML = `
+                <button class="btn btn-sm btn-success me-1" onclick="openGoodsReceiveModal('${item.skuId}', 'PO')" title="Receive Inventory">
+                    <i class="bi bi-plus">Receive Inventory</i>
+                </button>
+                <button class="btn btn-sm btn-danger me-1" onclick="openAdjustModal('${item.skuId}')" title="Adjust Inventory">
+                    <i class="bi bi-wrench-adjustable-circle">Adjust Inventory</i>
+                </button>
+            `;
+            mobActionButtonSection.appendChild(receiveButton);
+        } else {
+            const receiveButton = document.createElement('span');
+            receiveButton.innerHTML = `
+                <button class="btn btn-sm btn-danger me-1" onclick="openAdjustModal('${item.skuId}')" title="Adjust Inventory">
+                    <i class="bi bi-wrench-adjustable-circle">Adjust Inventory</i>
+                </button>
+            `;
+            mobActionButtonSection.appendChild(receiveButton);
+        }
     });
+    // Initialize Bootstrap tooltips
+    const tooltipTriggerList = document.querySelectorAll('[title]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 }

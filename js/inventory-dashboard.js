@@ -1,14 +1,24 @@
 // Credit balance and history data
-let creditBalance = 55000;
+let creditBalance = 38000;
 const creditHistory = [
     {
+        date: "2024-02-01",
+        description: "Spare Parts Purchase",
+        category: "debit",
+        credit: 0,
+        debit: 15000,
+        balance: 38000,
+        reference: "SR2401-056",
+        status: "Completed"
+    },{
         date: "2024-01-28",
-        description: "Commission for Service #SR2401-056",
-        category: "commission",
+        description: "Payment via IMPS #ICIC2401056",
+        category: "payment",
         credit: 3500,
         debit: 0,
-        balance: 53500,
-        reference: "SR2401-056"
+        balance: 53000,
+        reference: "ICIC2401056",
+        status: "Completed"
     },
     {
         date: "2024-01-25",
@@ -16,8 +26,9 @@ const creditHistory = [
         category: "schemes",
         credit: 2500,
         debit: 0,
-        balance: 56000,
-        reference: "SCH-EB-24-01"
+        balance: 49500,
+        reference: "SCH-EB-24-01",
+        status: "Completed"
     },
     {
         date: "2024-01-20",
@@ -25,8 +36,9 @@ const creditHistory = [
         category: "returns",
         credit: 1200,
         debit: 0,
-        balance: 57200,
-        reference: "RET2401-032"
+        balance: 47000,
+        reference: "RET2401-032",
+        status: "Completed"
     },
     {
         date: "2024-01-15",
@@ -34,17 +46,19 @@ const creditHistory = [
         category: "debit",
         credit: 0,
         debit: 1500,
-        balance: 55700,
-        reference: "PAY2401-015"
+        balance: 45800,
+        reference: "PAY2401-015",
+        status: "Completed"
     },
     {
         date: "2024-01-10",
         description: "Commission for Service #SR2401-023",
         category: "commission",
-        credit: 2800,
+        credit: 800,
         debit: 0,
-        balance: 58500,
-        reference: "SR2401-023"
+        balance: 47300,
+        reference: "SR2401-023",
+        status: "Completed"
     },
     {
         date: "2024-01-05",
@@ -52,8 +66,9 @@ const creditHistory = [
         category: "debit",
         credit: 0,
         debit: 3500,
-        balance: 55000,
-        reference: "PO2401-005"
+        balance: 46500,
+        reference: "PO2401-005",
+        status: "Completed"
     }
 ];
 
@@ -537,10 +552,13 @@ class InventoryManager {
 
     populateTable(filteredData = null) {
         const tbody = document.getElementById('inventoryTableBody');
+        const mobileList = document.getElementById('mobileInventoryList');
         const data = filteredData || this.inventoryData;
         tbody.innerHTML = '';
+        mobileList.innerHTML = '';
 
         data.forEach(item => {
+            // Desktop table row
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${item.skuId}</td>
@@ -550,7 +568,7 @@ class InventoryManager {
                 <td>₹${item.mrp}</td>
                 <td>₹${item.offerPrice}</td>
                 <td>${item.commission}%</td>
-                <td>${item.totalPurchased}</td>
+                <td><a href="#" onclick="openSerialNumbersModal('${item.skuId}', ${item.totalPurchased}); return false;" class="text-primary">${item.totalPurchased}</a></td>
                 <td>${item.totalSold}</td>
                 <td>${item.currentStock}</td>
                 <td>
@@ -579,8 +597,81 @@ class InventoryManager {
                 </td>
             `;
             tbody.appendChild(row);
+
+            // Mobile card
+            const card = document.createElement('div');
+            card.className = 'col-12';
+            card.innerHTML = `
+                <div class="inventory-card">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <div class="card-label">SKU ID</div>
+                            <div class="card-value">${item.skuId}</div>
+                        </div>
+                        <div class="text-end">
+                            <div class="card-label">Stock</div>
+                            <div class="card-value">${item.currentStock}</div>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <div class="card-label">SKU Name</div>
+                        <div class="card-value">${item.skuName}</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-6">
+                            <div class="card-label">Category</div>
+                            <div class="card-value">${item.category}</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card-label">Brand</div>
+                            <div class="card-value">${item.brand}</div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-6">
+                            <div class="card-label">MRP</div>
+                            <div class="card-value">₹${item.mrp}</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card-label">Offer Price</div>
+                            <div class="card-value">₹${item.offerPrice}</div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4">
+                            <div class="card-label">Purchased</div>
+                            <div class="card-value">
+                                <a href="#" onclick="openSerialNumbersModal('${item.skuId}', ${item.totalPurchased}); return false;" class="text-primary">${item.totalPurchased}</a>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card-label">Sold</div>
+                            <div class="card-value">${item.totalSold}</div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card-label">Open POs</div>
+                            <div class="card-value">${item.openPOs}</div>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2 mb-3">
+                        <span class="badge ${this.getInventoryStatusClass(item.inventoryStatus)}">Inventory: <br/>${item.inventoryStatus}</span>
+                        <span class="badge ${this.getDemandStatusClass(item.demand)}">Demand: <br/>${item.demand}</span>
+                        <span class="badge ${this.getReturnStatusClass(item.returnStatus)}">Return:<br/>${item.returnStatus || 'None'}</span>
+                    </div>
+                    <div class="card-actions" id="mobActionButtons-${item.skuId}">
+                        <button class="btn btn-sm btn-primary" onclick="inventoryManager.openOrderModal('${item.skuId}')">
+                            <i class="bi bi-cart-plus me-1"></i>Create Order
+                        </button>
+                        <button class="btn btn-sm btn-warning" onclick="inventoryManager.openReturnModal('${item.skuId}')">
+                            <i class="bi bi-arrow-return-left me-1"></i>Return
+                        </button>
+                    </div>
+                </div>
+            `;
+            mobileList.appendChild(card);
         });
         this.updateCreditBalance();
+        showButtons();
     }
 
     getReturnStatusClass(status) {
@@ -612,7 +703,15 @@ class InventoryManager {
         document.getElementById('orderSkuDetails').textContent = `${item.skuName} (${item.skuId}) - ₹${item.offerPrice}`;
         document.getElementById('orderQuantity').value = '';
         document.getElementById('orderTotalAmount').textContent = '₹0';
-        document.getElementById('orderCreditWarning').style.display = 'none';
+        if (document.getElementById('orderCreditWarning')) {
+            document.getElementById('orderCreditWarning').style.display = 'none';
+        }
+        if (document.getElementById('modalCreditBalance')) {
+            document.getElementById('modalCreditBalance').textContent = `₹${this.creditBalance.toLocaleString()}`;
+        }
+        if (document.getElementById('remainingBalance')) {
+            document.getElementById('remainingBalance').textContent = `₹${this.creditBalance.toLocaleString()}`;
+        }
         
         const modal = new bootstrap.Modal(document.getElementById('orderModal'));
         modal.show();
@@ -621,9 +720,17 @@ class InventoryManager {
         document.getElementById('orderQuantity').addEventListener('input', (e) => {
             const quantity = parseInt(e.target.value) || 0;
             const totalAmount = quantity * item.offerPrice;
+            const remainingBalance = this.creditBalance - totalAmount;
+            
             document.getElementById('orderTotalAmount').textContent = `₹${totalAmount.toLocaleString()}`;
-            document.getElementById('orderCreditWarning').style.display = 
-                totalAmount > this.creditBalance ? 'block' : 'none';
+            if (document.getElementById('remainingBalance')) {
+                document.getElementById('remainingBalance').textContent = `₹${remainingBalance.toLocaleString()}`;
+                document.getElementById('remainingBalance').className = `form-text ${remainingBalance >= 0 ? 'text-success' : 'text-danger'}`;
+            }
+            if (document.getElementById('orderCreditWarning')) {
+                document.getElementById('orderCreditWarning').style.display = 
+                    totalAmount > this.creditBalance ? 'block' : 'none';
+            }
         });
     }
 
@@ -679,7 +786,8 @@ class InventoryManager {
             credit: 0,
             debit: totalAmount,
             balance: this.creditBalance,
-            reference: `PO-${skuId}-${Date.now()}`
+            reference: `PO-${skuId}-${Date.now()}`,
+            status: 'Completed'
         });
 
         item.totalPurchased += quantity;
@@ -720,7 +828,8 @@ class InventoryManager {
             credit: returnAmount,
             debit: 0,
             balance: this.creditBalance + returnAmount,
-            reference: `RET-${skuId}-${Date.now()}`
+            reference: `RET-${skuId}-${Date.now()}`,
+            status: 'Pending'
         });
 
         this.populateTable();
@@ -730,48 +839,109 @@ class InventoryManager {
 
     populateCreditHistory() {
         const tbody = document.getElementById('creditHistoryTableBody');
-        if (!tbody) {
-            console.error('Credit history table body not found');
+        const mobileCards = document.getElementById('creditHistoryCards');
+
+        if (!tbody || !mobileCards) {
+            console.error('Credit history elements not found');
             return;
         }
 
+        // Keep the initial credit row and clear the rest
+        const initialCreditRow = tbody.querySelector('tr.table-primary');
+        const mobInitialCreditRow = mobileCards.querySelector('#mobFirstCreditCard');
         tbody.innerHTML = '';
+        if (initialCreditRow) {
+            tbody.appendChild(initialCreditRow);
+        }
+        mobileCards.innerHTML = '';
+        if (mobInitialCreditRow) {
+            mobileCards.appendChild(mobInitialCreditRow);
+        }
+
         if (this.creditHistory.length === 0) {
             const emptyRow = document.createElement('tr');
-            emptyRow.innerHTML = '<td colspan="8" class="text-center">No transaction history available</td>';
+            emptyRow.innerHTML = '<td colspan="7" class="text-center">No transaction history available</td>';
             tbody.appendChild(emptyRow);
+            mobileCards.innerHTML = '<div class="text-center p-3">No transaction history available</div>';
             return;
         }
 
         // Sort transactions in reverse chronological order
         const sortedHistory = [...this.creditHistory].reverse();
 
-        // Display transactions
-        sortedHistory.forEach(transaction => {
+        // Get initial credit balance
+        const initialBalance = parseFloat(document.getElementById('initialBalance').textContent.replace('₹', '').replace(',', ''));
+
+        // Display transactions in table
+        sortedHistory.forEach((transaction, index) => {
             const row = document.createElement('tr');
+            const categoryClass = transaction.category === 'debit' ? 'bg-danger' : 
+                                transaction.category === 'payment' ? 'bg-success' : 
+                                transaction.category === 'returns' ? 'bg-warning' : 'bg-info';
+            let hasCreditsAfterLastDebit = false;
+            for (let i = index; i < sortedHistory.length ; i++) {
+                if (sortedHistory[i].category === 'payment') {
+                    hasCreditsAfterLastDebit = true;
+                    break;
+                }
+            }
+            // Check if payment is pending for this transaction
+            const isPaymentPending = transaction.category === 'debit' && 
+                                   !hasCreditsAfterLastDebit && 
+                                   this.creditBalance < initialBalance;
+
             row.innerHTML = `
                 <td>${transaction.date}</td>
-                <td>${transaction.description}</td>
-                <td>${transaction.category}</td>
+                <td>
+                    ${transaction.description}
+                    ${isPaymentPending ? '<span class="badge bg-warning ms-2">Payment Pending</span>' : ''}
+                </td>
+                <td><span class="badge ${categoryClass}">${transaction.category}</span></td>
                 <td>₹${transaction.credit.toLocaleString()}</td>
                 <td>₹${transaction.debit.toLocaleString()}</td>
                 <td>₹${transaction.balance.toLocaleString()}</td>
                 <td>${transaction.reference}</td>
-                <td><span class="badge ${transaction.status === 'Completed' ? 'bg-success' : 'bg-warning'}">${transaction.status}</span></td>
             `;
             tbody.appendChild(row);
+
+            // Create mobile card
+            const card = document.createElement('div');
+            card.className = 'credit-history-card mb-3';
+            card.innerHTML = `
+                <div class="transaction-date">${transaction.date}</div>
+                <div class="transaction-description">
+                    ${transaction.description}
+                    ${isPaymentPending ? '<span class="badge bg-warning ms-2">Payment Pending</span>' : ''}
+                </div>
+                <div class="mb-2">
+                    <span class="badge ${categoryClass}">${transaction.category}</span>
+                </div>
+                <div class="transaction-amount">
+                    <div>
+                        <div class="amount-label">Credit</div>
+                        <div class="credit-amount">₹${transaction.credit.toLocaleString()}</div>
+                    </div>
+                    <div>
+                        <div class="amount-label">Debit</div>
+                        <div class="debit-amount">₹${transaction.debit.toLocaleString()}</div>
+                    </div>
+                </div>
+                <div class="balance">Balance: ₹${transaction.balance.toLocaleString()}</div>
+                <div class="reference">${transaction.reference}</div>
+            `;
+            mobileCards.appendChild(card);
         });
 
         // Update summary totals
-        const totalCredit = sortedHistory.reduce((sum, t) => sum + (t.amount > 0 ? t.amount : 0), 0);
-        const totalDebit = sortedHistory.reduce((sum, t) => sum + (t.amount < 0 ? Math.abs(t.amount) : 0), 0);
+        const totalCredit = sortedHistory.reduce((sum, t) => sum + t.credit, 0);
+        const totalDebit = sortedHistory.reduce((sum, t) => sum + t.debit, 0);
         
         const totalCreditElement = document.getElementById('totalCredit');
         const totalDebitElement = document.getElementById('totalDebit');
         const netBalanceElement = document.getElementById('netBalance');
 
-        if (totalCreditElement) totalCreditElement.textContent = ``;
-        if (totalDebitElement) totalDebitElement.textContent = ``;
+        if (totalCreditElement) totalCreditElement.textContent = `₹${totalCredit.toLocaleString()}`;
+        if (totalDebitElement) totalDebitElement.textContent = `₹${totalDebit.toLocaleString()}`;
         if (netBalanceElement) netBalanceElement.textContent = `₹${this.creditBalance.toLocaleString()}`;
     }
 
@@ -795,7 +965,6 @@ class InventoryManager {
         });
     
         this.populateTable(filteredData);
-        showButtons();
     }
 
     initialize() {
@@ -932,86 +1101,20 @@ function addSelectedSku() {
     });
 
     inventoryManager.populateTable();
-    const modal = bootstrap.Modal.getInstance(document.getElementById('addInventoryModal'));
-    modal.hide();
-}
-
-function filterAvailableSkus() {
-    const searchTerm = document.getElementById('skuSearch').value.toLowerCase();
-    const category = document.getElementById('skuFilterCategory').value;
-    const brand = document.getElementById('skuFilterBrand').value;
-
-    if (!masterSKUs || !Array.isArray(masterSKUs)) {
-        console.error('Master SKUs not properly initialized');
-        return;
-    }
-
-    const filteredSkus = masterSKUs.filter(sku => {
-        const matchesSearch = !searchTerm || 
-                             sku.skuName.toLowerCase().includes(searchTerm) ||
-                             sku.skuId.toLowerCase().includes(searchTerm);
-        const matchesCategory = !category || sku.category.toLowerCase() === category.toLowerCase();
-        const matchesBrand = !brand || sku.brand.toLowerCase() === brand.toLowerCase();
-
-        return matchesSearch && matchesCategory && matchesBrand;
-    });
-
-    const skuSelect = document.getElementById('availableSkus');
-    if (!skuSelect) {
-        console.error('SKU select element not found');
-        return;
-    }
-
-    skuSelect.innerHTML = '<option value="">Select a SKU</option>';
-
-    if (filteredSkus.length === 0) {
-        const option = document.createElement('option');
-        option.value = '';
-        option.textContent = 'No SKUs found';
-        option.disabled = true;
-        skuSelect.appendChild(option);
-    } else {
-        filteredSkus.forEach(sku => {
-            const option = document.createElement('option');
-            option.value = sku.skuId;
-            option.textContent = `${sku.skuName} (${sku.skuId})`;
-            skuSelect.appendChild(option);
-        });
-    }
-}
-
-function addSelectedSku() {
-    const selectedSkuId = document.getElementById('availableSkus').value;
-    if (!selectedSkuId) {
-        alert('Please select a SKU to add');
-        return;
-    }
-
-    const selectedSku = masterSKUs.find(sku => sku.skuId === selectedSkuId);
-    if (!selectedSku) {
-        alert('Selected SKU not found');
-        return;
-    }
-
-    const existingItemIndex = inventoryData.findIndex(i => i.skuId === selectedSkuId);
-    if (existingItemIndex !== -1) {
-        alert('This SKU is already in your inventory');
-        return;
-    }
-
-    inventoryData.push({
-        ...selectedSku,
-        totalPurchased: 0,
-        totalSold: 0,
-        currentStock: 0,
-        inventoryStatus: 'normal',
-        demand: 'normal',
-        lastPurchase: '-',
-        openPOs: 0
-    });
-
-    inventoryManager.populateTable();
-    const modal = bootstrap.Modal.getInstance(document.getElementById('addInventoryModal'));
-    modal.hide();
-}
+    const modalElement = document.getElementById('addInventoryModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+    modalInstance.hide();
     
+    // Clean up modal and backdrop
+    modalElement.addEventListener('hidden.bs.modal', function () {
+        modalInstance.dispose();
+        const modalBackdrop = document.querySelector('.modal-backdrop');
+        if (modalBackdrop) {
+            modalBackdrop.remove();
+        }
+        document.body.classList.remove('modal-open');
+        document.body.style.removeProperty('padding-right');
+    });
+    
+    alert('SKU added to inventory list, please place order');
+}
