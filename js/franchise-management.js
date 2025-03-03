@@ -8,6 +8,7 @@ let franchises = [
         contact: '+91 9876543210',
         email: 'john@franchisea.com',
         brands: ['Samsung', 'LG'],
+        languages: ['English', 'Hindi', 'Marathi'],
         address: '123 Main St, Mumbai',
         performanceScore: 85,
         status: 'active',
@@ -31,6 +32,7 @@ let franchises = [
         contact: '+91 9876543211',
         email: 'jane@franchiseb.com',
         brands: ['LG', 'Whirlpool'],
+        languages: ['English', 'Hindi', 'Punjabi'],
         address: '456 Park Ave, Delhi',
         performanceScore: 92,
         status: 'active',
@@ -54,6 +56,7 @@ let franchises = [
         contact: '+91 9876543212',
         email: 'mike@franchisec.com',
         brands: ['Samsung', 'LG'],
+        languages: ['English', 'Kannada', 'Telugu'],
         address: '789 Tech Park, Bangalore',
         performanceScore: 78,
         status: 'pending',
@@ -344,6 +347,7 @@ function submitFranchise() {
         id: franchises.length + 1,
         status: 'pending',
         brands: [],
+        languages: [],
         documents: {}
     };
 
@@ -427,6 +431,23 @@ function viewFranchise(id) {
                     <option value="Samsung" ${franchise.brands.includes('Samsung') ? 'selected' : ''}>Samsung</option>
                     <option value="LG" ${franchise.brands.includes('LG') ? 'selected' : ''}>LG</option>
                     <option value="Whirlpool" ${franchise.brands.includes('Whirlpool') ? 'selected' : ''}>Whirlpool</option>
+                </select>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label class="form-label">Languages</label>
+                <select class="form-select select2-multiple" name="languages[]" multiple readonly>
+                    <option value="English" ${franchise.languages?.includes('English') ? 'selected' : ''}>English</option>
+                    <option value="Hindi" ${franchise.languages?.includes('Hindi') ? 'selected' : ''}>Hindi</option>
+                    <option value="Marathi" ${franchise.languages?.includes('Marathi') ? 'selected' : ''}>Marathi</option>
+                    <option value="Punjabi" ${franchise.languages?.includes('Punjabi') ? 'selected' : ''}>Punjabi</option>
+                    <option value="Gujarati" ${franchise.languages?.includes('Gujarati') ? 'selected' : ''}>Gujarati</option>
+                    <option value="Bengali" ${franchise.languages?.includes('Bengali') ? 'selected' : ''}>Bengali</option>
+                    <option value="Kannada" ${franchise.languages?.includes('Kannada') ? 'selected' : ''}>Kannada</option>
+                    <option value="Telugu" ${franchise.languages?.includes('Telugu') ? 'selected' : ''}>Telugu</option>
+                    <option value="Tamil" ${franchise.languages?.includes('Tamil') ? 'selected' : ''}>Tamil</option>
+                    <option value="Malayalam" ${franchise.languages?.includes('Malayalam') ? 'selected' : ''}>Malayalam</option>
                 </select>
             </div>
         </div>

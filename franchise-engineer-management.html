@@ -230,7 +230,21 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <div class="col-12">
+                            <div class="col-md-6">
+                                <label class="form-label">Languages</label>
+                                <select class="form-select" name="languages" multiple required>
+                                    <option value="English">English</option>
+                                    <option value="Hindi">Hindi</option>
+                                    <option value="Marathi">Marathi</option>
+                                    <option value="Punjabi">Punjabi</option>
+                                    <option value="Tamil">Tamil</option>
+                                    <option value="Kannada">Kannada</option>
+                                    <option value="Telugu">Telugu</option>
+                                    <option value="Bengali">Bengali</option>
+                                    <option value="Gujarati">Gujarati</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
                                 <label class="form-label">Service Area Pincodes</label>
                                 <input type="text" class="form-control" name="pincodes" placeholder="Enter comma-separated pincodes" required>
                             </div>
@@ -289,10 +303,26 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Service Area Pincodes</label>
-                            <input type="text" class="form-control" id="editEngineerPincodes" 
-                                   placeholder="Enter comma-separated pincodes" required>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Languages</label>
+                                <select class="form-select" id="editEngineerLanguages" multiple required>
+                                    <option value="English">English</option>
+                                    <option value="Hindi">Hindi</option>
+                                    <option value="Marathi">Marathi</option>
+                                    <option value="Punjabi">Punjabi</option>
+                                    <option value="Tamil">Tamil</option>
+                                    <option value="Kannada">Kannada</option>
+                                    <option value="Telugu">Telugu</option>
+                                    <option value="Bengali">Bengali</option>
+                                    <option value="Gujarati">Gujarati</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Service Area Pincodes</label>
+                                <input type="text" class="form-control" id="editEngineerPincodes" 
+                                       placeholder="Enter comma-separated pincodes" required>
+                            </div>
                         </div>
                     </form>
                 </div>

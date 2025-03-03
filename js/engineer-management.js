@@ -9,6 +9,7 @@ const mockEngineersData = {
     // Available brands and categories
     brands: ['Samsung', 'LG', 'Whirlpool', 'Haier', 'Godrej', 'IFB'],
     categories: ['Refrigerator', 'Washing Machine', 'Air Conditioner', 'Microwave', 'Dishwasher'],
+    languages: ['Hindi', 'English', 'Marathi', 'Bengali', 'Gujarati', 'Urdu', 'Punjabi', 'Telugu', 'Kannada', 'Tamil', 'Kashmiri'],
 
     // Engineers data
     engineers: [
@@ -18,6 +19,7 @@ const mockEngineersData = {
             contact: '9876543210',
             brands: ['Samsung', 'LG', 'Whirlpool'],
             categories: ['Refrigerator', 'Washing Machine'],
+            languages: ['Hindi', 'English', 'Marathi'],
             servicePincodes: ['400001', '400002', '400003'],
             performanceScore: 4.5,
             status: 'active',
@@ -86,6 +88,7 @@ const mockEngineersData = {
             contact: '9876543211',
             brands: ['Samsung', 'LG'],
             categories: ['Air Conditioner'],
+            languages: ['Bengali', 'English'],
             servicePincodes: ['400004', '400005'],
             performanceScore: 4.8,
             status: 'active',
@@ -150,6 +153,7 @@ const mockEngineersData = {
             contact: '9876543212',
             brands: ['Whirlpool', 'IFB'],
             categories: ['Washing Machine', 'Dishwasher'],
+            languages: ['English'],
             servicePincodes: ['400006', '400007', '400008'],
             performanceScore: 4.2,
             status: 'inactive',
@@ -214,6 +218,7 @@ const mockEngineersData = {
             contact: '9876543213',
             brands: ['Samsung', 'Haier', 'Godrej'],
             categories: ['Refrigerator', 'Air Conditioner'],
+            languages: ['English'],
             servicePincodes: ['400009', '400010'],
             performanceScore: 4.6,
             status: 'active',
@@ -268,6 +273,7 @@ const mockEngineersData = {
             contact: '9876543214',
             brands: ['LG', 'Whirlpool'],
             categories: ['Microwave', 'Dishwasher'],
+            languages: ['English', 'Hindi'],
             servicePincodes: ['400011', '400012', '400013'],
             performanceScore: 3.9,
             status: 'active',
@@ -311,6 +317,7 @@ const mockEngineersData = {
             contact: '9876543215',
             brands: ['Samsung', 'Godrej'],
             categories: ['Refrigerator'],
+            languages: ['Marathi', 'Hindi'],
             servicePincodes: ['400014', '400015'],
             performanceScore: 4.7,
             status: 'active',
@@ -354,6 +361,7 @@ const mockEngineersData = {
             contact: '9876543216',
             brands: ['LG', 'IFB'],
             categories: ['Washing Machine', 'Air Conditioner'],
+            languages: ['Tamil'],
             servicePincodes: ['400016', '400017', '400018'],
             performanceScore: 4.4,
             status: 'active',
@@ -397,6 +405,7 @@ const mockEngineersData = {
             contact: '9876543217',
             brands: ['Haier', 'Whirlpool'],
             categories: ['Microwave', 'Refrigerator'],
+            languages: ['English', 'Tamil'],
             servicePincodes: ['400019', '400020'],
             performanceScore: 4.1,
             status: 'inactive',
@@ -440,6 +449,7 @@ const mockEngineersData = {
             contact: '9876543218',
             brands: ['Samsung', 'LG', 'IFB'],
             categories: ['Dishwasher', 'Washing Machine'],
+            languages: ['English'],
             servicePincodes: ['400021', '400022', '400023'],
             performanceScore: 4.9,
             status: 'active',
@@ -504,6 +514,7 @@ const mockEngineersData = {
             contact: '9876543219',
             brands: ['Godrej', 'Haier'],
             categories: ['Air Conditioner', 'Microwave'],
+            languages: ['Bengali'],
             servicePincodes: ['400024', '400025', '400026'],
             performanceScore: 4.3,
             status: 'active',
@@ -1037,6 +1048,14 @@ function editEngineer(engineerId) {
                                     <select class="form-select" name="categories" multiple required>
                                         ${window.engineerManagement.engineersData.categories.map(category => 
                                             `<option value="${category}" ${engineer.categories.includes(category) ? 'selected' : ''}>${category}</option>`
+                                        ).join('')}
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Languages</label>
+                                    <select class="form-select" name="languages" multiple required>
+                                        ${window.engineerManagement.engineersData.languages.map(language => 
+                                            `<option value="${language}" ${engineer.languages.includes(language) ? 'selected' : ''}>${language}</option>`
                                         ).join('')}
                                     </select>
                                 </div>
