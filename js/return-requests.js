@@ -33,35 +33,14 @@ class ReturnRequestsManager {
                 submittedDate: new Date().toISOString()
             }
         ];
-        this.initializeEventListeners();
         this.modal = null;
         this.currentRequest = null;
         this.initializeModal();
     }
 
-    initializeEventListeners() {
-        if (this.returnRequestForm) {
-            this.returnRequestForm.addEventListener('submit', (e) => this.handleReturnRequestSubmit(e));
-        }
-
-        // Delegate table action buttons
-        if (this.returnRequestsTable) {
-            this.returnRequestsTable.addEventListener('click', (e) => {
-                if (e.target.classList.contains('approve-btn')) {
-                    this.approveReturnRequest(e.target.dataset.id);
-                } else if (e.target.classList.contains('reject-btn')) {
-                    this.rejectReturnRequest(e.target.dataset.id);
-                } else if (e.target.classList.contains('download-certificate-btn')) {
-                    this.downloadReturnCertificate(e.target.dataset.id);
-                }
-            });
-        }
-    }
-
-    async loadReturnRequests() {
+    loadReturnRequests() {
         try {
             // Simulate API delay
-            await new Promise(resolve => setTimeout(resolve, 500));
             this.displayReturnRequests(this.mockReturnRequests);
         } catch (error) {
             console.error('Error loading return requests:', error);
@@ -95,19 +74,19 @@ class ReturnRequestsManager {
                 <td>${new Date(request.submittedDate).toLocaleDateString()}</td>
                 <td>${request.status}</td>
                 <td>
-                    <button class="btn btn-info btn-sm view-btn" id="view-${request.id}" data-id="${request.id}" title="View Details">
+                    <button class="btn btn-info btn-sm view-btn" id="view-${request.id}" data-id="${request.id}" onclick="returnRequestsManager.show(${request.id})" title="View Details">
                         <i class="bi bi-eye"></i>
                     </button>
                     <button class="btn btn-success btn-sm approve-btn" data-id="${request.id}"
-                            ${request.status !== 'Pending' ? 'disabled' : ''} title="Approve Return">
+                            ${request.status !== 'Pending' ? 'disabled' : ''} onclick="returnRequestsManager.approveReturnRequest(${request.id})" title="Approve Return">
                         <i class="bi bi-check-circle"></i>
                     </button>
                     <button class="btn btn-danger btn-sm reject-btn" data-id="${request.id}"
-                            ${request.status !== 'Pending' ? 'disabled' : ''} title="Reject Return">
+                            ${request.status !== 'Pending' ? 'disabled' : ''} onclick="returnRequestsManager.rejectReturnRequest(${request.id})" title="Reject Return">
                         <i class="bi bi-x-circle"></i>
                     </button>
                     ${request.status === 'Approved' ? `
-                    <button class="btn btn-primary btn-sm download-certificate-btn" data-id="${request.id}" title="Download Certificate">
+                    <button class="btn btn-primary btn-sm download-certificate-btn" data-id="${request.id}" onclick="returnRequestsManager.downloadReturnCertificate(${request.id})" title="Download Certificate">
                         <i class="bi bi-download"></i>
                     </button>` : ''}
                 </td>
@@ -116,7 +95,7 @@ class ReturnRequestsManager {
         });
     }
 
-    async approveReturnRequest(returnId) {
+    approveReturnRequest(returnId) {
         try {
             const approvalModal = new bootstrap.Modal(document.getElementById('approvalModal'));
             approvalModal.show();
@@ -126,7 +105,7 @@ class ReturnRequestsManager {
             const newConfirmBtn = confirmBtn.cloneNode(true);
             confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
 
-            newConfirmBtn.addEventListener('click', async () => {
+            newConfirmBtn.addEventListener('click', () => {
                 const reasonCode = document.getElementById('reasonCode').value;
                 const comments = document.getElementById('comments').value;
 
@@ -134,9 +113,6 @@ class ReturnRequestsManager {
                     alert('Please select a reason code');
                     return;
                 }
-
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 500));
 
                 // Update mock data
                 const request = this.mockReturnRequests.find(r => r.id === parseInt(returnId));
@@ -156,7 +132,7 @@ class ReturnRequestsManager {
         }
     }
 
-    async rejectReturnRequest(returnId) {
+    rejectReturnRequest(returnId) {
         try {
             const rejectionModal = new bootstrap.Modal(document.getElementById('rejectionModal'));
             rejectionModal.show();
@@ -166,16 +142,13 @@ class ReturnRequestsManager {
             const newConfirmBtn = confirmBtn.cloneNode(true);
             confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
 
-            newConfirmBtn.addEventListener('click', async () => {
+            newConfirmBtn.addEventListener('click', () => {
                 const rejectionReason = document.getElementById('rejectionReason').value;
 
                 if (!rejectionReason) {
                     alert('Please provide a rejection reason');
                     return;
                 }
-
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 500));
 
                 // Update mock data
                 const request = this.mockReturnRequests.find(r => r.id === parseInt(returnId));
@@ -194,11 +167,8 @@ class ReturnRequestsManager {
         }
     }
 
-    async downloadReturnCertificate(returnId) {
+    downloadReturnCertificate(returnId) {
         try {
-            // Simulate API call to generate certificate
-            await new Promise(resolve => setTimeout(resolve, 500));
-
             const request = this.mockReturnRequests.find(r => r.id === parseInt(returnId));
             if (!request) {
                 throw new Error('Return request not found');
@@ -276,7 +246,9 @@ class ReturnRequestsManager {
 
         // Initialize event listeners
         document.getElementById('modalActions').addEventListener('click', (e) => {
-            if (e.target.id === 'approveBtn') {
+            if (e.target.id === 'viewBtn') {
+                this.handleView();
+            } else if (e.target.id === 'approveBtn') {
                 this.handleApprove();
             } else if (e.target.id === 'rejectBtn') {
                 this.handleReject();
@@ -289,7 +261,6 @@ class ReturnRequestsManager {
     show(reqId) {
         var returnRequest = this.mockReturnRequests.find(req => req.id == reqId);
         this.currentRequest = returnRequest;
-        
         // Update modal content
         document.getElementById('returnId').textContent = returnRequest.id;
         document.getElementById('customerName').textContent = returnRequest.customerName;
@@ -390,13 +361,5 @@ class ReturnRequestsManager {
 document.addEventListener('DOMContentLoaded', () => {
     const returnRequestsManager = new ReturnRequestsManager();
     returnRequestsManager.loadReturnRequests();
-    
-    // Use event delegation for view buttons
-    if (returnRequestsManager.returnRequestsTable) {
-        returnRequestsManager.returnRequestsTable.addEventListener('click', (e) => {
-            if (e.target.classList.contains('view-btn')) {
-                returnRequestsManager.show(e.target.dataset.id);
-            }
-        });
-    }
+    window.returnRequestsManager = returnRequestsManager;
 });
