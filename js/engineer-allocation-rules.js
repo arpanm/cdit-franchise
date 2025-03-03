@@ -5,6 +5,7 @@ let allocationRules = [
         name: 'High Priority AC Service',
         categories: ['AC', 'Air Purifier'],
         brands: ['Samsung', 'LG'],
+        languages: ['English', 'Hindi'],
         pincodeStart: 400001,
         pincodeEnd: 400099,
         sortingCriteria: 'performance',
@@ -20,6 +21,7 @@ let allocationRules = [
         name: 'Regular Appliance Service',
         categories: ['Refrigerator', 'Washing Machine'],
         brands: ['Whirlpool', 'Samsung'],
+        languages: ['Hindi', 'Marathi'],
         pincodeStart: 400100,
         pincodeEnd: 400199,
         sortingCriteria: 'availability',
@@ -35,6 +37,7 @@ let allocationRules = [
         name: 'East India AC Service',
         categories: ['AC', 'Air Purifier'],
         brands: ['Samsung', 'LG'],
+        languages: ['Bengali', 'English'],
         pincodeStart: 400001,
         pincodeEnd: 400099,
         sortingCriteria: 'performance',
@@ -50,6 +53,7 @@ let allocationRules = [
         name: 'TV Service',
         categories: ['Refrigerator', 'Washing Machine'],
         brands: ['Whirlpool', 'Samsung'],
+        languages: ['Hindi', 'Gujarati'],
         pincodeStart: 400100,
         pincodeEnd: 400199,
         sortingCriteria: 'availability',
@@ -70,6 +74,7 @@ function saveRule() {
         name: form.querySelector('[name="ruleName"]').value,
         categories: Array.from(form.querySelector('[name="categories"]').selectedOptions).map(opt => opt.value),
         brands: Array.from(form.querySelector('[name="brands"]').selectedOptions).map(opt => opt.value),
+        languages: Array.from(form.querySelector('[name="languages"]').selectedOptions).map(opt => opt.value),
         sortingCriteria: form.querySelector('[name="sortingMethod"]').value,
         status: form.querySelector('[name="status"]').value,
         pincodes: form.querySelector('[name="pincodes"]').value.split(',').map(p => p.trim()),
@@ -85,17 +90,18 @@ function saveRule() {
     form.reset();
 }
 
-// Mock data for categories and brands
+// Mock data for categories, brands and languages
 const categories = ['AC', 'Refrigerator', 'Washing Machine', 'Air Purifier', 'Water Purifier'];
 const brands = ['Samsung', 'LG', 'Whirlpool', 'Voltas', 'Blue Star'];
+const languages = ['English', 'Hindi', 'Bengali', 'Gujarati', 'Marathi', 'Tamil', 'Telugu', 'Kannada', 'Malayalam'];
 
 // Mock data for engineers
 const engineers = [
-    { id: 1, name: 'John Doe', category: 'ac', brand: 'LG,Samsung', rating: 4.5 },
-    { id: 2, name: 'Jane Smith', category: 'refrigerator', brand: 'Samsung', rating: 4.8 },
-    { id: 3, name: 'Mike Johnson', category: 'washing_machine', brand: 'BPL,LG', rating: 4.2 },
-    { id: 4, name: 'Sarah Wilson', category: 'ac', brand: 'Hitachi', rating: 4.7 },
-    { id: 5, name: 'Tom Brown', category: 'refrigerator', brand: 'LG,Whirepool,Samsung', rating: 4.4 }
+    { id: 1, name: 'John Doe', category: 'ac', brand: 'LG,Samsung', languages: ['English', 'Hindi'], rating: 4.5 },
+    { id: 2, name: 'Jane Smith', category: 'refrigerator', brand: 'Samsung', languages: ['Hindi', 'Marathi'], rating: 4.8 },
+    { id: 3, name: 'Mike Johnson', category: 'washing_machine', brand: 'BPL,LG', languages: ['English', 'Bengali'], rating: 4.2 },
+    { id: 4, name: 'Sarah Wilson', category: 'ac', brand: 'Hitachi', languages: ['Hindi', 'Gujarati'], rating: 4.7 },
+    { id: 5, name: 'Tom Brown', category: 'refrigerator', brand: 'LG,Whirepool,Samsung', languages: ['English', 'Tamil'], rating: 4.4 }
 ];
 
 // Selected engineers for the current rule
@@ -106,11 +112,13 @@ function initializeEngineerSelection() {
     const engineerSearch = document.getElementById('engineerSearch');
     const categoryFilter = document.getElementById('engineerCategoryFilter');
     const brandFilter = document.getElementById('engineerBrandFilter');
+    const languageFilter = document.getElementById('engineerLanguageFilter');
 
     // Add event listeners for filters
     engineerSearch.addEventListener('input', filterEngineers);
     categoryFilter.addEventListener('change', filterEngineers);
     brandFilter.addEventListener('change', filterEngineers);
+    languageFilter.addEventListener('change', filterEngineers);
 
     // Initial render of engineers list
     renderEngineersList();
@@ -121,12 +129,14 @@ function filterEngineers() {
     const searchQuery = document.getElementById('engineerSearch').value.toLowerCase();
     const categoryFilter = document.getElementById('engineerCategoryFilter').value;
     const brandFilter = document.getElementById('engineerBrandFilter').value;
+    const languageFilter = document.getElementById('engineerLanguageFilter').value;
 
     const filteredEngineers = engineers.filter(engineer => {
         const matchesSearch = engineer.name.toLowerCase().includes(searchQuery);
         const matchesCategory = !categoryFilter || engineer.category === categoryFilter;
-        const matchesBrand = !brandFilter || engineer.brand.toLocaleLowerCase().includes(brandFilter);
-        return matchesSearch && matchesCategory && matchesBrand;
+        const matchesBrand = !brandFilter || engineer.brand.toLowerCase().includes(brandFilter);
+        const matchesLanguage = !languageFilter || engineer.languages.includes(languageFilter);
+        return matchesSearch && matchesCategory && matchesBrand && matchesLanguage;
     });
 
     renderEngineersList(filteredEngineers);
@@ -280,15 +290,19 @@ function renderFilteredRules(rules) {
 function populateDropdowns() {
     const categorySelect = document.querySelector('select[name="categories"]');
     const brandSelect = document.querySelector('select[name="brands"]');
+    const languageSelect = document.querySelector('select[name="languages"]');
+    const languageFilter = document.getElementById('engineerLanguageFilter');
 
-    if (!categorySelect || !brandSelect) {
-        console.error('Could not find category or brand select elements');
+    if (!categorySelect || !brandSelect || !languageSelect) {
+        console.error('Could not find select elements');
         return;
     }
 
     // Clear existing options
     categorySelect.innerHTML = '';
     brandSelect.innerHTML = '';
+    languageSelect.innerHTML = '';
+    if (languageFilter) languageFilter.innerHTML = '<option value="">All Languages</option>';
 
     // Populate categories
     categories.forEach(category => {
@@ -305,6 +319,15 @@ function populateDropdowns() {
         option.textContent = brand;
         brandSelect.appendChild(option);
     });
+
+    // Populate languages
+    languages.forEach(language => {
+        const option = document.createElement('option');
+        option.value = language;
+        option.textContent = language;
+        languageSelect.appendChild(option.cloneNode(true));
+        if (languageFilter) languageFilter.appendChild(option);
+    });
 }
 
 // Render rules table
@@ -319,6 +342,7 @@ function renderRulesTable() {
             <td>
                 <div><strong>Categories:</strong> ${rule.categories.join(', ')}</div>
                 <div><strong>Brands:</strong> ${rule.brands.join(', ')}</div>
+                <div><strong>Languages:</strong> ${rule.languages ? rule.languages.join(', ') : 'Any'}</div>
                 <div><strong>Pincodes:</strong> ${rule.pincodeStart}-${rule.pincodeEnd}</div>
             </td>
             <td>${formatSortingCriteria(rule.sortingCriteria)}</td>
@@ -411,6 +435,12 @@ function editRule(ruleId) {
     const brandSelect = form.querySelector('[name="brands"]');
     Array.from(brandSelect.options).forEach(option => {
         option.selected = rule.brands.includes(option.value);
+    });
+
+    // Set selected languages
+    const languageSelect = form.querySelector('[name="languages"]');
+    Array.from(languageSelect.options).forEach(option => {
+        option.selected = rule.languages && rule.languages.includes(option.value);
     });
 
     // Set pincodes

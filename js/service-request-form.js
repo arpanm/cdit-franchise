@@ -2,6 +2,8 @@
 const mockCustomerDB = {
     '9902733440': {
         name: 'John Doe',
+        language: 'English',
+        alternatePhone: '+917890123456',
         addresses: [
             '123 Main St, City - 400001',
             '456 Park Ave, City - 400002'
@@ -22,6 +24,8 @@ async function searchCustomer() {
         // Populate customer information
         document.getElementById('customerName').value = customer.name;
         document.getElementById('customerPhone').value = phoneNumber;
+        document.getElementById('customerLanguage').value = customer.language || '';
+        document.getElementById('customerAlternatePhone').value = customer.alternatePhone || '';
 
         // Show and populate address dropdown
         const addressSelect = document.getElementById('addressSelect');
@@ -42,6 +46,8 @@ async function searchCustomer() {
         // Reset form for new customer
         document.getElementById('customerName').value = '';
         document.getElementById('customerPhone').value = phoneNumber;
+        document.getElementById('customerLanguage').value = '';
+        document.getElementById('customerAlternatePhone').value = '';
         document.getElementById('existingAddresses').style.display = 'none';
         document.getElementById('customerAddress').value = '';
         document.getElementById('existingProducts').style.display = 'none';

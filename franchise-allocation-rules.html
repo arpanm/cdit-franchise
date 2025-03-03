@@ -199,102 +199,94 @@
                 <div class="modal-body">
                     <form id="addRuleForm">
                         <div class="mb-3">
-                            <label class="form-label">Rule Name</label>
+                            <label for="ruleName" class="form-label">Rule Name</label>
                             <input type="text" class="form-control" name="ruleName" required>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Selection Criteria</label>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <select class="form-select" name="brands" multiple required>
-                                        <option value="Samsung">Samsung</option>
-                                        <option value="LG">LG</option>
-                                        <option value="Whirlpool">Whirlpool</option>
-                                        <option value="Haier">Haier</option>
-                                        <option value="Godrej">Godrej</option>
-                                        <option value="IFB">IFB</option>
-                                    </select>
-                                    <small class="text-muted">Select Brands</small>
-                                </div>
-                                <div class="col-md-6">
-                                    <select class="form-select" name="categories" multiple required>
-                                        <option value="Refrigerator">Refrigerator</option>
-                                        <option value="Washing Machine">Washing Machine</option>
-                                        <option value="Air Conditioner">Air Conditioner</option>
-                                        <option value="Microwave">Microwave</option>
-                                        <option value="Dishwasher">Dishwasher</option>
-                                    </select>
-                                    <small class="text-muted">Select Categories</small>
-                                </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="categories" class="form-label">Categories</label>
+                                <select class="form-select" name="categories" multiple required>
+                                    <!-- Will be populated dynamically -->
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="brands" class="form-label">Brands</label>
+                                <select class="form-select" name="brands" multiple required>
+                                    <!-- Will be populated dynamically -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="languages" class="form-label">Languages</label>
+                                <select class="form-select" name="languages" multiple required>
+                                    <!-- Will be populated dynamically -->
+                                </select>
+                                <small class="text-muted">Hold Ctrl/Cmd to select multiple languages</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="pincodes" class="form-label">Pincodes (comma separated)</label>
+                                <input type="text" class="form-control" name="pincodes" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="sortingMethod" class="form-label">Sorting Method</label>
+                                <select class="form-select" name="sortingMethod" required>
+                                    <option value="performance">Performance Score</option>
+                                    <option value="availability">Availability</option>
+                                    <option value="proximity">Location Proximity</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-select" name="status" required>
+                                    <option value="active">Active</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Service Area Pincodes</label>
-                            <input type="text" class="form-control" name="pincodes" placeholder="Enter comma-separated pincodes" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Sorting Method</label>
-                            <select class="form-select" name="sortingMethod" required>
-                                <option value="performance">Performance Score</option>
-                                <option value="distance">Distance from Customer</option>
-                                <option value="workload">Current Workload</option>
-                                <option value="rating">Customer Rating</option>
-                            </select>
+                            <label for="priority" class="form-label">Priority</label>
+                            <input type="number" class="form-control" name="priority" min="1" max="10" value="1" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Engineer Selection</label>
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row mb-3">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <input type="text" class="form-control" id="engineerSearch" placeholder="Search engineers...">
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <select class="form-select" id="engineerCategoryFilter">
                                                 <option value="">All Categories</option>
-                                                <option value="ac">AC</option>
-                                                <option value="refrigerator">Refrigerator</option>
-                                                <option value="washing_machine">Washing Machine</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <select class="form-select" id="engineerBrandFilter">
                                                 <option value="">All Brands</option>
-                                                <option value="samsung">Samsung</option>
-                                                <option value="lg">LG</option>
-                                                <option value="bpl">BPL</option>
-                                                <option value="hitachi">Hitachi</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="form-select" id="engineerLanguageFilter">
+                                                <option value="">All Languages</option>
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="selected-engineers mb-3" id="selectedEngineers">
-                                        <!-- Selected engineers will appear here as tags -->
-                                    </div>
-                                    <div class="engineer-list scroll-container" style="max-height: 200px; overflow-y: auto;">
-                                        <div class="list-group" id="engineerList">
-                                            <!-- Engineers will be populated here dynamically -->
-                                        </div>
+                                    <div id="engineerList" class="list-group"></div>
+                                    <div class="mt-3">
+                                        <label class="form-label">Selected Engineers:</label>
+                                        <div id="selectedEngineers"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Priority</label>
-                            <input type="number" class="form-control" name="priority" min="1" max="10" required>
-                            <small class="text-muted">1 (Highest) to 10 (Lowest)</small>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Status</label>
-                            <select class="form-select" name="status" required>
-                                <option value="active">Active</option>
-                                <option value="pending">Pending</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
-                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" onclick="saveRule()">Save Rule</button>
                 </div>
             </div>

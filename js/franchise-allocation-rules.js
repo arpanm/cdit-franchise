@@ -17,6 +17,13 @@ let allocationRules = [
                 criteria: {
                     brands: ['samsung', 'lg']
                 }
+            },
+            {
+                operator: 'AND',
+                type: 'language',
+                criteria: {
+                    languages: ['English', 'Hindi']
+                }
             }
         ],
         sortingRule: 'nps',
@@ -42,6 +49,13 @@ let allocationRules = [
                 criteria: {
                     minScore: 4.5,
                     distribution: 'highest'
+                }
+            },
+            {
+                operator: 'AND',
+                type: 'language',
+                criteria: {
+                    languages: ['English', 'Marathi']
                 }
             }
         ],
@@ -69,6 +83,13 @@ let allocationRules = [
                     minScore: 4.0,
                     distribution: 'highest'
                 }
+            },
+            {
+                operator: 'AND',
+                type: 'language',
+                criteria: {
+                    languages: ['English', 'Tamil', 'Kannada']
+                }
             }
         ],
         sortingRule: 'nps',
@@ -76,6 +97,24 @@ let allocationRules = [
         priority: 3,
         lastUpdated: '2024-01-30',
         status: 'pending'
+    },
+    {
+        id: 4,
+        name: 'Language Specific Service',
+        assignedFranchises: ['franchise1', 'franchise3'],
+        subRules: [
+            {
+                type: 'language',
+                criteria: {
+                    languages: ['Hindi', 'Punjabi']
+                }
+            }
+        ],
+        sortingRule: 'nps',
+        selectedFranchise: ['franchise1', 'franchise3'],
+        priority: 4,
+        lastUpdated: '2024-02-01',
+        status: 'active'
     }
 ];
 
@@ -132,6 +171,7 @@ function setupSelectionRuleHandlers() {
                     <option value="pincode">Pincode</option>
                     <option value="brand">Brand</option>
                     <option value="nps">NPS</option>
+                    <option value="language">Language</option>
                     <option value="manual">Manual</option>
                 </select>
             </div>
@@ -170,6 +210,21 @@ function setupSelectionRuleHandlers() {
                                 <option value="samsung">Samsung</option>
                                 <option value="lg">LG</option>
                                 <option value="whirlpool">Whirlpool</option>
+                            </select>
+                        </div>
+                    `;
+                    break;
+                case 'language':
+                    criteriaDiv.innerHTML = `
+                        <div class="mb-3">
+                            <label class="form-label">Languages</label>
+                            <select class="form-select" multiple required>
+                                <option value="English">English</option>
+                                <option value="Hindi">Hindi</option>
+                                <option value="Marathi">Marathi</option>
+                                <option value="Punjabi">Punjabi</option>
+                                <option value="Tamil">Tamil</option>
+                                <option value="Kannada">Kannada</option>
                             </select>
                         </div>
                     `;
@@ -277,6 +332,11 @@ function formatCriteria(rules) {
                     displayStr.push(`Brands: ${rule.criteria.brands.join(', ')}`);
                 }
                 break;
+            case 'language':
+                if (rule.criteria.languages) {
+                    displayStr.push(`Languages: ${rule.criteria.languages.join(', ')}`);
+                }
+                break;
             case 'nps':
                 if (rule.criteria.minScore !== undefined) {
                     displayStr.push(`Min NPS: ${rule.criteria.minScore}${rule.criteria.distribution ? ', ' + rule.criteria.distribution : ''}`);
@@ -330,6 +390,10 @@ function handleAddRule(event) {
             case 'brand':
                 const brands = Array.from(criteriaDiv.querySelector('select').selectedOptions).map(opt => opt.value);
                 criteria = { brands };
+                break;
+            case 'language':
+                const languages = Array.from(criteriaDiv.querySelector('select').selectedOptions).map(opt => opt.value);
+                criteria = { languages };
                 break;
             case 'nps':
                 const minScore = parseFloat(criteriaDiv.querySelector('input').value);
@@ -386,9 +450,8 @@ function handleAddRule(event) {
 
 // Handle edit rule form submission
 function handleEditRule(event) {
-    event.preventDefault();
-    // Implementation for editing existing rule
-    // This will be implemented based on the form data structure
+    const editModal = bootstrap.Modal.getInstance(document.getElementById('editRuleModal'));
+    editModal.hide();
 }
 
 // Edit rule
@@ -432,6 +495,7 @@ function editRule(ruleId) {
                     <option value="">Select Type</option>
                     <option value="pincode" ${subRule.type === 'pincode' ? 'selected' : ''}>Pincode</option>
                     <option value="brand" ${subRule.type === 'brand' ? 'selected' : ''}>Brand</option>
+                    <option value="language" ${subRule.type === 'language' ? 'selected' : ''}>Language</option>
                     <option value="nps" ${subRule.type === 'nps' ? 'selected' : ''}>NPS</option>
                     <option value="manual" ${subRule.type === 'manual' ? 'selected' : ''}>Manual</option>
                 </select>
@@ -497,6 +561,21 @@ function updateRuleCriteria(type, criteriaDiv, existingCriteria = {}) {
                 </div>
             `;
             break;
+            case 'language':
+                criteriaDiv.innerHTML = `
+                    <div class="mb-3">
+                        <label class="form-label">Languages</label>
+                        <select class="form-select" multiple required>
+                            <option value="English" ${existingCriteria.language && existingCriteria.language.includes('English') ? 'selected' : ''}>English</option>
+                            <option value="Hindi" ${existingCriteria.language && existingCriteria.language.includes('Hindi') ? 'selected' : ''}>Hindi</option>
+                            <option value="Marathi" ${existingCriteria.language && existingCriteria.language.includes('Marathi') ? 'selected' : ''}>Marathi</option>
+                            <option value="Punjabi" ${existingCriteria.language && existingCriteria.language.includes('Punjabi') ? 'selected' : ''}>Punjabi</option>
+                            <option value="Tamil" ${existingCriteria.language && existingCriteria.language.includes('Tamil') ? 'selected' : ''}>Tamil</option>
+                            <option value="Kannada" ${existingCriteria.language && existingCriteria.language.includes('Kanada') ? 'selected' : ''}>Kannada</option>
+                        </select>
+                    </div>
+                `;
+                break;
         case 'nps':
             criteriaDiv.innerHTML = `
                 <div class="mb-3">

@@ -8,6 +8,7 @@ let customers = [
         email: 'john@example.com',
         phone: '+912345678900',
         alternatePhone: '+917890123456',
+        language: 'English',
         address: '123 Main St',
         city: 'Howrah',
         state: 'WB',
@@ -21,6 +22,7 @@ let customers = [
         name: 'Jane Smith',
         email: 'jane.smith@example.com',
         phone: '+919087654321',
+        language: 'Hindi',
         address: '456 Oak Avenue',
         city: 'Pune',
         state: 'MA',
@@ -35,6 +37,7 @@ let customers = [
         email: 'robert.j@example.com',
         phone: '+911223034455',
         alternatePhone: '+918765432109',
+        language: 'Bengali',
         address: '789 Pine Road',
         city: 'Hyderabad',
         state: 'TL',
@@ -219,6 +222,7 @@ function editCustomer(customerId) {
     document.getElementById('customerState').value = customer.state;
     document.getElementById('customerPincode').value = customer.pincode;
     document.getElementById('customerStatus').value = customer.status;
+    document.getElementById('customerLanguage').value = customer.language || 'English';
 
     // Display Added By information (read-only)
     document.getElementById('customerAddedBy').value = customer.addedBy;
@@ -240,6 +244,7 @@ function saveCustomer() {
         email: document.getElementById('customerEmail').value,
         phone: document.getElementById('customerPhone').value,
         alternatePhone: document.getElementById('customerAlternatePhone').value,
+        language: document.getElementById('customerLanguage').value,
         type: document.getElementById('customerType').value,
         address: document.getElementById('customerAddress').value,
         city: document.getElementById('customerCity').value,
