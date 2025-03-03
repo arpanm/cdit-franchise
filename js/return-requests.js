@@ -33,6 +33,12 @@ class ReturnRequestsManager {
                 submittedDate: new Date().toISOString()
             }
         ];
+        this.requestDocuments = {
+            documents: [
+                { type: 'Front Picture', date: '2025-01-15', fileNo: 'INV001' },
+                { type: 'Side Picture', date: '2025-01-16', fileNo: 'SRPT001' }
+            ]
+        };
         this.modal = null;
         this.currentRequest = null;
         this.initializeModal();
@@ -231,6 +237,19 @@ class ReturnRequestsManager {
                                 <label class="fw-bold">Status:</label>
                                 <p id="status"></p>
                             </div>
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h6 class="text-muted mb-3">Documents & Attachments</h6>
+                                    <div id="attachments" class="list-group list-group-flush border-bottom mb-3"></div>
+                                    <div class="card p-3">
+                                        <h6 class="card-subtitle mb-3">Add More Photos & Documents</h6>
+                                        <div class="mb-3">
+                                            <input type="file" class="form-control" id="supportingDocuments" multiple>
+                                        </div>
+                                        <button type="button" class="btn btn-primary" onclick="uploadDocuments()">Upload Documents</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer" id="modalActions">
                             <!-- Buttons will be added dynamically based on status -->
@@ -243,6 +262,7 @@ class ReturnRequestsManager {
         // Add modal to document
         document.body.insertAdjacentHTML('beforeend', modalHtml);
         this.modal = new bootstrap.Modal(document.getElementById('returnRequestDetailsModal'));
+        this.loadDocuments();
 
         // Initialize event listeners
         document.getElementById('modalActions').addEventListener('click', (e) => {
@@ -256,6 +276,21 @@ class ReturnRequestsManager {
                 this.handleDownloadCertificate();
             }
         });
+    }
+
+    loadDocuments() {
+        const documentsContainer = document.getElementById('attachments');
+        if (documentsContainer && this.requestDocuments && this.requestDocuments.documents) {
+            documentsContainer.innerHTML = this.requestDocuments.documents.map(doc => `
+                <div class="document-item d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <h6 class="mb-0">${doc.type}</h6>
+                        <small class="text-muted">Date: ${doc.date}</small>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary" onclick="downloadDocument('${doc.fileNo}')">Download</button>
+                </div>
+            `).join('');
+        }
     }
 
     show(reqId) {
@@ -363,3 +398,38 @@ document.addEventListener('DOMContentLoaded', () => {
     returnRequestsManager.loadReturnRequests();
     window.returnRequestsManager = returnRequestsManager;
 });
+
+function uploadDocuments() {
+    const fileInput = document.getElementById('supportingDocuments');
+    const files = fileInput.files;
+
+    if (files.length === 0) {
+        alert('Please select files to upload');
+        return;
+    }
+
+    // In a real implementation, you would upload these files to a server
+    // For now, we'll just display them in the attachments section
+    const attachmentsContainer = document.getElementById('attachments');
+    
+    for (const file of files) {
+        const currentDate = new Date().toLocaleDateString();
+        const fileType = file.type.split('/')[1].toUpperCase();
+        
+        const documentItem = `
+            <div class="document-item d-flex justify-content-between align-items-center mb-2">
+                <div>
+                    <h6 class="mb-0">${file.name}</h6>
+                    <small class="text-muted">Type: ${fileType} | Date: ${currentDate}</small>
+                </div>
+                <button class="btn btn-sm btn-outline-primary" onclick="downloadDocument('${file.name}')">Download</button>
+            </div>
+        `;
+        
+        attachmentsContainer.insertAdjacentHTML('beforeend', documentItem);
+    }
+
+    // Clear the file input
+    fileInput.value = '';
+    alert('Documents uploaded successfully!');
+}
