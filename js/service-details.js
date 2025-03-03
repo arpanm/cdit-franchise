@@ -30,7 +30,11 @@ const serviceRequestDetails = {
         createdDate: '2025-01-15',
         slaDeadline: '2025-01-17',
         engineer: 'Mike Tech',
-        issueDescription: 'AC not cooling properly, making unusual noise during operation.'
+        issueDescription: 'AC not cooling properly, making unusual noise during operation.',
+        documents: [
+            { type: 'Invoice', date: '2025-01-15', fileNo: 'INV001' },
+            { type: 'Service Report', date: '2025-01-16', fileNo: 'SRPT001' }
+        ]
     },
     productInfo: {
         brand: 'Samsung',
@@ -106,6 +110,19 @@ function populateServiceRequestDetails() {
     document.getElementById('slaDeadline').textContent = request.slaDeadline;
     document.getElementById('currentEngineer').textContent = request.engineer || '-';
     document.getElementById('issueDescription').textContent = request.issueDescription;
+
+    const documentsContainer = document.getElementById('serviceAttachments');
+    if (documentsContainer && request.documents) {
+        documentsContainer.innerHTML = request.documents.map(doc => `
+            <div class="document-item d-flex justify-content-between align-items-center mb-2">
+                <div>
+                    <h6 class="mb-0">${doc.type}</h6>
+                    <small class="text-muted">Date: ${doc.date}</small>
+                </div>
+                <button class="btn btn-sm btn-outline-primary" onclick="downloadDocument('${doc.fileNo}')">Download</button>
+            </div>
+        `).join('');
+    }
 }
 
 // Function to populate product information
@@ -583,6 +600,41 @@ function printAndSendInvoice() {
 
     // Show confirmation message
     alert(`Invoice generated and sent for ${paidItems.length} items`);
+}
+
+function uploadServiceDocuments() {
+    const fileInput = document.getElementById('serviceDocuments');
+    const files = fileInput.files;
+
+    if (files.length === 0) {
+        alert('Please select files to upload');
+        return;
+    }
+
+    // In a real implementation, you would upload these files to a server
+    // For now, we'll just display them in the attachments section
+    const attachmentsContainer = document.getElementById('serviceAttachments');
+    
+    for (const file of files) {
+        const currentDate = new Date().toLocaleDateString();
+        const fileType = file.type.split('/')[1].toUpperCase();
+        
+        const documentItem = `
+            <div class="document-item d-flex justify-content-between align-items-center mb-2">
+                <div>
+                    <h6 class="mb-0">${file.name}</h6>
+                    <small class="text-muted">Type: ${fileType} | Date: ${currentDate}</small>
+                </div>
+                <button class="btn btn-sm btn-outline-primary" onclick="downloadDocument('${file.name}')">Download</button>
+            </div>
+        `;
+        
+        attachmentsContainer.insertAdjacentHTML('beforeend', documentItem);
+    }
+
+    // Clear the file input
+    fileInput.value = '';
+    alert('Documents uploaded successfully!');
 }
 
 function updateTrackingFlow(currentStatus) {

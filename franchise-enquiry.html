@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Franchise - Enquiry Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/common-dashboard.css">
+    <link rel="stylesheet" href="css/inline-styles.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="index.html">
+                    <img src="images/titleicon.ico" alt="FraMaSaaS AI" class="me-2 logo-icon">
+                    <span class="h3 mb-0 me-2">FraMaSaaS AI</span>
+                </a>
+                <div class="navbar-text text-light d-none d-md-block">
+                    <small class="text-light">AI based Business Growth SaaS Platform</small>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="d-flex">
+        <!-- Left Sidebar -->
+        <div class="sidebar bg-dark text-white p-3 admin-sidebar">
+            <h5 class="mb-4 py-2 border-bottom">Franchise Admin</h5>
+            <button class="toggle-btn" onclick="toggleSidebar()">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2">
+                    <a href="franchise-customers.html" class="nav-link text-white active">
+                        <i class="bi bi-people me-2"></i> Customer Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="franchise-service.html" class="nav-link text-white">
+                        <i class="bi bi-tools me-2"></i> Service
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="franchise-enquiry.html" class="nav-link text-white active">
+                        <i class="bi bi-question-circle me-2"></i> Enquiry
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="franchise-finance.html" class="nav-link text-white">
+                        <i class="bi bi-currency-rupee me-2"></i> Finance
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="franchise-inventory.html" class="nav-link text-white">
+                        <i class="bi bi-box-seam me-2"></i> Inventory
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="franchise-engineer-management.html" class="nav-link text-white">
+                        <i class="bi bi-people me-2"></i> Engineers
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="franchise-allocation-rules.html" class="nav-link text-white">
+                        <i class="bi bi-diagram-2 me-2"></i> Engineer Allocation Rule
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="franchise-customer-return.html" class="nav-link text-white active">
+                        <i class="bi bi-arrow-return-left me-2"></i> Customer Returns
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="franchise-quotation.html" class="nav-link text-white active">
+                        <i class="bi bi-credit-card me-2"></i> Quotation Management
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="franchise-settings.html" class="nav-link text-white active">
+                        <i class="bi bi-gear me-2"></i> Settings
+                    </a>
+                </li>
+                <li class="nav-item mt-auto">
+                    <a href="#" class="nav-link text-white" onclick="logout()">
+                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <main class="flex-grow-1 p-4">
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h2 class="fw-bold text-dark">Enquiry Dashboard</h2>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="franchise-finance.html" class="text-decoration-none">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Enquiry</li>
+                            </ol>
+                        </nav>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newEnquiryModal">
+                            <i class="bi bi-plus-circle"></i> New Enquiry
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Enquiry Management</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Filter Section -->
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <label class="form-label">Customer Name/Phone</label>
+                                <input type="text" class="form-control" id="filterCustomer" placeholder="Search customer...">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Status</label>
+                                <select class="form-select" id="filterStatus">
+                                    <option value="">All Status</option>
+                                    <option value="open">Open</option>
+                                    <option value="in-progress">In Progress</option>
+                                    <option value="resolved">Resolved</option>
+                                    <option value="closed">Closed</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button type="button" class="btn btn-primary me-2" id="applyFilters">
+                                    <i class="bi bi-funnel"></i> Apply Filters
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary" id="resetFilters">
+                                    <i class="bi bi-arrow-counterclockwise"></i> Reset
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Table Section -->
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="enquiryTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Customer</th>
+                                        <th>Type</th>
+                                        <th>Product</th>
+                                        <th>Status</th>
+                                        <th>Created Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="enquiryList">
+                                    <!-- Enquiries will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- New Enquiry Modal -->
+    <div class="modal fade" id="newEnquiryModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Enquiry</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="enquiryForm">
+                        <!-- Customer Search Section -->
+                        <div class="mb-3">
+                            <label class="form-label">Customer Phone Number</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="customerPhone" required>
+                                <button type="button" class="btn btn-outline-secondary" id="searchCustomer">Search</button>
+                            </div>
+                        </div>
+
+                        <!-- Customer Details Section -->
+                        <div id="customerDetails" class="mb-3 d-none">
+                            <h6>Customer Information</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="customerName" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="customerEmail">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Enquiry Details -->
+                        <div class="mb-3">
+                            <label class="form-label">Enquiry Type</label>
+                            <select class="form-select" id="enquiryType" required>
+                                <option value="">Select Type</option>
+                                <option value="product">Product Related</option>
+                                <option value="service">Service Related</option>
+                                <option value="warranty">Warranty Related</option>
+                                <option value="general">General Enquiry</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Product Details</label>
+                            <select class="form-select" id="productCategory">
+                                <option value="">Select Product Category</option>
+                                <!-- Product categories will be loaded here -->
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Question/Issue Details</label>
+                            <textarea class="form-control" id="enquiryDetails" rows="3" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveEnquiry">Save Enquiry</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enquiry Details Modal -->
+    <div class="modal fade" id="enquiryDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Enquiry Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="enquiryInfo"></div>
+                    
+                    <!-- Comments Section -->
+                    <div class="mt-4">
+                        <h6>Comments</h6>
+                        <div id="commentsList" class="mb-3">
+                            <!-- Comments will be loaded here -->
+                        </div>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="newComment" placeholder="Add a comment...">
+                            <button class="btn btn-outline-primary" type="button" id="addComment">Add</button>
+                        </div>
+                    </div>
+
+                    <!-- Resolution Section -->
+                    <div class="mt-4">
+                        <h6>Resolution</h6>
+                        <textarea class="form-control mb-3" id="resolutionDetails" rows="3" placeholder="Enter resolution details..."></textarea>
+                        <select class="form-select mb-3" id="enquiryStatus">
+                            <option value="open">Open</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="resolved">Resolved</option>
+                            <option value="closed">Closed</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="updateEnquiry">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/enquiry-management.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>
