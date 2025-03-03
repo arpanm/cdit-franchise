@@ -922,6 +922,9 @@ function setupEventListeners() {
     document.getElementById('searchApi').addEventListener('input', filterConfigurations);
     document.getElementById('eventTypeFilter').addEventListener('change', filterConfigurations);
     document.getElementById('statusFilter').addEventListener('change', filterConfigurations);
+
+    // Add header button handler
+    document.getElementById('addHeaderBtn').addEventListener('click', () => addHeader('', ''));
 }
 
 // Filter configurations
@@ -1054,7 +1057,7 @@ function inferType(value) {
 // Parse cURL command and extract parameters
 function parseCurlCommand(curlCommand) {
     // Extract URL and its parameters
-    const urlMatch = curlCommand.match(/curl ['"](.*?)['"]/);
+    const urlMatch = curlCommand.match(/curl ['"](.+?)['"]/);
     if (!urlMatch) return;
     
     const url = urlMatch[1];
@@ -1065,29 +1068,24 @@ function parseCurlCommand(curlCommand) {
             addApiParameter(key, typeof value === 'number' ? 'number' : 'string');
         });
 
-        // Extract and parse request body
-        const dataRawMatch = curlCommand.match(/--data-raw ['"](.*?)['"]/);
-        if (dataRawMatch) {
-            const rawData = dataRawMatch[1].replace(/\\n/g, '\n');
-            const jsonObjects = rawData.split('\n').filter(line => line.trim());
-            
-            jsonObjects.forEach(jsonStr => {
-                try {
-                    const jsonObj = JSON.parse(jsonStr);
-                    parseRequestBodyParams(jsonObj);
-                } catch (e) {
-                    console.error('Error parsing JSON object:', e);
-                }
-            });
-        }
-
         // Extract headers
-        const headerMatches = curlCommand.matchAll(/-H ['"](.*?): (.*?)['"]\s*\\/g);
+        const headerMatches = curlCommand.matchAll(/-H ['"](.+?): (.+?)['"]\s*/g);
         for (const match of headerMatches) {
             const [_, headerName, headerValue] = match;
-            addApiParameter(headerName.toLowerCase(), 'string');
+            addHeader(headerName, headerValue);
         }
 
+        // Extract and parse request body
+        const dataRawMatch = curlCommand.match(/--data-raw ['"](.+?)['"]/);
+        if (dataRawMatch) {
+            const rawData = dataRawMatch[1].replace(/\\n/g, '\n');
+            try {
+                const jsonObj = JSON.parse(rawData);
+                parseRequestBodyParams(jsonObj);
+            } catch (e) {
+                console.error('Error parsing JSON object:', e);
+            }
+        }
     } catch (error) {
         console.error('Error parsing cURL command:', error);
     }
@@ -1118,6 +1116,60 @@ function parseRequestBodyParams(obj, prefix = '') {
             addApiParameter(newPrefix, inferType(value));
         }
     }
+}
+
+// Add header field
+function addHeader(name, value) {
+    const container = document.getElementById('headerContainer');
+    const headerId = 'header_' + Date.now();
+    
+    const headerDiv = document.createElement('div');
+    headerDiv.className = 'header-item mb-2';
+    headerDiv.innerHTML = `
+        <div class="row">
+            <div class="col-md-5">
+                <input type="text" class="form-control" placeholder="Header Name" 
+                       value="${name}" data-header-id="${headerId}" required>
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Header Value" required>
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-danger btn-sm" onclick="removeHeader(this)">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+        </div>
+    `;
+    
+    container.appendChild(headerDiv);
+    updateHeadersList();
+}
+
+// Update headers list
+function updateHeadersList() {
+    const headersList = document.getElementById('headersList');
+    if (!headersList) return;
+    
+    headersList.innerHTML = '';
+    
+    const headerInputs = document.querySelectorAll('#headerContainer .header-item');
+    headerInputs.forEach(headerItem => {
+        const nameInput = headerItem.querySelector('input[type="text"][data-header-id]');
+        const valueInput = headerItem.querySelector('input[type="text"]:not([data-header-id])');
+        
+        if (nameInput && nameInput.value.trim()) {
+            const headerElement = document.createElement('div');
+            headerElement.className = 'header-item';
+            headerElement.innerHTML = `
+                <div class="header-content">
+                    <strong>${nameInput.value}</strong>: 
+                    <span class="text-muted">${valueInput ? valueInput.value : ''}</span>
+                </div>
+            `;
+            headersList.appendChild(headerElement);
+        }
+    });
 }
 
 // Save API configuration
@@ -1321,6 +1373,9 @@ function setupEventListeners() {
     document.getElementById('searchApi').addEventListener('input', filterConfigurations);
     document.getElementById('eventTypeFilter').addEventListener('change', filterConfigurations);
     document.getElementById('statusFilter').addEventListener('change', filterConfigurations);
+
+    // Add header button handler
+    document.getElementById('addHeaderBtn').addEventListener('click', () => addHeader('', ''));
 }
 
 // Filter configurations
