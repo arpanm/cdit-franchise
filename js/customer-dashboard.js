@@ -671,3 +671,9 @@ function updateTrackingFlow(currentStatus) {
         }
     });
 }
+
+// View customer dashboard
+function viewOrderDashboard() {
+    // Store the customer ID in session storage for the dashboard page
+    window.location.href = 'order-tracking.html';
+}

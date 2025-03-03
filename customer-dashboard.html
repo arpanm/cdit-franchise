@@ -30,6 +30,7 @@
         <main class="container mt-4">
             <!-- Welcome Section -->
             <div class="d-flex justify-content-between align-items-center mb-4">
+                <button class="btn btn-outline-secondary me-3" onclick="window.history.back()"><i class="bi bi-arrow-left"></i> Back</button>
                 <h2>Welcome Back, <span id="customerName">Customer</span></h2>
                 <div class="action-buttons">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newServiceRequestModal">
@@ -108,7 +109,7 @@
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">Orders & Invoices</h5>
-                    <!--<button class="btn btn-outline-primary btn-sm">View All</button>-->
+                    <button class="btn btn-outline-primary btn-sm" onclick="viewOrderDashboard()">Detailed Order Tracking</button>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive d-none d-md-block">
