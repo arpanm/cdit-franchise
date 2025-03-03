@@ -171,10 +171,23 @@
                                 <input type="tel" class="form-control" id="customerPhone" required>
                             </div>
                             <div class="col-md-6 mb-3">
+                                <label for="customerAlternatePhone" class="form-label">Alternate Phone Number</label>
+                                <input type="tel" class="form-control" id="customerAlternatePhone">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
                                 <label for="customerType" class="form-label">Customer Type</label>
                                 <select class="form-select" id="customerType" required>
                                     <option value="individual">Individual</option>
                                     <option value="business">Business</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="customerStatus" class="form-label">Status</label>
+                                <select class="form-select" id="customerStatus" required>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
                                 </select>
                             </div>
                         </div>

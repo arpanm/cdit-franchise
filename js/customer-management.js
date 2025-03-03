@@ -7,6 +7,7 @@ let customers = [
         name: 'John Doe',
         email: 'john@example.com',
         phone: '+912345678900',
+        alternatePhone: '+917890123456',
         address: '123 Main St',
         city: 'Howrah',
         state: 'WB',
@@ -33,6 +34,7 @@ let customers = [
         name: 'Robert Johnson',
         email: 'robert.j@example.com',
         phone: '+911223034455',
+        alternatePhone: '+918765432109',
         address: '789 Pine Road',
         city: 'Hyderabad',
         state: 'TL',
@@ -59,6 +61,7 @@ let customers = [
         name: 'Michael Brown',
         email: 'michael.b@example.com',
         phone: '+916607788990',
+        alternatePhone: '+919876543210',
         address: '159 Maple Drive',
         city: 'Bangalore',
         state: 'KA',
@@ -85,6 +88,7 @@ let customers = [
         name: 'David Wilson',
         email: 'david.w@example.com',
         phone: '+919902733440',
+        alternatePhone: '+917654321098',
         address: '852 Horamavu Agara',
         city: 'Bangalore',
         state: 'KA',
@@ -208,6 +212,7 @@ function editCustomer(customerId) {
     document.getElementById('customerName').value = customer.name;
     document.getElementById('customerEmail').value = customer.email;
     document.getElementById('customerPhone').value = customer.phone;
+    document.getElementById('customerAlternatePhone').value = customer.alternatePhone || '';
     document.getElementById('customerType').value = customer.type;
     document.getElementById('customerAddress').value = customer.address;
     document.getElementById('customerCity').value = customer.city;
@@ -234,13 +239,14 @@ function saveCustomer() {
         name: document.getElementById('customerName').value,
         email: document.getElementById('customerEmail').value,
         phone: document.getElementById('customerPhone').value,
+        alternatePhone: document.getElementById('customerAlternatePhone').value,
         type: document.getElementById('customerType').value,
         address: document.getElementById('customerAddress').value,
         city: document.getElementById('customerCity').value,
         state: document.getElementById('customerState').value,
         pincode: document.getElementById('customerPincode').value,
         status: document.getElementById('customerStatus').value,
-        addedBy: customerId ? customers.find(c => c.id === customerId).addedBy : 'Franchise' // Preserve existing or set new
+        addedBy: customerId ? customers.find(c => c.id === customerId).addedBy : 'Franchise'
     };
 
     if (customerId) {
@@ -283,8 +289,9 @@ document.getElementById('customerSearch').addEventListener('input', function(e) 
     rows.forEach(row => {
         const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
         const phone = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+        const alternatePhone = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
 
-        if (name.includes(searchTerm) || phone.includes(searchTerm)) {
+        if (name.includes(searchTerm) || phone.includes(searchTerm) || alternatePhone.includes(searchTerm)) {
             row.style.display = '';
         } else {
             row.style.display = 'none';
