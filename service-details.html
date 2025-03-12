@@ -50,7 +50,15 @@
                         <div class="col-md-6">
                             <p><strong>Request ID:</strong> <span id="requestId"></span></p>
                             <p><strong>Customer Name:</strong> <span id="customerName"></span></p>
-                            <p><strong>Phone:</strong> <span id="customerPhone"></span></p>
+                            <p><strong>Phone:</strong> 
+                                <span id="customerPhone"></span>
+                                <button id="showPhoneBtn" class="btn btn-sm btn-outline-primary ms-2" onclick="togglePhone()">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <a id="callButton" href="tel:" class="btn btn-sm btn-success ms-2">
+                                    <i class="bi bi-telephone-fill"></i> Call
+                                </a>
+                            </p>
                             <p><strong>Location:</strong> <span id="location"></span></p>
                             <p><strong>Payment Status:</strong> <span id="paymentStatus" class="badge"></span></p>
                             <p><strong>Service Type:</strong> <span id="serviceType"></span></p>
@@ -129,6 +137,7 @@
                 <div class="card-body">
                     <div id="productInfo" class="row">
                         <div class="col-md-6">
+                            <p><strong>Product Brand:</strong> <span id="productCategory"></span></p>
                             <p><strong>Product Brand:</strong> <span id="productBrand"></span></p>
                             <p><strong>Model:</strong> <span id="productModel"></span></p>
                             <p><strong>Purchase Date:</strong> <span id="purchaseDate"></span></p>

@@ -39,6 +39,7 @@ const serviceRequestDetails = {
         ]
     },
     productInfo: {
+        category: 'AC',
         brand: 'Samsung',
         model: 'AR12TY',
         purchaseDate: '2024-01-01',
@@ -85,6 +86,28 @@ const serviceRequestDetails = {
 // Initialize engineer management
 const engineerManager = new EngineerManager();
 
+// Add these functions to your existing JavaScript
+function maskPhoneNumber(phone) {
+    return 'XXXXXX' + phone.slice(-4);
+}
+
+function togglePhone() {
+    const phoneSpan = document.getElementById('customerPhone');
+    const showPhoneBtn = document.getElementById('showPhoneBtn');
+    const callButton = document.getElementById('callButton');
+    const fullPhone = phoneSpan.getAttribute('data-phone');
+
+    if (phoneSpan.textContent === maskPhoneNumber(fullPhone)) {
+        phoneSpan.textContent = fullPhone;
+        showPhoneBtn.innerHTML = '<i class="bi bi-eye-slash"></i>';
+        callButton.style.display = 'none';
+    } else {
+        phoneSpan.textContent = maskPhoneNumber(fullPhone);
+        showPhoneBtn.innerHTML = '<i class="bi bi-eye"></i>';
+        callButton.style.display = 'inline-block';
+        callButton.href = `tel:${fullPhone}`;
+    }
+}
 
 // Function to populate service request details
 function populateServiceRequestDetails() {
@@ -93,8 +116,11 @@ function populateServiceRequestDetails() {
     // Basic information
     document.getElementById('requestId').textContent = request.id;
     document.getElementById('customerName').textContent = request.customer;
-    document.getElementById('customerPhone').textContent = request.phone;
     document.getElementById('location').textContent = request.location;
+
+    // Modify your existing code that sets the phone number
+    document.getElementById('customerPhone').textContent = maskPhoneNumber(request.phone);
+    document.getElementById('customerPhone').setAttribute('data-phone', request.phone);
 
     // Payment Status with appropriate badge class
     const paymentStatusBadge = document.getElementById('paymentStatus');
@@ -131,6 +157,7 @@ function populateServiceRequestDetails() {
 function populateProductInfo() {
     const product = serviceRequestDetails.productInfo;
     
+    document.getElementById('productCategory').textContent = product.category;
     document.getElementById('productBrand').textContent = product.brand;
     document.getElementById('productModel').textContent = product.model;
     document.getElementById('purchaseDate').textContent = product.purchaseDate;

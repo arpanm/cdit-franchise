@@ -1,3 +1,15 @@
+// Mock data for dropdowns
+const mockCategories = ['Electronics', 'Home Appliances', 'Kitchen Appliances', 'Mobile Devices', 'AC', 'Fridge', 'TV', 'Washing Machine', 'Microwave'];
+const mockBrands = ['Samsung', 'LG', 'Apple', 'Sony', 'Whirlpool'];
+
+// Mock warranty data
+const mockWarrantyData = {
+    type: 'brand',
+    startDate: '2023-01-01',
+    endDate: '2024-01-01',
+    status: 'valid'
+};
+
 // Function to show edit modal for product and warranty information
 function showEditModal() {
     // Create modal HTML
@@ -17,11 +29,21 @@ function showEditModal() {
                                     <h6 class="mb-3">Product Information</h6>
                                     <div class="mb-3">
                                         <label class="form-label">Category</label>
-                                        <input type="text" class="form-control" id="productCategory_edit" value="${document.getElementById('productCategory')?.textContent || ''}" required>
+                                        <select class="form-select" id="productCategory_edit" required>
+                                            <option value="">Select Category</option>
+                                            ${mockCategories.map(category => 
+                                                `<option value="${category}" ${document.getElementById('productCategory')?.textContent === category ? 'selected' : ''}>${category}</option>`
+                                            ).join('')}
+                                        </select>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Brand</label>
-                                        <input type="text" class="form-control" id="productBrand_edit" value="${document.getElementById('productBrand')?.textContent || ''}" required>
+                                        <select class="form-select" id="productBrand_edit" required>
+                                            <option value="">Select Brand</option>
+                                            ${mockBrands.map(brand => 
+                                                `<option value="${brand}" ${document.getElementById('productBrand')?.textContent === brand ? 'selected' : ''}>${brand}</option>`
+                                            ).join('')}
+                                        </select>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Model</label>
@@ -101,11 +123,16 @@ function showEditModal() {
         document.body.insertAdjacentHTML('beforeend', modalHtml);
     }
 
-    // Set current values in warranty selects
-    const warrantyType = document.getElementById('warrantyType')?.textContent || '';
-    const warrantyStatus = document.getElementById('warrantyStatus')?.textContent || '';
+    // Set current values in warranty fields
+    const warrantyType = document.getElementById('warrantyType')?.textContent || mockWarrantyData.type;
+    const warrantyStatus = document.getElementById('warrantyStatus')?.textContent || mockWarrantyData.status;
+    const warrantyStartDate = document.getElementById('warrantyStartDate')?.textContent || mockWarrantyData.startDate;
+    const warrantyEndDate = document.getElementById('warrantyEndDate')?.textContent || mockWarrantyData.endDate;
+
     document.getElementById('warrantyType_edit').value = warrantyType.toLowerCase();
     document.getElementById('warrantyStatus_edit').value = warrantyStatus.toLowerCase();
+    document.getElementById('warrantyStartDate_edit').value = warrantyStartDate;
+    document.getElementById('warrantyEndDate_edit').value = warrantyEndDate;
 
     // Show modal
     const modal = new bootstrap.Modal(document.getElementById('editProductWarrantyModal'));
