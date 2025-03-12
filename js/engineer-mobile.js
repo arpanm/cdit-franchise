@@ -1,11 +1,164 @@
 // Mock service requests data - Replace with actual API call
 let serviceRequests = [
+    // Yesterday's requests
+    {
+        id: 'SR013',
+        type: 'Repair',
+        status: 'Completed',
+        date: '2025-03-12',
+        customer: {
+            name: 'Rachel Green',
+            contact: '+91 9876543222',
+            address: '123 Electronic City, Bangalore 560100'
+        },
+        product: 'Samsung Refrigerator',
+        modelNo: 'RF28R7551SR',
+        serialNo: 'RF2023SM990',
+        description: 'Ice maker not working',
+        location: {
+            latitude: 12.8399,
+            longitude: 77.6770
+        },
+        serviceHistory: [
+            {
+                date: '2025-03-12 09:00 AM',
+                status: 'Created',
+                remarks: 'Service request registered'
+            },
+            {
+                date: '2025-03-12 09:30 AM',
+                status: 'Completed',
+                remarks: 'Ice maker fixed'
+            }
+        ],
+        documents: [
+            {
+                type: 'Service Report',
+                date: '2023-11-30',
+                fileNo: 'SR2023113001'
+            }
+        ]
+    },
+    {
+        id: 'SR014',
+        type: 'Installation',
+        status: 'Pending',
+        date: '2025-03-12',
+        customer: {
+            name: 'Ross Geller',
+            contact: '+91 9876543223',
+            address: '456 HSR Layout, Bangalore 560102'
+        },
+        product: 'LG Smart TV',
+        modelNo: 'OLED65C1',
+        serialNo: 'TV2023LG445',
+        description: 'New TV installation with wall mount',
+        location: {
+            latitude: 12.9716,
+            longitude: 77.5946
+        },
+        serviceHistory: [
+            {
+                date: '2023-11-30 10:00 AM',
+                status: 'Created',
+                remarks: 'Installation request received'
+            },
+            {
+                date: '2023-11-30 11:30 AM',
+                status: 'Completed',
+                remarks: 'TV installed successfully'
+            }
+        ],
+        documents: [
+            {
+                type: 'Installation Report',
+                date: '2023-11-30',
+                fileNo: 'IR2023113002'
+            }
+        ]
+    },
+    {
+        id: 'SR015',
+        type: 'Maintenance',
+        status: 'Completed',
+        date: '2025-03-12',
+        customer: {
+            name: 'Monica Geller',
+            contact: '+91 9876543224',
+            address: '789 Koramangala, Bangalore 560034'
+        },
+        product: 'Whirlpool Washing Machine',
+        modelNo: 'WFW9620HC',
+        serialNo: 'WM2023WP778',
+        description: 'Regular maintenance service',
+        location: {
+            latitude: 12.9279,
+            longitude: 77.6271
+        },
+        serviceHistory: [
+            {
+                date: '2023-11-30 14:00 PM',
+                status: 'Created',
+                remarks: 'Maintenance request received'
+            },
+            {
+                date: '2023-11-30 15:30 PM',
+                status: 'Completed',
+                remarks: 'Maintenance completed'
+            }
+        ],
+        documents: [
+            {
+                type: 'Maintenance Report',
+                date: '2023-11-30',
+                fileNo: 'MR2023113003'
+            }
+        ]
+    },
+    {
+        id: 'SR016',
+        type: 'Repair',
+        status: 'Completed',
+        date: '2025-03-12',
+        customer: {
+            name: 'Chandler Bing',
+            contact: '+91 9876543225',
+            address: '321 Indiranagar, Bangalore 560038'
+        },
+        product: 'Panasonic Microwave',
+        modelNo: 'NN-SN966S',
+        serialNo: 'MW2023PN556',
+        description: 'Display not working',
+        location: {
+            latitude: 12.9784,
+            longitude: 77.6408
+        },
+        serviceHistory: [
+            {
+                date: '2023-11-30 16:00 PM',
+                status: 'Created',
+                remarks: 'Service request registered'
+            },
+            {
+                date: '2023-11-30 17:30 PM',
+                status: 'Completed',
+                remarks: 'Display panel replaced'
+            }
+        ],
+        documents: [
+            {
+                type: 'Service Report',
+                date: '2023-11-30',
+                fileNo: 'SR2023113004'
+            }
+        ]
+    },
     // Today's requests
     {
         id: 'SR001',
         type: 'Repair',
         status: 'In Progress',
-        date: '2023-12-01',
+        date: '2025-03-13',
         customer: {
             name: 'John Doe',
             contact: '+91 9876543210',
@@ -43,7 +196,7 @@ let serviceRequests = [
         id: 'SR002',
         type: 'Installation',
         status: 'Pending',
-        date: '2023-12-01',
+        date: '2025-03-13',
         customer: {
             name: 'Sarah Wilson',
             contact: '+91 9876543211',
@@ -76,7 +229,7 @@ let serviceRequests = [
         id: 'SR003',
         type: 'Maintenance',
         status: 'Pending',
-        date: '2023-12-01',
+        date: '2025-03-13',
         customer: {
             name: 'Michael Brown',
             contact: '+91 9876543212',
@@ -109,7 +262,7 @@ let serviceRequests = [
         id: 'SR004',
         type: 'Repair',
         status: 'In Progress',
-        date: '2023-12-01',
+        date: '2025-03-13',
         customer: {
             name: 'Emily Davis',
             contact: '+91 9876543213',
@@ -147,7 +300,7 @@ let serviceRequests = [
         id: 'SR005',
         type: 'Installation',
         status: 'Pending',
-        date: '2023-12-01',
+        date: '2025-03-13',
         customer: {
             name: 'Robert Taylor',
             contact: '+91 9876543214',
@@ -181,7 +334,7 @@ let serviceRequests = [
         id: 'SR006',
         type: 'Repair',
         status: 'Scheduled',
-        date: '2023-12-02',
+        date: '2025-03-14',
         customer: {
             name: 'David Wilson',
             contact: '+91 9876543215',
@@ -214,7 +367,7 @@ let serviceRequests = [
         id: 'SR007',
         type: 'Installation',
         status: 'Scheduled',
-        date: '2023-12-02',
+        date: '2025-03-14',
         customer: {
             name: 'Jennifer Lee',
             contact: '+91 9876543216',
@@ -247,7 +400,7 @@ let serviceRequests = [
         id: 'SR008',
         type: 'Repair',
         status: 'Scheduled',
-        date: '2023-12-02',
+        date: '2025-03-14',
         customer: {
             name: 'Thomas Anderson',
             contact: '+91 9876543217',
@@ -280,7 +433,7 @@ let serviceRequests = [
         id: 'SR009',
         type: 'Maintenance',
         status: 'Scheduled',
-        date: '2023-12-02',
+        date: '2025-03-14',
         customer: {
             name: 'Lisa Martinez',
             contact: '+91 9876543218',
@@ -314,7 +467,7 @@ let serviceRequests = [
         id: 'SR010',
         type: 'Installation',
         status: 'Scheduled',
-        date: '2023-12-03',
+        date: '2025-03-15',
         customer: {
             name: 'William Turner',
             contact: '+91 9876543219',
@@ -347,7 +500,7 @@ let serviceRequests = [
         id: 'SR011',
         type: 'Repair',
         status: 'Scheduled',
-        date: '2023-12-03',
+        date: '2025-03-15',
         customer: {
             name: 'Emma Thompson',
             contact: '+91 9876543220',
@@ -380,7 +533,7 @@ let serviceRequests = [
         id: 'SR012',
         type: 'Maintenance',
         status: 'Scheduled',
-        date: '2023-12-03',
+        date: '2025-03-15',
         customer: {
             name: 'Daniel Clark',
             contact: '+91 9876543221',
@@ -423,7 +576,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Load service requests for the selected date
 function loadServiceRequests(date) {
+    // Filter service requests for the selected date
+    const selectedDate = new Date(date);
+    const filteredRequests = serviceRequests.filter(request => {
+        const requestDate = new Date(request.date);
+        return requestDate.toDateString() === selectedDate.toDateString();
+    });
+    if (filteredRequests.length === 0) {
+        document.getElementById('serviceRequestsList').innerHTML = '<p>No service requests found for the selected date, change the date to 13th March 2025.</p>';
+        return;
+    }
+    
+    // Update the global serviceRequests array with filtered requests
+    const tempRequests = serviceRequests;
+    serviceRequests = filteredRequests;
+    
+    // Display the filtered requests
     displayServiceRequests();
+    
+    // Restore the original service requests
+    serviceRequests = tempRequests;
 }
 
 // Display service requests in the list
@@ -467,7 +639,7 @@ function displayRequestsWithDistance(engineerLocation) {
                     <button class="btn btn-primary" onclick="window.location.href='engineer-service-details.html?id=${request.id}'">
                         <i class="bi bi-eye"></i> Details
                     </button>
-                    ${isNearby ? `
+                    ${isNearby && (request.status !== 'Accepted' || request.status !== 'Completed') ? `
                     <button class="btn btn-success" onclick="acceptService('${request.id}')">
                         <i class="bi bi-check-lg"></i> Accept
                     </button>
@@ -534,7 +706,7 @@ function displayRequestsWithDistance(currentCoords) {
                             <button class="btn btn-primary" onclick="window.location.href='engineer-service-details.html?id=${request.id}'">
                                 <i class="bi bi-eye"></i> Details
                             </button>
-                            ${isNearby ? `
+                            ${isNearby && (request.status !== 'Accepted' || request.status !== 'Completed') ? `
                             <button class="btn btn-success" onclick="acceptService('${request.id}')">
                                 <i class="bi bi-check-lg"></i> Accept
                             </button>
