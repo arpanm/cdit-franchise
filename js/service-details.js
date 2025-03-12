@@ -336,6 +336,14 @@ document.addEventListener('DOMContentLoaded', function() {
 // Function to cancel request
 function cancelRequest() {
     const reason = document.getElementById('cancellationReason').value;
+    const comment = document.getElementById('cancellationComment').value;
+    const customerOtp = document.getElementById('customerCancelOtp').value;
+
+    // Validate OTP
+    if (customerOtp !== '321456') {
+        alert('Please enter valid customer OTP for cancellation');
+        return;
+    }
     
     // Update status
     serviceRequestDetails.requestInfo.status = 'Cancelled';
@@ -345,14 +353,14 @@ function cancelRequest() {
         date: new Date().toLocaleString(),
         engineer: null,
         status: 'Cancelled',
-        notes: reason
+        notes: `${reason} - ${comment}`
     });
     
     // Add comment
     serviceRequestDetails.comments.push({
         date: new Date().toLocaleString(),
         user: 'System',
-        text: `Request cancelled. Reason: ${reason}`
+        text: `Request cancelled. Reason: ${reason}, Comment: ${comment}`
     });
     
     // Refresh UI
@@ -384,13 +392,34 @@ function addComment() {
 }
 
 // Function to change service request status
+function toggleOtpField() {
+    const newStatus = document.getElementById('newStatus').value;
+    const otpField = document.getElementById('otpField');
+    otpField.style.display = newStatus === 'completed' ? 'block' : 'none';
+    if (newStatus !== 'completed') {
+        document.getElementById('customerCompletionOtp').value = '';
+    }
+}
+
 function changeStatus() {
     const newStatus = document.getElementById('newStatus').value;
     const statusComment = document.getElementById('statusComment').value;
+    const customerOtp = document.getElementById('customerCompletionOtp').value;
     
     if (!newStatus || !statusComment) {
         alert('Please fill in all required fields');
         return;
+    }
+    if (newStatus === 'completed') {
+        if (!customerOtp) {
+            alert('Please enter customer OTP for completion');
+            return;
+        }
+        if (customerOtp !== '321456') {
+            document.getElementById('customerCompletionOtp').classList.add('is-invalid');
+            alert('Please enter valid customer OTP for completion');
+            return;
+        }
     }
     
     // Update status

@@ -359,7 +359,11 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="cancellationComment" class="form-label">Comment</label>
-                                    <textarea class="form-control" id="cancellationComment" rows="3"  required placeholder="Please provide a details"></textarea>
+                                    <textarea class="form-control" id="cancellationComment" rows="3" required placeholder="Please provide a details"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="customerOtp" class="form-label">Customer OTP</label>
+                                    <input type="text" class="form-control" id="customerCancelOtp" required placeholder="Enter customer OTP">
                                 </div>
                             </form>
                         </div>
@@ -467,13 +471,17 @@
                             <form id="changeStatusForm">
                                 <div class="mb-3">
                                     <label for="newStatus" class="form-label">New Status</label>
-                                    <select class="form-select" id="newStatus" required>
+                                    <select class="form-select" id="newStatus" required onchange="toggleOtpField()">
                                         <option value="" selected disabled>Select new status</option>
                                         <option value="pending">Pending</option>
                                         <option value="in_progress">In Progress</option>
                                         <option value="completed">Completed</option>
                                         <option value="on_hold">On Hold</option>
                                     </select>
+                                </div>
+                                <div class="mb-3" id="otpField" style="display: none;">
+                                    <label for="customerOtp" class="form-label">Customer OTP</label>
+                                    <input type="text" class="form-control" id="customerCompletionOtp" placeholder="Enter customer OTP">
                                 </div>
                                 <div class="mb-3">
                                     <label for="statusComment" class="form-label">Status Change Comment</label>
