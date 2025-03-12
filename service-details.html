@@ -116,11 +116,18 @@
 
             <!-- Product Details Section -->
             <div class="card mb-4">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">Product Information</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <button class="btn btn-primary btn-sm" onclick="enableProductEditing()" id="editProductBtn">Edit Product Info</button>
+                        <div class="edit-actions" style="display: none;">
+                            <button class="btn btn-success btn-sm me-2" onclick="saveProductWarrantyInfo()">Save</button>
+                            <button class="btn btn-secondary btn-sm" onclick="location.reload()">Cancel</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <div class="row">
+                    <div id="productInfo" class="row">
                         <div class="col-md-6">
                             <p><strong>Product Brand:</strong> <span id="productBrand"></span></p>
                             <p><strong>Model:</strong> <span id="productModel"></span></p>
@@ -131,7 +138,10 @@
                         </div>
                         <div class="col-md-6">
                             <h6>Warranty Information:</h6>
-                            <div id="warrantyDetails" class="border p-3 bg-light">
+                            <div id="warrantyInfo" class="border p-3 bg-light">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="mb-0">Warranty Details</h6>
+                                </div>
                                 <p><strong>Brand Warranty Status:</strong> <span id="brandWarrantyStatus"></span></p>
                                 <p><strong>Brand Warranty Valid Till:</strong> <span id="brandWarrantyDate"></span></p>
                                 <p><strong>Extended Warranty Status:</strong> <span id="extendedWarrantyStatus"></span></p>
@@ -504,5 +514,7 @@
     <script src="js/engineer-assignment.js"></script>
     <script src="js/service-details.js"></script>
     <script src="js/warranty-plans.js"></script>
+    <!-- Add script reference before closing body tag -->
+    <script src="js/product-warranty-update.js"></script>
 </body>
 </html>

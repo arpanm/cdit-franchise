@@ -528,7 +528,7 @@ function displayAddedItems() {
         <td>Service</td>
         <td>Free Service</td>
         <td>NA</td>
-        <td><span class="text-success">Free</span></td>
+        <td><span class="text-success" id="servicePaymentStatus">Free</span></td>
         <td></td>
     `;
     tbody.appendChild(serviceRow);
