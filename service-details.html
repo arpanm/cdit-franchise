@@ -145,6 +145,43 @@
                 </div>
             </div>
 
+            <!-- Reschedule Modal -->
+            <div class="modal fade" id="rescheduleModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Reschedule Service</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="rescheduleForm">
+                                <div class="mb-3">
+                                    <label for="newServiceDate" class="form-label">New Date</label>
+                                    <input type="date" class="form-control" id="newServiceDate" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="newServiceTime" class="form-label">New Time Slot</label>
+                                    <select class="form-select" id="newServiceTime" required>
+                                        <option value="" selected disabled>Select time slot</option>
+                                        <option value="morning">Morning (9 AM - 12 PM)</option>
+                                        <option value="afternoon">Afternoon (12 PM - 3 PM)</option>
+                                        <option value="evening">Evening (3 PM - 6 PM)</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="rescheduleReason" class="form-label">Reason for Rescheduling</label>
+                                    <textarea class="form-control" id="rescheduleReason" rows="3" required></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" onclick="handleReschedule()">Confirm Reschedule</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Extended Warranty Modal -->
             <div class="modal fade" id="extendedWarrantyModal" tabindex="-1">
                 <div class="modal-dialog modal-lg">
@@ -176,6 +213,30 @@
                 </div>
             </div>
 
+            <!-- Upcoming Service Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Upcoming Service</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Engineer Details</h6>
+                            <p><strong>Name:</strong> <span id="upcomingEngineerName"></span></p>
+                            <p><strong>Contact:</strong> <span id="upcomingEngineerContact"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Appointment Details</h6>
+                            <p><strong>Date:</strong> <span id="upcomingServiceDate"></span></p>
+                            <p><strong>Time Slot:</strong> <span id="upcomingServiceTime"></span></p>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rescheduleModal">
+                                <i class="bi bi-calendar"></i> Reschedule
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Spares, Accessories, and Services Section -->
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -193,6 +254,7 @@
                                     <th>Price</th>
                                     <th>Payment Status</th>
                                     <th>Actions</th>
+                                    <th>Inventory</th>
                                 </tr>
                             </thead>
                             <tbody id="addedItemsTable"></tbody>
@@ -246,6 +308,7 @@
                                             <th>Name</th>
                                             <th>Category</th>
                                             <th>Price</th>
+                                            <th>Inventory</th>
                                         </tr>
                                     </thead>
                                     <tbody id="searchResults"></tbody>

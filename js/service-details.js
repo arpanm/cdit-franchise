@@ -2,14 +2,14 @@
 // Mock catalog data for spares and accessories
 const itemCatalog = {
     spares: [
-        { id: 'SP001', name: 'Compressor', price: 12000, category: 'Spare' },
-        { id: 'SP002', name: 'Condenser Coil', price: 8000, category: 'Spare' },
-        { id: 'SP003', name: 'PCB Board', price: 5000, category: 'Spare' }
+        { id: 'SP001', name: 'Compressor', price: 12000, category: 'Spare', source: 'Franchise', inventory: 10 },
+        { id: 'SP002', name: 'Condenser Coil', price: 8000, category: 'Spare', source: 'Mother Company', inventory: 5 },
+        { id: 'SP003', name: 'PCB Board', price: 5000, category: 'Spare', source: 'Franchise', inventory: 12 },
     ],
     accessories: [
-        { id: 'AC001', name: 'Remote Control', price: 800, category: 'Accessory' },
-        { id: 'AC002', name: 'Air Filter', price: 500, category: 'Accessory' },
-        { id: 'AC003', name: 'Copper Pipe', price: 1200, category: 'Accessory' }
+        { id: 'AC001', name: 'Remote Control', price: 800, category: 'Accessory', source: 'Mother Company', inventory: 8},
+        { id: 'AC002', name: 'Air Filter', price: 500, category: 'Accessory', source: 'Franchise', inventory: 15 },
+        { id: 'AC003', name: 'Copper Pipe', price: 1200, category: 'Accessory', source: 'Mother Company', inventory: 10 }
     ],
     services: [
         { id: 'SV001', name: 'Deep Cleaning', price: 1500, category: 'Service' },
@@ -28,8 +28,10 @@ const serviceRequestDetails = {
         serviceType: 'Repair',
         status: 'Pending',
         createdDate: '2025-01-15',
-        slaDeadline: '2025-01-17',
+        slaDeadline: '2025-03-17',
         engineer: 'Mike Tech',
+        scheduledDate: '2025-02-01',
+        timeSlot: 'Morning (9 AM - 12 PM)',
         issueDescription: 'AC not cooling properly, making unusual noise during operation.',
         documents: [
             { type: 'Invoice', date: '2025-01-15', fileNo: 'INV001' },
@@ -238,6 +240,7 @@ function handleEngineerAssignment(engineerId) {
         populateServiceRequestDetails();
         populateAssignmentHistory();
         populateComments();
+        updateUpcomingService();
         
         // Close the modal
         const modal = bootstrap.Modal.getInstance(document.getElementById('engineerAssignmentModal'));
@@ -245,6 +248,67 @@ function handleEngineerAssignment(engineerId) {
             modal.hide();
         }
     }
+}
+
+function updateUpcomingService() {
+    const engineerName = document.getElementById('upcomingEngineerName');
+    const engineerContact = document.getElementById('upcomingEngineerContact');
+    const serviceDate = document.getElementById('upcomingServiceDate');
+    const serviceTime = document.getElementById('upcomingServiceTime');
+
+    if (serviceRequestDetails.requestInfo.engineer) {
+        engineerName.textContent = serviceRequestDetails.requestInfo.engineer;
+        engineerContact.textContent = 'Contact information will be available 24 hours before service';
+    }
+
+    if (serviceRequestDetails.requestInfo.scheduledDate) {
+        serviceDate.textContent = new Date(serviceRequestDetails.requestInfo.scheduledDate).toLocaleDateString();
+        serviceTime.textContent = serviceRequestDetails.requestInfo.timeSlot || 'Not specified';
+    }
+}
+
+function handleReschedule() {
+    const newDate = document.getElementById('newServiceDate').value;
+    const newTime = document.getElementById('newServiceTime').value;
+    const reason = document.getElementById('rescheduleReason').value;
+
+    if (!newDate || !newTime || !reason) {
+        alert('Please fill in all fields');
+        return;
+    }
+
+    // Update service request details
+    serviceRequestDetails.requestInfo.scheduledDate = newDate;
+    serviceRequestDetails.requestInfo.timeSlot = newTime;
+
+    // Add to assignment history
+    serviceRequestDetails.assignmentHistory.unshift({
+        date: new Date().toLocaleString(),
+        engineer: serviceRequestDetails.requestInfo.engineer,
+        status: 'Rescheduled',
+        notes: `Service rescheduled to ${newDate} (${newTime}). Reason: ${reason}`
+    });
+
+    // Add system comment
+    serviceRequestDetails.comments.unshift({
+        date: new Date().toLocaleString(),
+        user: 'System',
+        text: `Service appointment rescheduled to ${newDate} (${newTime})`
+    });
+
+    // Refresh the display
+    updateUpcomingService();
+    populateAssignmentHistory();
+    populateComments();
+
+    // Close the modal
+    const modal = bootstrap.Modal.getInstance(document.getElementById('rescheduleModal'));
+    if (modal) {
+        modal.hide();
+    }
+
+    // Reset form
+    document.getElementById('rescheduleForm').reset();
 }
 
 // Initialize page
@@ -389,6 +453,7 @@ function displaySearchResults(results) {
             <td>${item.name}</td>
             <td>${item.category}</td>
             <td>₹${item.price}</td>
+            <td>${item.source ? item.source + " : " + item.inventory : ""}</td>
         `;
         tbody.appendChild(row);
     });
@@ -435,6 +500,7 @@ function displayAddedItems() {
         <td>Free Service</td>
         <td>NA</td>
         <td><span class="text-success">Free</span></td>
+        <td></td>
     `;
     tbody.appendChild(serviceRow);
 
@@ -454,6 +520,15 @@ function displayAddedItems() {
                     `<button class="btn btn-sm btn-danger" onclick="removeItem('${item.id}')">Remove</button>
                     <button class="btn btn-sm btn-primary ms-2" onclick="markPaid('${item.id}')">Mark Paid by Cash</button>` :
                     '<span class="text-success">Paid</span>'}
+            </td>
+            <td>
+                ${item.markDelivered ? 
+                    `<span class='text-success'>Delivered</span>` :
+                        item.paymentStatus === 'Paid' ?
+                            item.source === 'Franchise' ? 
+                                `<span>${item.source ? item.source + " : " + item.inventory : ""}</span> <button class="btn btn-sm btn-primary ms-2" onclick="markDelivered('${item.id}')">Mark Delivered</button>` :
+                                `<span>${item.source ? item.source + " : " + item.inventory + " : <a href='#'>Status: Pending</a>" : ""}</span>` : 
+                                `<span>${item.source? item.source + " : " + item.inventory : ""}</span>`}
             </td>
         `;
         tbody.appendChild(row);
@@ -512,6 +587,29 @@ function markPaid(itemId) {
     }
 }
 
+// Function to mark item as paid by cash
+function markDelivered(itemId) {
+    const item = serviceRequestDetails.items.find(i => i.id === itemId);
+    if (item) {
+        // Update payment status to Paid
+        item.markDelivered = true;
+        
+        // Add a comment about the cash payment
+        serviceRequestDetails.comments.push({
+            date: new Date().toLocaleString(),
+            user: 'Malik Raja',
+            text: `item delivered: ${item.name} (${item.id})`
+        });
+        
+        // Refresh the display
+        displayAddedItems();
+        populateComments();
+        
+        // Show confirmation message
+        alert('Item marked as delivered');
+    }
+}
+
 // Function to remove item
 function removeItem(itemId) {
     if (confirm('Are you sure you want to remove this item?')) {
@@ -530,6 +628,7 @@ document.addEventListener('DOMContentLoaded', function() {
     populateAssignmentHistory();
     populateComments();
     displayAddedItems();
+    updateUpcomingService();
 
     // Add event listeners for item search
     document.getElementById('itemSearch').addEventListener('input', handleItemSearch);
