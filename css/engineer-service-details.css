@@ -1,0 +1,149 @@
+@media (max-width: 768px) {
+    .btn {
+        padding: 12px 20px;
+        font-size: 16px;
+        margin: 5px 0;
+        width: 100%;
+    }
+    .form-control, .form-select {
+        height: 48px;
+        font-size: 16px;
+    }
+    textarea.form-control {
+        height: auto;
+    }
+    .card {
+        margin-bottom: 20px;
+        border-radius: 10px;
+    }
+    .card-body {
+        padding: 15px;
+    }
+    .progress {
+        height: 25px;
+    }
+    #serviceProgressBar {
+        font-size: 14px;
+    }
+    .badge {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+    #showPhoneBtn, #callButton {
+        padding: 8px 12px;
+        margin: 5px;
+    }
+    .list-group-item {
+        padding: 15px;
+    }
+    .modal-content {
+        border-radius: 15px;
+        margin: 10px;
+    }
+    .modal-header, .modal-footer {
+        padding: 15px;
+    }
+    .modal-body {
+        padding: 15px;
+    }
+    .table-responsive {
+        margin: 0 -15px;
+    }
+    .table {
+        font-size: 14px;
+    }
+    .table td, .table th {
+        padding: 8px;
+    }
+    .form-check {
+        margin-bottom: 10px;
+    }
+    .form-check-input {
+        margin-right: 8px;
+    }
+    #itemSearch {
+        margin-bottom: 15px;
+    }
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+    .modal.fade .modal-dialog {
+        transform: translate(0, -50px);
+    }
+    .modal.show .modal-dialog {
+        transform: none;
+    }
+}
+
+/* Card Styles for Items List */
+.selectable-card {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.selectable-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.selectable-card.selected {
+    border-color: var(--bs-primary);
+    background-color: rgba(var(--bs-primary-rgb), 0.05);
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1rem;
+    }
+
+    .card-title {
+        font-size: 1rem;
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+
+    .modal-body {
+        padding: 1rem;
+    }
+
+    .form-check {
+        margin-bottom: 0;
+    }
+}
+
+/* Status Badge Positioning */
+.badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+}
+
+/* Card Action Buttons */
+.card .btn-group {
+    width: 100%;
+    justify-content: space-between;
+}
+
+.card .btn-group .btn {
+    flex: 1;
+    margin: 0 0.25rem;
+}
+
+/* Item Selection Checkbox */
+.form-check {
+    margin-top: 1rem;
+    padding-left: 1.75rem;
+}
+
+.form-check-input:checked {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
