@@ -859,3 +859,75 @@ function updateTrackingFlow(currentStatus) {
         }
     });
 }
+
+
+function displayItemsAsCards(items, containerId, selectable = false) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+
+    items.forEach(item => {
+        const col = document.createElement('div');
+        col.className = 'col-12 col-md-6 col-lg-4';
+
+        const card = document.createElement('div');
+        card.className = 'card h-100';
+        if (selectable) {
+            card.classList.add('selectable-card');
+            card.onclick = () => toggleItemSelection(item.id);
+        }
+
+        const cardBody = document.createElement('div');
+        cardBody.className = 'card-body';
+
+        const statusBadge = getStatusBadgeHTML(item.paymentStatus);
+        
+        cardBody.innerHTML = `
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <h6 class="card-title mb-0">${item.name}</h6>
+                ${statusBadge}
+            </div>
+            <p class="card-text mb-1"><small class="text-muted">ID: ${item.id}</small></p>
+            <p class="card-text mb-1">Category: ${item.category}</p>
+            <p class="card-text mb-2">Price: ₹${item.price}</p>
+            ${selectable ? `
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="${item.id}" id="check_${item.id}">
+                    <label class="form-check-label" for="check_${item.id}">Select Item</label>
+                </div>
+            ` : `
+                <div class="d-flex justify-content-between align-items-center">
+                    <button class="btn btn-sm btn-danger" onclick="removeItem('${item.id}')">Remove</button>
+                    <button class="btn btn-sm btn-primary" onclick="updateItemStatus('${item.id}')">Update Status</button>
+                </div>
+            `}
+        `;
+
+        card.appendChild(cardBody);
+        col.appendChild(card);
+        container.appendChild(col);
+    });
+}
+
+function getStatusBadgeHTML(status) {
+    const badgeClass = status === 'Paid' ? 'bg-success' : 
+                      status === 'Pending' ? 'bg-warning' : 'bg-secondary';
+    return `<span class="badge ${badgeClass}">${status}</span>`;
+}
+
+function toggleItemSelection(itemId) {
+    const checkbox = document.getElementById(`check_${itemId}`);
+    checkbox.checked = !checkbox.checked;
+}
+
+// Update the existing functions to use the new card layout
+function loadAvailableItems() {
+    // Simulated API call to get items
+    const items = getAvailableItems();
+    displayItemsAsCards(items, 'itemSelectionCards', true);
+}
+
+function loadAddedItems() {
+    // Simulated API call to get added items
+    const items = getAddedItems();
+    displayItemsAsCards(items, 'addedItemsCards');
+}

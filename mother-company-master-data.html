@@ -118,7 +118,7 @@
                 </li>
                 <li class="nav-item mb-2">
                     <a href="mother-company-workflow.html" class="nav-link text-white active">
-                        <i class="bi bi-gear me-2"></i> Workflow <span class="badge bg-warning text-dark">Beta</span>
+                        <i class="bi bi-stack-overflow me-2"></i> Workflow <span class="badge bg-warning text-dark">Beta</span>
                     </a>
                 </li>
                 <li class="nav-item mb-2">
@@ -190,6 +190,9 @@
                                 <button class="btn btn-outline-primary me-2" onclick="openConfigModal('categories')">
                                     <i class="bi bi-broadcast"></i> Real-time Feed
                                 </button>
+                                <button class="btn btn-outline-primary me-2" onclick="openColumnManagementModal('Categories')">
+                                    <i class="bi bi-columns"></i> Manage Columns
+                                </button>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -229,6 +232,9 @@
                                 <button class="btn btn-outline-primary me-2" onclick="openConfigModal('brands')">
                                     <i class="bi bi-broadcast"></i> Real-time Feed
                                 </button>
+                                <button class="btn btn-outline-primary me-2" onclick="openColumnManagementModal('Brands')">
+                                    <i class="bi bi-columns"></i> Manage Columns
+                                </button>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -266,6 +272,9 @@
                                 <input type="file" id="productImport" hidden accept=".xlsx,.xls" onchange="importFromExcel('products', this)">
                                 <button class="btn btn-outline-primary me-2" onclick="openConfigModal('products')">
                                     <i class="bi bi-broadcast"></i> Real-time Feed
+                                </button>
+                                <button class="btn btn-outline-primary me-2" onclick="openColumnManagementModal('Products')">
+                                    <i class="bi bi-columns"></i> Manage Columns
                                 </button>
                             </div>
                         </div>
@@ -306,6 +315,9 @@
                                 <input type="file" id="warrantyImport" hidden accept=".xlsx,.xls" onchange="importFromExcel('warranty', this)">
                                 <button class="btn btn-outline-primary me-2" onclick="openConfigModal('warranty')">
                                     <i class="bi bi-broadcast"></i> Real-time Feed
+                                </button>
+                                <button class="btn btn-outline-primary me-2" onclick="openColumnManagementModal('Warranty')">
+                                    <i class="bi bi-columns"></i> Manage Columns
                                 </button>
                             </div>
                         </div>
@@ -607,5 +619,9 @@
     <script src="js/data/master-data-attributes.js"></script>
     <script src="js/realtime-feed-config.js"></script>
     <script src="js/login.js"></script>
+    <script src="js/dynamic-master-data.js" defer></script>
+    <script src="js/dynamic-master-data-modal.js" defer></script>
+    <script src="js/dynamic-master-data-entry-modal.js" defer></script>
+    <script src="js/column-management-modal.js" defer></script>
 </body>
 </html>
